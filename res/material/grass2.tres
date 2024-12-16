@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://btjvoa4pfw6x3"]
+
+[ext_resource type="Texture2D" uid="uid://qv0y6dkk4pct" path="res://assets/texture3d/overworld/moss1.png" id="1_1d262"]
+
+[resource]
+specular_mode = 2
+albedo_texture = ExtResource("1_1d262")
+uv1_scale = Vector3(-0.18, -0.18, -0.18)

@@ -1,0 +1,83 @@
+[gd_scene load_steps=9 format=3 uid="uid://bdniqwi3nd2d6"]
+
+[ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
+[ext_resource type="Script" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="2_kdlyg"]
+[ext_resource type="Script" path="res://addons/netfox/tick-interpolator.gd" id="3_xn7sc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ar3d"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_04lsb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nyojp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5ujji"]
+radius = 0.1
+height = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_gb8lt"]
+size = Vector3(0.2, 0.2, 1.57)
+
+[node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("physics_body")]
+script = ExtResource("1_t8tp8")
+physics_body = NodePath("PhysicsBody")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.764922, 0.681674, 1.81688)
+
+[node name="CameraOrigin" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.472895, 0)
+
+[node name="h" type="Node3D" parent="CameraOrigin"]
+
+[node name="v" type="Node3D" parent="CameraOrigin/h"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin/h/v"]
+spring_length = 3.0
+
+[node name="CameraTarget" type="Node3D" parent="CameraOrigin/h/v/SpringArm3D"]
+
+[node name="PhysicsBody" type="CharacterBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicsBody"]
+shape = SubResource("CapsuleShape3D_0ar3d")
+
+[node name="Vis" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Vis"]
+mesh = SubResource("CapsuleMesh_04lsb")
+surface_material_override/0 = SubResource("StandardMaterial3D_nyojp")
+
+[node name="WeaponOrigin" type="Node3D" parent="Vis"]
+transform = Transform3D(-1, 0, 6.60042e-08, 0, 1, 0, -8.74228e-08, 0, -0.755, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Vis/WeaponOrigin"]
+transform = Transform3D(1, 0, 0, 0, 0.792375, 0.610035, 0, -0.610035, 0.792375, 0.540121, -0.152645, 0.357241)
+mesh = SubResource("CapsuleMesh_5ujji")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Vis/WeaponOrigin"]
+transform = Transform3D(0.989055, 0.130785, 0.0683116, 1.37325e-08, -0.462971, 0.886373, 0.14755, -0.876672, -0.457904, 0.506066, -0.249329, 0.972966)
+mesh = SubResource("CapsuleMesh_5ujji")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Vis/WeaponOrigin"]
+transform = Transform3D(0.934379, -0.356281, 7.28998e-09, 0.108114, 0.283538, 0.952847, -0.339482, -0.89032, 0.303451, -0.420473, -0.0807457, 0.528119)
+mesh = SubResource("CapsuleMesh_5ujji")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Vis/WeaponOrigin"]
+transform = Transform3D(0.781401, -0.616831, -0.0945096, 1.49012e-08, -0.151451, 0.988465, -0.62403, -0.772387, -0.118344, 0.043897, -0.157586, 1.28475)
+mesh = SubResource("CapsuleMesh_5ujji")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Vis/WeaponOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.399007, -0.0135987, 1.1757)
+mesh = SubResource("BoxMesh_gb8lt")
+
+[node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("2_kdlyg")
+root = NodePath("..")
+state_properties = Array[String](["Vis:global_transform", "PhysicsBody:global_transform"])
+input_properties = Array[String]([":dummy"])
+enable_input_broadcast = false
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("3_xn7sc")
+root = NodePath("..")
+properties = Array[String](["PhysicsBody:global_transform", "Vis:global_transform"])

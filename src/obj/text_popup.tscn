@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://d2y6f0g5rkvbg"]
+
+[ext_resource type="Script" path="res://src/obj/text_popup.gd" id="1_sbhy4"]
+
+[sub_resource type="SystemFont" id="SystemFont_12sce"]
+font_names = PackedStringArray("Arial")
+subpixel_positioning = 0
+oversampling = 2.0
+
+[sub_resource type="Animation" id="Animation_7c02g"]
+resource_name = "floatup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.466667, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.531947, 0), Vector3(0, 0.485276, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0s6pi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hpva1"]
+_data = {
+"RESET": SubResource("Animation_0s6pi"),
+"floatup": SubResource("Animation_7c02g")
+}
+
+[node name="TextPopup" type="Node3D"]
+script = ExtResource("1_sbhy4")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+visibility_range_end = 50.0
+pixel_size = 0.01
+billboard = 1
+alpha_cut = 1
+text = "."
+font = SubResource("SystemFont_12sce")
+font_size = 24
+outline_size = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hpva1")
+}
+autoplay = "floatup"

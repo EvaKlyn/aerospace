@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=3 uid="uid://lubma0oweog8"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_f2b64"]
+[ext_resource type="PackedScene" uid="uid://bdniqwi3nd2d6" path="res://src/obj/base_player.tscn" id="2_jwlpu"]
+[ext_resource type="Script" path="res://src/bootstrapper.gd" id="2_l05i4"]
+
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_root", "peers_parent")]
+script = ExtResource("1_f2b64")
+character_scene = ExtResource("2_jwlpu")
+spawn_root = NodePath("World3D")
+peers_parent = NodePath("Peers")
+
+[node name="Bootstrapper" type="Node" parent="." node_paths=PackedStringArray("connect_ui", "noray_address_input", "oid_input", "host_oid_input", "force_relay_check")]
+script = ExtResource("2_l05i4")
+connect_ui = NodePath("../Control")
+noray_address_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/LineEdit2")
+oid_input = NodePath("../LineEdit")
+host_oid_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/LineEdit")
+force_relay_check = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/CheckBox")
+
+[node name="Peers" type="Node" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/CenterContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label2" type="Label" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Relay Server IP"
+
+[node name="LineEdit2" type="LineEdit" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "tomfol.io"
+placeholder_text = "tomfol.io"
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "session ID:"
+
+[node name="LineEdit" type="LineEdit" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "XXXX"
+alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "force relay"
+
+[node name="ConnectButton" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "connect to host"
+
+[node name="Button" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "host session"
+
+[node name="Button" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "play offline"
+
+[node name="World3D" type="Node3D" parent="."]
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_right = 300.0
+offset_bottom = 31.0
+placeholder_text = "your session id will appear here"
+alignment = 1
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
+spawn_path = NodePath("../World3D")
+
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/ConnectButton" to="Bootstrapper" method="join"]
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/Button" to="Bootstrapper" method="host"]

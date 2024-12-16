@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://c058e10e87jo6"
+path="res://.godot/imported/coast_beach1.map-81a4347584d78bae7ef0b2c6bcc806fb.tres"
+
+[deps]
+
+source_file="res://mapping/maps/coast_beach1.map"
+dest_files=["res://.godot/imported/coast_beach1.map-81a4347584d78bae7ef0b2c6bcc806fb.tres"]
+
+[params]
+

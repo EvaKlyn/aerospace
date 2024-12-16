@@ -1,0 +1,100 @@
+[gd_scene load_steps=4 format=3 uid="uid://bke1gby46hsvp"]
+
+[ext_resource type="Script" path="res://src/obj/game_unit.gd" id="1_k6u2v"]
+[ext_resource type="Script" path="res://src/obj/unit_info.gd" id="2_bjbw2"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_i4lhl"]
+properties/0/path = NodePath(".:unit_name")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:team")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:unit_positon")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:target_position")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("UnitInfo:max_hp")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath("UnitInfo:current_hp")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath("UnitInfo:max_target_range")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath("UnitInfo:attack_damage")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("UnitInfo:armor")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+properties/9/path = NodePath("UnitInfo:poise")
+properties/9/spawn = true
+properties/9/replication_mode = 2
+properties/10/path = NodePath("UnitInfo:magic_power")
+properties/10/spawn = true
+properties/10/replication_mode = 2
+properties/11/path = NodePath("UnitInfo:magic_resist")
+properties/11/spawn = true
+properties/11/replication_mode = 2
+properties/12/path = NodePath("UnitInfo:armor_pen")
+properties/12/spawn = true
+properties/12/replication_mode = 2
+properties/13/path = NodePath("UnitInfo:magic_pen")
+properties/13/spawn = true
+properties/13/replication_mode = 2
+properties/14/path = NodePath("UnitInfo:attack_drain")
+properties/14/spawn = true
+properties/14/replication_mode = 2
+properties/15/path = NodePath("UnitInfo:magic_drain")
+properties/15/spawn = true
+properties/15/replication_mode = 2
+properties/16/path = NodePath("UnitInfo:attack_speed")
+properties/16/spawn = true
+properties/16/replication_mode = 2
+properties/17/path = NodePath("UnitInfo:cooldown_reduce")
+properties/17/spawn = true
+properties/17/replication_mode = 2
+properties/18/path = NodePath("UnitInfo:move_speed")
+properties/18/spawn = true
+properties/18/replication_mode = 2
+properties/19/path = NodePath("UnitInfo:missile_range")
+properties/19/spawn = true
+properties/19/replication_mode = 2
+properties/20/path = NodePath("UnitInfo:melee_range")
+properties/20/spawn = true
+properties/20/replication_mode = 2
+properties/21/path = NodePath(".:has_target")
+properties/21/spawn = true
+properties/21/replication_mode = 2
+properties/22/path = NodePath(".:status_effects")
+properties/22/spawn = true
+properties/22/replication_mode = 2
+properties/23/path = NodePath("UnitInfo:cast_time_left")
+properties/23/spawn = true
+properties/23/replication_mode = 2
+properties/24/path = NodePath("UnitInfo:gravity_mult")
+properties/24/spawn = true
+properties/24/replication_mode = 2
+properties/25/path = NodePath("UnitInfo:atb")
+properties/25/spawn = true
+properties/25/replication_mode = 2
+properties/26/path = NodePath("UnitInfo:skills_dict")
+properties/26/spawn = true
+properties/26/replication_mode = 2
+properties/27/path = NodePath("UnitInfo:full_cast_time")
+properties/27/spawn = true
+properties/27/replication_mode = 2
+
+[node name="GameUnit" type="Node"]
+script = ExtResource("1_k6u2v")
+team = 2
+
+[node name="UnitInfo" type="Node" parent="."]
+script = ExtResource("2_bjbw2")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_i4lhl")

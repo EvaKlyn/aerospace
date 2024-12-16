@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://6qsxs7fe5r5b"]
+
+[ext_resource type="Texture2D" uid="uid://d3afvyq6lp4a8" path="res://assets/texture3d/overworld/stone2.png" id="1_glccb"]
+
+[resource]
+specular_mode = 2
+albedo_texture = ExtResource("1_glccb")
+uv1_scale = Vector3(0.25, 0.2, 0.25)

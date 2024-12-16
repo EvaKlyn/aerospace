@@ -1,0 +1,330 @@
+[gd_scene load_steps=9 format=3 uid="uid://lubma0oweog8"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_f2b64"]
+[ext_resource type="PackedScene" uid="uid://bdniqwi3nd2d6" path="res://src/obj/base_player.tscn" id="2_jwlpu"]
+[ext_resource type="Script" path="res://src/bootstrapper.gd" id="2_l05i4"]
+[ext_resource type="PackedScene" uid="uid://dhnvibhofvmjx" path="res://src/network_peer.tscn" id="3_mnm6m"]
+[ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="5_n1tw6"]
+[ext_resource type="Script" path="res://src/ui_coodinator.gd" id="5_xcw28"]
+
+[sub_resource type="SystemFont" id="SystemFont_h8suk"]
+font_names = PackedStringArray("Arial")
+font_italic = true
+font_weight = 100
+multichannel_signed_distance_field = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_rwbqw"]
+font = SubResource("SystemFont_h8suk")
+
+[node name="Main" type="Node" node_paths=PackedStringArray("spawn_root", "peers_parent", "color_picker", "fps_label", "ping_label", "chatlog", "syslog")]
+script = ExtResource("1_f2b64")
+character_scene = ExtResource("2_jwlpu")
+peer_scene = ExtResource("3_mnm6m")
+spawn_root = NodePath("World3D")
+peers_parent = NodePath("Peers")
+color_picker = NodePath("PanelContainer/TabContainer/Session/SessionInfo/GridContainer/ColorPickerButton")
+fps_label = NodePath("PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2/FPSLabel")
+ping_label = NodePath("PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2/PingLabel")
+chatlog = NodePath("PanelContainer/TabContainer/Chat/Log")
+syslog = NodePath("PanelContainer/TabContainer/Events")
+
+[node name="Bootstrapper" type="Node" parent="." node_paths=PackedStringArray("connect_ui", "noray_address_input", "oid_input", "host_oid_input", "force_relay_check")]
+script = ExtResource("2_l05i4")
+connect_ui = NodePath("../Control")
+noray_address_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2/LineEdit2")
+oid_input = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/GridContainer/LineEdit")
+host_oid_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/LineEdit")
+force_relay_check = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/CheckBox")
+
+[node name="Peers" type="Node" parent="."]
+
+[node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_bar", "spell_text")]
+script = ExtResource("5_xcw28")
+chat_log = NodePath("../PanelContainer/TabContainer/Chat/Log")
+chat_line_edit = NodePath("../PanelContainer/TabContainer/Chat/HBoxContainer/LineEdit")
+chat_button = NodePath("../PanelContainer/TabContainer/Chat/HBoxContainer/ChatButton")
+hotbar = NodePath("../Hotbar")
+hp_text = NodePath("../Hotbar/VBoxContainer/HFlowContainer/Label")
+hp_bar = NodePath("../Hotbar/VBoxContainer/HFlowContainer/ProgressBar")
+atb_text = NodePath("../Hotbar/VBoxContainer/HFlowContainer/Label2")
+atb_bar = NodePath("../Hotbar/VBoxContainer/HFlowContainer/ProgressBar2")
+skills_area = NodePath("../Hotbar/VBoxContainer/HBoxContainer")
+spell_bar = NodePath("../Hotbar/VBoxContainer/SpellBar/ProgressBar")
+spell_text = NodePath("../Hotbar/VBoxContainer/SpellBar/Label")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_n1tw6")
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/CenterContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer2" type="GridContainer" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label2" type="Label" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Relay Server IP"
+
+[node name="LineEdit2" type="LineEdit" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "localhost"
+placeholder_text = "0.0.0.0"
+alignment = 1
+
+[node name="Button" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "connect to relay"
+
+[node name="HSeparator" type="HSeparator" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "session ID:"
+
+[node name="LineEdit" type="LineEdit" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "XXXX"
+alignment = 1
+
+[node name="Label2" type="Label" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "nickname:"
+
+[node name="NicknameEdit" type="LineEdit" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "nickname5"
+alignment = 1
+max_length = 8
+
+[node name="ConnectButton" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "connect to host"
+
+[node name="CheckBox" type="CheckBox" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "force relay"
+
+[node name="HSeparator2" type="HSeparator" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer3" type="GridContainer" parent="Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Button2" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "host & play"
+
+[node name="Button3" type="Button" parent="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "server only"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_right = 406.0
+offset_bottom = 279.0
+theme = ExtResource("5_n1tw6")
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer"]
+clip_contents = true
+layout_mode = 2
+theme = ExtResource("5_n1tw6")
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Chat" type="VBoxContainer" parent="PanelContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Log" type="RichTextLabel" parent="PanelContainer/TabContainer/Chat"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+scroll_following = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/TabContainer/Chat"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/TabContainer/Chat/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "type a message..."
+
+[node name="ChatButton" type="Button" parent="PanelContainer/TabContainer/Chat/HBoxContainer"]
+layout_mode = 2
+text = "send"
+
+[node name="Events" type="RichTextLabel" parent="PanelContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+scroll_following = true
+metadata/_tab_index = 1
+
+[node name="Session" type="MarginContainer" parent="PanelContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="SessionInfo" type="VBoxContainer" parent="PanelContainer/TabContainer/Session"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+layout_mode = 2
+text = "Session ID"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "your session id will appear here"
+alignment = 1
+editable = false
+
+[node name="Label2" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+layout_mode = 2
+text = "Player Color"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+layout_mode = 2
+color = Color(0.498039, 1, 0.831373, 1)
+edit_alpha = false
+
+[node name="HFlowContainer" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+layout_mode = 2
+
+[node name="HFlowContainer3" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+layout_mode = 2
+
+[node name="HFlowContainer2" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+layout_mode = 2
+
+[node name="PingLabel" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2"]
+layout_mode = 2
+text = "Ping: ??ms"
+
+[node name="FPSLabel" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2"]
+layout_mode = 2
+text = "FPS: ??"
+
+[node name="Hotbar" type="PanelContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 332.0
+grow_vertical = 0
+size_flags_vertical = 8
+theme = ExtResource("5_n1tw6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Hotbar"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="SpellBar" type="HFlowContainer" parent="Hotbar/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Hotbar/VBoxContainer/SpellBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Hotbar/VBoxContainer/SpellBar"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "1.00"
+label_settings = SubResource("LabelSettings_rwbqw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HFlowContainer" type="GridContainer" parent="Hotbar/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="Hotbar/VBoxContainer/HFlowContainer"]
+layout_mode = 2
+text = "HEALTH 100/100"
+
+[node name="Label2" type="Label" parent="Hotbar/VBoxContainer/HFlowContainer"]
+layout_mode = 2
+text = "ATB 20/100"
+
+[node name="ProgressBar" type="ProgressBar" parent="Hotbar/VBoxContainer/HFlowContainer"]
+modulate = Color(0.324, 0.81, 0.324, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+step = 1.0
+value = 100.0
+
+[node name="ProgressBar2" type="ProgressBar" parent="Hotbar/VBoxContainer/HFlowContainer"]
+modulate = Color(0.9, 0.7461, 0.387, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+step = 1.0
+value = 20.0
+
+[node name="HBoxContainer" type="HFlowContainer" parent="Hotbar/VBoxContainer"]
+layout_mode = 2
+
+[node name="World3D" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
+spawn_path = NodePath("../World3D")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../World3D")
+
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2/Button" to="Bootstrapper" method="connect_to_noray"]
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/ConnectButton" to="Bootstrapper" method="join"]
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3/Button2" to="Bootstrapper" method="host"]
+[connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3/Button3" to="Bootstrapper" method="host_only"]
+[connection signal="pressed" from="PanelContainer/TabContainer/Chat/HBoxContainer/ChatButton" to="UiCoodinator" method="_on_chat_button_pressed"]

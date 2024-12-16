@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://jrec6f84e6rw"]
+
+[ext_resource type="Script" path="res://src/obj/enemy_units/attack_dummy.gd" id="1_b6x5a"]
+[ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="1_p5xtl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ynb8f"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kj272"]
+material = SubResource("StandardMaterial3D_ynb8f")
+radial_segments = 8
+rings = 2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2ywng"]
+
+[sub_resource type="SystemFont" id="SystemFont_b5b56"]
+font_names = PackedStringArray("Arial")
+font_weight = 725
+subpixel_positioning = 0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1p77o"]
+properties/0/path = NodePath("CharacterBody3D:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="AttackDummy" type="Node3D" node_paths=PackedStringArray("vis", "physics_body")]
+script = ExtResource("1_b6x5a")
+vis = NodePath("MeshInstance3D")
+physics_body = NodePath("CharacterBody3D")
+
+[node name="GameUnit" parent="." instance=ExtResource("1_p5xtl")]
+unit_name = "Attack Dummy"
+team = 2
+max_hp = 9999
+current_hp = 9999
+stat_armor = 18
+stat_evasion = 0.288
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+gi_mode = 2
+mesh = SubResource("CapsuleMesh_kj272")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_2ywng")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74261, 0)
+pixel_size = 0.007
+billboard = 1
+alpha_cut = 1
+texture_filter = 2
+text = "nickname"
+font = SubResource("SystemFont_b5b56")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_1p77o")
