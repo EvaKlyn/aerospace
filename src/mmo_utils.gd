@@ -70,3 +70,11 @@ func text_popup(position: Vector3, text: String, size: float = 1.0, lifetime: fl
 	new_popup.outline_color = outline_color
 	main.world_3d.add_child(new_popup)
 	new_popup.global_position = position + Vector3(0, 2, 0)
+
+@rpc("reliable", "call_local")
+func do_fx(fx_path, origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO, data: Dictionary = {}):
+	var fx_scene: PackedScene = load(fx_path)
+	var new_scene: FxScene = fx_scene.instantiate()
+	main.world_3d.add_child(new_scene)
+	new_scene.setup(origin_pos, target_position, data)
+	

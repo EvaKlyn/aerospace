@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=6 format=3 uid="uid://depgb4fmn47dn"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=8 format=3 uid="uid://depgb4fmn47dn"]
 
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_obhyj"]
 [ext_resource type="PackedScene" uid="uid://nia7hvg82hpl" path="res://mapping/models/prop_scenes/palm_tree.tscn" id="2_1ex5q"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_model_point_class.gd" id="3_t8xg4"]
+[ext_resource type="PackedScene" uid="uid://b7c04hbuwbrak" path="res://src/obj/world_objects/launcher.tscn" id="4_4nya6"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_file.gd" id="4_758sq"]
 
 [sub_resource type="Resource" id="Resource_th2df"]
@@ -23,7 +24,31 @@ class_property_descriptions = {}
 auto_apply_to_matching_node_properties = false
 meta_properties = {
 "color": Color(0.8, 0.8, 0.8, 1),
-"model": "\"models/display/tree_palm.glb\"",
+"model": "\"display/tree_palm.glb\"",
+"size": AABB(-8, -8, -8, 8, 8, 8)
+}
+node_class = ""
+name_property = ""
+
+[sub_resource type="Resource" id="Resource_n2lat"]
+script = ExtResource("3_t8xg4")
+target_map_editor = 1
+models_sub_folder = "display"
+scale_expression = ""
+generate_size_property = false
+generate_gd_ignore_file = false
+scene_file = ExtResource("4_4nya6")
+apply_rotation_on_map_build = true
+classname = "Launcher"
+description = ""
+func_godot_internal = false
+base_classes = Array[Resource]([])
+class_properties = {}
+class_property_descriptions = {}
+auto_apply_to_matching_node_properties = false
+meta_properties = {
+"color": Color(0.8, 0.8, 0.8, 1),
+"model": "\"display/Launcher.glb\"",
 "size": AABB(-8, -8, -8, 8, 8, 8)
 }
 node_class = ""
@@ -35,4 +60,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "Aerospace"
 base_fgd_files = Array[Resource]([ExtResource("1_obhyj")])
-entity_definitions = Array[Resource]([SubResource("Resource_th2df")])
+entity_definitions = Array[Resource]([SubResource("Resource_th2df"), SubResource("Resource_n2lat")])

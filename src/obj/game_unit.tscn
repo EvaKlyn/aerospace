@@ -98,3 +98,4 @@ script = ExtResource("2_bjbw2")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_i4lhl")
+public_visibility = false

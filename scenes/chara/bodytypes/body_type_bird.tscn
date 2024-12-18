@@ -1,0 +1,157 @@
+[gd_scene load_steps=19 format=3 uid="uid://crnp1ylxwmb6x"]
+
+[ext_resource type="Script" path="res://src/obj/body_type.gd" id="1_wsmet"]
+[ext_resource type="Texture2D" uid="uid://52bsx8jmtctd" path="res://assets/texture3d/chara/fabric2.png" id="2_52wow"]
+[ext_resource type="Texture2D" uid="uid://c86lom3fuascn" path="res://assets/texture3d/chara/feather.png" id="3_1u1fd"]
+[ext_resource type="Texture2D" uid="uid://bhprwdalvd2vu" path="res://assets/texture3d/chara/hand.png" id="3_fvi6v"]
+[ext_resource type="AnimationLibrary" uid="uid://d22p4e4wjmyje" path="res://res/player_anim_lib.res" id="5_8wydl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5y2p"]
+albedo_texture = ExtResource("2_52wow")
+uv1_scale = Vector3(4.78, 4.78, 4.78)
+texture_filter = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_k837a"]
+material = SubResource("StandardMaterial3D_d5y2p")
+top_radius = 0.2
+bottom_radius = 0.4
+height = 0.8
+radial_segments = 6
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0a2ih"]
+albedo_texture = ExtResource("2_52wow")
+uv1_scale = Vector3(4.78, 4.78, 4.78)
+texture_filter = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wqdon"]
+material = SubResource("StandardMaterial3D_0a2ih")
+top_radius = 0.4
+bottom_radius = 0.1
+height = 0.55
+radial_segments = 6
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hl4l0"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_bpt26"]
+material = SubResource("StandardMaterial3D_hl4l0")
+left_to_right = 0.2
+size = Vector3(0.745, 0.19, 0.255)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fx06k"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("3_1u1fd")
+uv1_scale = Vector3(4.535, 4.535, 4.535)
+texture_filter = 2
+
+[sub_resource type="PrismMesh" id="PrismMesh_45cov"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_fx06k")
+left_to_right = 0.1
+size = Vector3(0.745, 0.19, 0.095)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jh6dn"]
+albedo_color = Color(0.727428, 0.727428, 0.727428, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_pre52"]
+material = SubResource("StandardMaterial3D_jh6dn")
+left_to_right = 1.0
+size = Vector3(0.745, 0.11, 0.185)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bebiy"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("3_1u1fd")
+uv1_scale = Vector3(5, 5, 5)
+texture_filter = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_eheit"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_bebiy")
+radius = 0.36
+height = 0.72
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_me53f"]
+properties/0/path = NodePath("AnimationPlayer:current_animation")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="BodyTypeBird" type="Node3D" node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
+script = ExtResource("1_wsmet")
+clothes_parts = [NodePath("Hands/RightHand"), NodePath("Hands/LeftHand"), NodePath("Neck/Head/MeshInstance3D3"), NodePath("Neck/Head/HeadMesh2"), NodePath("Neck/Head/MeshInstance3D4"), NodePath("Neck/Head/MeshInstance3D5"), NodePath("Neck/Head/MeshInstance3D3")]
+right_hand = NodePath("Hands/RightHand")
+left_hand = NodePath("Hands/LeftHand")
+hand_container = NodePath("Hands")
+head = NodePath("Neck/Head")
+animator = NodePath("AnimationPlayer")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945549, 0)
+mesh = SubResource("CylinderMesh_k837a")
+skeleton = NodePath("../../..")
+
+[node name="Body2" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.274032, 0)
+mesh = SubResource("CylinderMesh_wqdon")
+skeleton = NodePath("../../..")
+
+[node name="Hands" type="Node3D" parent="."]
+
+[node name="RightHand" type="Sprite3D" parent="Hands"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.54, 0)
+pixel_size = 0.013
+billboard = 1
+shaded = true
+texture = ExtResource("3_fvi6v")
+
+[node name="LeftHand" type="Sprite3D" parent="Hands"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.54, 0)
+pixel_size = 0.013
+billboard = 1
+shaded = true
+texture = ExtResource("3_fvi6v")
+
+[node name="Neck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.346, 0)
+
+[node name="Head" type="Node3D" parent="Neck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000111818, 0)
+
+[node name="BeakUpper" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.59535e-08, 0.295692, -0.488928)
+mesh = SubResource("PrismMesh_bpt26")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0.5, -0.866025, 2.18557e-08, 0.866025, 0.5, 3.78552e-08, -7.59535e-08, 0.540766, 0.35698)
+mesh = SubResource("PrismMesh_45cov")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(-0.239813, -0.138456, 0.960895, 0.5, -0.866025, 2.18557e-08, 0.83216, 0.480448, 0.276912, -0.0741701, 0.44875, 0.327257)
+mesh = SubResource("PrismMesh_45cov")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(0.314035, 0.181308, 0.931938, 0.5, -0.866025, 2.18557e-08, 0.807082, 0.465969, -0.362617, 0.0931442, 0.456692, 0.323129)
+mesh = SubResource("PrismMesh_45cov")
+
+[node name="BeakLower" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0.0460254, -0.99894, 2.01184e-09, 0.99894, 0.0460254, 4.36651e-08, -7.59535e-08, 0.138748, -0.384142)
+mesh = SubResource("PrismMesh_pre52")
+
+[node name="HeadMesh2" type="MeshInstance3D" parent="Neck/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("SphereMesh_eheit")
+skeleton = NodePath("../../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"player_anim_lib": ExtResource("5_8wydl")
+}
+autoplay = "idle"
+playback_auto_capture_transition_type = 6
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_me53f")

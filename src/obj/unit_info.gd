@@ -1,7 +1,7 @@
 extends Node
 class_name UnitInfo
 
-@export var atb: int = 100
+@export var atb: float = 100
 @export var max_hp: int = 10
 @export var current_hp: int = 10
 @export var max_target_range: float = 20.0

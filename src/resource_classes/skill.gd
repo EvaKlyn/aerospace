@@ -28,6 +28,9 @@ enum SkillResult {
 @export_enum("enemy", "ally", "object", "self") var target_type: String = "enemy"
 @export_enum("skill", "spell", "special", "misc") var category: String = "skill"
 @export_enum("data-driven", "callable") var logic_type: String
+@export var fx_scene: PackedScene
+@export var cast_animation_name: StringName
+@export var result_offset: float = 0.0
 
 @export_category("Damage Details")
 @export var inflicts_damage: bool = false
@@ -56,7 +59,7 @@ func _ready() -> void:
 	add_child(cooldown_timer)
 	cooldown_timer.one_shot = true
 
-func cast(caster: GameUnit, target: GameUnit) -> SkillResult:
+func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 	if not caster:
 		return SkillResult.INVALID
 	if not caster.actionable:
@@ -85,15 +88,32 @@ func cast(caster: GameUnit, target: GameUnit) -> SkillResult:
 		if !success:
 			return SkillResult.INTERRUPT
 	
-	var result = _realcast(caster, target)
+	var result = _realcast(caster, target) 
+	
+	if cast_animation_name and caster.animator:
+		caster.animator.play(cast_animation_name)
+		caster.status_effects["animating"] = caster.animator.current_animation_length
+	
+	await get_tree().create_timer(result_offset).timeout
 	
 	match result:
 		SkillResult.SUCCESS:
-			caster.unit_info.atb += atb_gain
+			if fx_scene:
+				var targetpos = null
+				if target: targetpos = target.unit_positon
+				MmoUtils.rpc("do_fx", fx_scene.resource_path, caster.unit_positon, targetpos)
 	return result
 
 func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 	var result = SkillResult.FIZZLE
+	
+	if target_type != "self":
+		if range_type == "melee" and caster.unit_positon.distance_to(target.unit_positon) > caster.unit_info.melee_range:
+			MmoUtils.rpc("text_popup", target.unit_positon, "Out of range!", 1.0, 1.0, Color.WHITE, Color.BLACK)
+			return SkillResult.FIZZLE
+		if range_type == "ranged" and caster.unit_positon.distance_to(target.unit_positon) > caster.unit_info.missile_range:
+			MmoUtils.rpc("text_popup", target.unit_positon, "Out of range!", 1.0, 1.0, Color.WHITE, Color.BLACK)
+			return SkillResult.FIZZLE
 	
 	if randf_range(0.0, 1.0) < failure_chance:
 		MmoUtils.rpc("text_popup", target.unit_positon, "Fizzled!", 1.0, 1.0, Color.WHITE, Color.BLACK)

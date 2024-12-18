@@ -35,7 +35,7 @@ var skill_map: Array[GameSkill] = []
 @export var stat_magic_drain: int = 0
 @export var stat_attack_speed: float = 1.0
 @export var stat_cooldown_reduce: float = 0.0
-@export var stat_move_speed: float = 7.0
+@export var stat_move_speed: float = 10.0
 @export var stat_jump_str: float = 14.0
 @export var stat_melee_range: float = 4.0
 @export var stat_missile_range: float = 12.0
@@ -66,9 +66,11 @@ var skill_map: Array[GameSkill] = []
 @export var status_effects: Dictionary = {}
 
 @onready var unit_info: UnitInfo = $UnitInfo
+@onready var sync: MultiplayerSynchronizer = $MultiplayerSynchronizer
+
+var animator: AnimationPlayer
 
 var hardened_armor: int = 0
-
 var last_autoattack_lockout = 0.0
 
 ## STATUS EFFECTS 
@@ -104,22 +106,27 @@ func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
 	
-	unit_info.atb = unit_info.atb + atb_passive_gain * atb_gain_mult * delta
+	unit_info.atb = unit_info.atb + (atb_passive_gain * delta)
 	unit_info.atb = clamp(unit_info.atb, 0, 100)
 	
 	if current_target: 
+		has_target = true
 		target_position = current_target.unit_positon
 		if current_target.unit_positon.distance_to(unit_positon) > max_target_range:
 			current_target = null
+	else:
+		has_target = false
 	
 	last_cast_time = unit_info.cast_time_left
 	
 	if unit_info.cast_time_left > 0:
+		status_effects["casting"] = -1
 		unit_info.cast_time_left -= delta
 		if last_cast_time > 0 and unit_info.cast_time_left <= 0:
 			cast_over.emit(true)
 	else:
 		unit_info.cast_time_left = 0
+		status_effects.erase("casting")
 	
 	if NetworkTime.time - 1.5 > last_prune:
 		prune_targeting_me()
@@ -137,7 +144,7 @@ func _physics_process(delta: float) -> void:
 		if status_effects[state] > 0.0:
 			status_effects[state] -= delta
 		elif status_effects[state] == -1:
-			break
+			continue
 		else:
 			stale_states.append(state)
 	
@@ -164,7 +171,7 @@ func untarget_me():
 		if unit.current_target == self:
 			unit.current_target = null
 		dead_positions.append(i)
-	if dead_positions.size() == 0:
+	if dead_positions.size() == 0 or targeting_me.size() == 0:
 		return
 	for i in dead_positions:
 		targeting_me.remove_at(i)
@@ -230,6 +237,8 @@ func recalc_stats():
 		unit_info.poise *= 0
 		unit_info.evasion *= 0
 	
+	max_target_range = unit_info.missile_range
+	
 	skills.clear()
 	unit_info.skills_dict.clear()
 	for child in get_children():
@@ -259,16 +268,21 @@ func take_damage(from: GameUnit, damage: DamageInstance) -> Dictionary:
 		else: 
 			MmoUtils.rpc("eventlog", unit_name + " would have evaded " + from.unit_name + "'s attack but could not!", "combat")
 	
+	var textcolor = [Color.DARK_RED, Color.MEDIUM_VIOLET_RED]
+	
 	if damage.damage_type == "attack":
 		var effective_armor: float = unit_info.armor - damage.bonus_armor_pen - from.unit_info.armor_pen
 		effective_armor = max(hardened_armor, effective_armor)
 		cooked = damage.raw / (1.0 + (effective_armor/10))
+		textcolor = [Color.DARK_RED, Color.WHITE]
 	elif damage.damage_type == "magic":
 		var effective_resist = unit_info.magic_resist - damage.bonus_magic_pen - from.unit_info.magic_pen
 		effective_resist = max(0.0, effective_resist)
 		cooked = damage.raw / (1 + (effective_resist/100))
+		textcolor = [Color.REBECCA_PURPLE, Color.WHITE]
 	elif damage.damage_type == "true":
 		cooked = damage.raw
+		textcolor = [Color.WHITE, Color.BLACK]
 	
 	var final_dmg = ceili(cooked)
 	var dmg_report = {"inflicted": final_dmg, "mitigated": damage.raw - final_dmg, "status_code": "normal"}

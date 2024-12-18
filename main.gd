@@ -10,7 +10,6 @@ var spawn_host_pc = true
 @export var peer_scene: PackedScene
 @export var spawn_root: Node3D
 @export var peers_parent: Node
-@export var color_picker: ColorPickerButton
 @export var fps_label: Label
 @export var ping_label: Label
 @export var chatlog: RichTextLabel
@@ -129,4 +128,6 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if not NetworkEvents.is_server():
 		return
+	if !spawn_host_pc and get_viewport().get_camera_3d():
+		get_viewport().get_camera_3d().current = false
 	MmoUtils.peers = peers

@@ -6,7 +6,13 @@ class_name PlayerBody
 # @onready var animator: AnimationPlayer = $AnimationPlayer
 @onready var state_chart: StateChart = $StateChart
 
+@export var looking_vector: Vector3 = Vector3.ZERO
+
+@export var network_velocity = Vector3.ZERO
 @export var is_actionable: bool = true
+@export var animation: String = "idle"
+@export var anim_speed: float = 1.0
+@export var move_dir: Vector3 = Vector3.ZERO
 
 var unit_status: UnitInfo
 var network_peer: NetworkPeer
@@ -36,6 +42,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
+	network_velocity = velocity
 	move_and_slide()
 
 @rpc("reliable", "any_peer", "call_local")
@@ -60,24 +67,40 @@ func _on_actionable_state_physics_processing(delta: float) -> void:
 	var speed = game_unit.unit_info.move_speed
 	var move_basis = base.cam_h.transform
 	var last_y = velocity.y
-	var move_dir = (move_basis * network_peer.movement).normalized()
+	move_dir = (move_basis * network_peer.movement).normalized()
 	var target_vel = Vector3.ZERO
 	
-	if move_dir:
+	if network_peer.movement:
 		# player movement
-		target_vel.x = move_dir.x * speed
-		target_vel.z = move_dir.z * speed
+		target_vel.x = move_dir.x 
+		target_vel.z = move_dir.z
+		target_vel = target_vel.normalized() * speed
 		
-		# change player model rotation
 		if not game_unit.has_target:
 			global_rotation.y = move_basis.basis.get_euler().y
 	else:
 		target_vel.x = 0
 		target_vel.z = 0
 	
+	if network_peer.target:
+		base.rpc("target_auto")
+	
+	if game_unit.has_target:
+		base.angle_dummy.look_at_from_position(base.vis_body.head.global_position, game_unit.target_position)
+		global_rotation.y = base.angle_dummy.global_rotation.y
+		looking_vector = base.angle_dummy.global_rotation
+	else:
+		looking_vector = Vector3.ZERO
+	
 	if is_on_floor():
 		velocity.x = velocity.move_toward(target_vel, delta * accel).x
 		velocity.z = velocity.move_toward(target_vel, delta * accel).z
+		if velocity.length() > 0:
+			animation = "walk"
+			anim_speed = velocity.length() / 7
+		else:
+			animation = "idle"
+			anim_speed = 1.0
 		if network_peer.jump:
 			if move_dir != Vector3.ZERO:
 				velocity.y = unit_status.jump_str * 1.0
@@ -85,9 +108,11 @@ func _on_actionable_state_physics_processing(delta: float) -> void:
 			else:
 				velocity.y = unit_status.jump_str * 1.2
 	else:
-		velocity.x = velocity.move_toward(target_vel, delta * aircontrol).x
-		velocity.z = velocity.move_toward(target_vel, delta * aircontrol).z
+		velocity.x = velocity.move_toward(target_vel, delta * (aircontrol * move_dir.length())).x
+		velocity.z = velocity.move_toward(target_vel, delta * (aircontrol * move_dir.length())).z
 		velocity.y -= gravity * delta * unit_status.gravity_mult
+		animation = "air"
+		anim_speed = 1.0
 
 func _on_casting_state_physics_processing(delta: float) -> void:
 	if !is_multiplayer_authority():
@@ -99,12 +124,25 @@ func _on_casting_state_physics_processing(delta: float) -> void:
 		state_chart.send_event("hit")
 		
 	var target_vel = Vector3.ZERO
-	velocity.x = velocity.move_toward(target_vel, delta * accel).x
-	velocity.z = velocity.move_toward(target_vel, delta * accel).z
+	
+	if game_unit.has_target:
+		base.angle_dummy.look_at_from_position(base.vis_body.head.global_position, game_unit.target_position)
+		global_rotation.y = base.angle_dummy.global_rotation.y
+		looking_vector = base.angle_dummy.global_rotation
+	else:
+		looking_vector = Vector3.ZERO
 	
 	if !is_on_floor():
-		pass
+		animation = "air"
+		anim_speed = 1.0
 		velocity.y -= gravity * delta * unit_status.gravity_mult
+		velocity.x = velocity.move_toward(target_vel, delta * drag).x
+		velocity.z = velocity.move_toward(target_vel, delta * drag).z
+	else:
+		animation = "casting"
+		anim_speed = 1.0
+		velocity.x = velocity.move_toward(target_vel, delta * accel).x
+		velocity.z = velocity.move_toward(target_vel, delta * accel).z
 	
 	if unit_status.cast_time_left <= 0:
 		state_chart.send_event("castover")
@@ -130,7 +168,9 @@ func _on_knockback_state_physics_processing(delta: float) -> void:
 	
 	velocity.x = velocity.move_toward(target_vel, delta * drag).x
 	velocity.z = velocity.move_toward(target_vel, delta * drag).z
-
+	
+	animation = "air"
+	anim_speed = 1.0
 
 func _on_actionable_state_entered() -> void:
 	if !is_multiplayer_authority():
@@ -145,6 +185,8 @@ func _on_actionable_state_exited() -> void:
 	is_actionable = false
 
 func _on_frozen_state_physics_processing(delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
 	velocity = Vector3.ZERO
 	if just_spawned:
 		position = spawn_pos

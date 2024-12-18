@@ -29,17 +29,18 @@ physics_body = NodePath("CharacterBody3D")
 
 [node name="GameUnit" parent="." instance=ExtResource("1_p5xtl")]
 unit_name = "Attack Dummy"
-team = 2
 max_hp = 9999
 current_hp = 9999
 stat_armor = 18
 stat_evasion = 0.288
+stat_magic_resist = 8
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 gi_mode = 2
 mesh = SubResource("CapsuleMesh_kj272")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_2ywng")

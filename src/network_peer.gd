@@ -8,6 +8,7 @@ var movement: Vector3 = Vector3.ZERO
 var twist_input = 0.0
 var pitch_input = 0.0
 var jump: bool = false
+var target: bool = false
 
 var twist_pivot = Node3D.new()
 var pitch_pivot = Node3D.new()
@@ -29,8 +30,6 @@ func _ready():
 	if !is_multiplayer_authority():
 		return
 	
-	var picker: ColorPickerButton = get_node("/root/Main").color_picker
-	picker.color_changed.connect(_color_changed)
 	nickname = get_node("/root/Main").name_input.text
 	nickname = nickname.left(12)
 
@@ -41,11 +40,14 @@ func _physics_process(delta: float) -> void:
 	movement = Vector3(
 	Input.get_axis("input_left", "input_right"), 0,
 	Input.get_axis("input_up", "input_down"))
+	
 	jump = Input.is_action_pressed("input_jump")
+	target = Input.is_action_just_pressed("menu_target")
 	
 	if get_viewport().gui_get_focus_owner():
 		movement = Vector3.ZERO
 		jump = false
+		target = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
@@ -64,7 +66,3 @@ func capture_mouse():
 	
 func release_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-func _color_changed(new_color: Color):
-	if is_multiplayer_authority():
-		color = new_color
