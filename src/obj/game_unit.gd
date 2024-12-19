@@ -137,7 +137,7 @@ func _physics_process(delta: float) -> void:
 		
 	
 	if NetworkTime.time - unit_info.attack_speed > last_autoattack_lockout:
-			auto_attack()
+		await auto_attack()
 	
 	var stale_states = []
 	for state in status_effects:
@@ -157,6 +157,7 @@ func prune_targeting_me():
 	var dead_positions: Array[int] = []
 	for i in targeting_me.size():
 		var unit = targeting_me[i]
+		if unit == null: dead_positions.append(i)
 		if unit.current_target != self:
 			dead_positions.append(i)
 	for i in dead_positions:
@@ -187,7 +188,7 @@ func auto_attack():
 			return
 	
 	last_autoattack_lockout = NetworkTime.time
-	auto_attack_skill.cast(self, current_target)
+	await auto_attack_skill.cast(self, current_target)
 
 func recalc_stats():
 	unit_info.max_hp = max_hp
@@ -303,6 +304,6 @@ func add_status(state: String, duration: float):
 func remove_status(state: String):
 	status_effects.erase(state)
 	recalc_stats()
-	if team == Teams.FRIENDLY:
-		MmoUtils.rpc("eventlog", unit_name + " is no longer " + str(state), "status")
+	#if team == Teams.FRIENDLY:
+		#MmoUtils.rpc("eventlog", unit_name + " is no longer " + str(state), "status")
 	

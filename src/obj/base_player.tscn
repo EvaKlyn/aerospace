@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bdniqwi3nd2d6"]
+[gd_scene load_steps=19 format=3 uid="uid://bdniqwi3nd2d6"]
 
 [ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="2_3mq61"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://dogwtl8hqdpcd" path="res://scenes/fx_scenes/class_test/fx_laser_blast.tscn" id="5_k72ke"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_o54a7"]
 [ext_resource type="Texture2D" uid="uid://c6fp2r011bpc6" path="res://assets/texture2d/ui_rangering.png" id="5_smjeu"]
-[ext_resource type="Script" path="res://src/skills/test_autoattack.gd" id="6_00r4o"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_28du0"]
 [ext_resource type="Script" path="res://src/skills/great_leap.gd" id="6_mc0xs"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
@@ -63,6 +62,12 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath("TargetRing:scale")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath(".:customization")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath(".:network_anim")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("physics_body", "game_unit", "vis_body")]
 script = ExtResource("1_t8tp8")
@@ -84,14 +89,17 @@ atb_passive_gain = 5.0
 auto_attack_skill = NodePath("TestAttack")
 
 [node name="TestAttack" type="Node" parent="GameUnit"]
-script = ExtResource("6_00r4o")
-skill_name = "Auto Attack"
+script = ExtResource("4_sxmj2")
+skill_name = "Basic Attack"
 is_auto_attack = true
+base_cooldown = 0.0
 atb_gain = 10
 atb_cost = 0
-logic_type = "callable"
+logic_type = "data-driven"
 cast_animation_name = &"player_anim_lib/onehand_swing1"
-result_offset = 0.433
+result_offset = 0.4
+inflicts_damage = true
+damage_scales_with = "attack_damage"
 
 [node name="VoidBeam" type="Node" parent="GameUnit"]
 script = ExtResource("4_sxmj2")
@@ -130,6 +138,8 @@ floor_constant_speed = true
 script = ExtResource("3_nmnka")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PhysicsBody"]
+replication_interval = 0.05
+delta_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_7jxna")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicsBody"]
@@ -238,6 +248,7 @@ delay_in_seconds = "0.0"
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+cull_mask = 983039
 
 [node name="TargetRing" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -255,7 +266,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8749, 0)
 [node name="v" type="Node3D" parent="CameraOrigin/h"]
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin/h/v"]
-spring_length = 5.0
+spring_length = 11.95
 margin = 0.47
 
 [node name="CameraTarget" type="Node3D" parent="CameraOrigin/h/v/SpringArm3D"]
@@ -282,6 +293,8 @@ outline_size = 8
 [node name="Body" parent="Vis" instance=ExtResource("13_8ntcc")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.05
+delta_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_0u3pd")
 
 [connection signal="damaged" from="GameUnit" to="." method="_on_game_unit_damaged"]

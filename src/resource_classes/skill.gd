@@ -88,13 +88,13 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 		if !success:
 			return SkillResult.INTERRUPT
 	
-	var result = _realcast(caster, target) 
-	
 	if cast_animation_name and caster.animator:
 		caster.animator.play(cast_animation_name)
 		caster.status_effects["animating"] = caster.animator.current_animation_length
 	
 	await get_tree().create_timer(result_offset).timeout
+	
+	var result = _realcast(caster, target) 
 	
 	match result:
 		SkillResult.SUCCESS:
@@ -116,7 +116,7 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 			return SkillResult.FIZZLE
 	
 	if randf_range(0.0, 1.0) < failure_chance:
-		MmoUtils.rpc("text_popup", target.unit_positon, "Fizzled!", 1.0, 1.0, Color.WHITE, Color.BLACK)
+		MmoUtils.rpc("text_popup", caster.unit_positon, "Fizzled!", 1.0, 1.0, Color.WHITE, Color.BLACK)
 		return SkillResult.FIZZLE
 	
 	if logic_type == "callable":
@@ -152,6 +152,7 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 			result = SkillResult.SUCCESS
 		elif report["status_code"] == "evaded":
 			str_message = target.unit_name + " evaded " + caster.unit_name + "'s " + skill_name + "."
+			result = SkillResult.SUCCESS
 		else:
 			str_message = "something went weird lol."
 		MmoUtils.rpc("eventlog", str_message, "combat")
@@ -163,7 +164,6 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 		SkillResult.INTERRUPT:
 			MmoUtils.rpc("eventlog", caster.unit_name + " was interrupted using " + skill_name + ".")
 			MmoUtils.rpc("text_popup", caster.unit_positon, "Interrupted!", 1.0, 1.0, Color.WHITE, Color.BLACK)
-	
 	return result
 
 func custom_cast(caster: GameUnit, target: GameUnit) -> SkillResult:

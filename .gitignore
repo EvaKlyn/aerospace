@@ -2,3 +2,7 @@
 /.godot/
 /android/
 /mapping/maps/autosave
+# ignore baked lightmaps for size
+*.exr
+*.lmbake
+*.exr.import

@@ -25,6 +25,8 @@ var unitinfo: UnitInfo
 var unit: GameUnit
 var dict_hash
 
+var just_connected = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hotbar.visible = false
@@ -34,6 +36,16 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not unitinfo or not base_player:
 		return
+	if just_connected:
+		var customization = {
+		"ancestry" = ancestry_dropdown.text.to_lower(),
+		"clothes_color" = color_picker.color,
+		"head_scale" = head_slider.value,
+		"hand_scale" = hands_slider.value
+		}
+		base_player.rpc("remote_customize", customization)
+		just_connected = false
+	
 	hotbar.visible = true
 	hp_text.text = "HEALTH: " + str(unitinfo.current_hp) + "/" + str(unitinfo.max_hp)
 	atb_text.text = "ATB: " + str(ceil(unitinfo.atb)) + "/100"

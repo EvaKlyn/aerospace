@@ -1,55 +1,75 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
 
-uniform vec3 albedo : source_color;
-uniform sampler2D water_texture1;
-uniform sampler2D water_texture2;
-uniform sampler2D noise_texture;
-uniform vec2 scroll_speed1 = vec2(0.05, 0.0);
-uniform vec2 scroll_speed2 = vec2(-0.03, 0.0);
-uniform float blend_factor = 0.5;
-uniform vec2 scale1 = vec2(1.0, 1.0);
-uniform vec2 scale2 = vec2(1.0, 1.0);
-uniform float wave_strength = 1.0;
-uniform float wave_scale = 0.02;
-uniform int pixelation_level = 64;
-uniform float FoamSize = 0.5;
-uniform sampler2D DepthTexture : hint_depth_texture;
-uniform float WaterOpacity = 1.0;
-uniform float FoamGlowIntensity = 0.5;
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, repeat_disable, filter_nearest; 
 
-void vertex() {
-    vec2 global_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz;
-    float noise_value = texture(noise_texture, global_position * wave_scale).r;
-    float wave = sin(global_position.x * 0.2 + global_position.y * 0.2 + TIME + noise_value * 10.0) * wave_strength;
-    VERTEX.y += wave;
+uniform float depth_fade_distance : hint_range(0.0, 10.0) = 1.0;
+uniform float absorbance : hint_range(0.0, 10.0) = 2.0;
+
+uniform vec3 shallow_color : source_color = vec3(0.22, 0.66, 1.0);
+uniform vec3 deep_color : source_color = vec3(0.0, 0.25, 0.45);
+
+uniform float foam_amount : hint_range(0.0, 2.0) = 0.2;
+uniform vec3 foam_color : source_color = vec3(1);
+uniform sampler2D foam_noise : hint_default_white;
+
+uniform float roughness : hint_range(0.0, 1.0) = 0.05;
+
+uniform sampler2D wave_texture;
+uniform float wave_scale = 4.0;
+uniform float height_scale = 0.15;
+varying float wave_height;
+varying vec3 uv_world_pos;
+
+uniform sampler2D normal1;
+uniform vec2 wave_dir1 = vec2(1.0, 0.0);
+uniform sampler2D normal2;
+uniform vec2 wave_dir2 = vec2(0.0, 1.0);
+uniform float wave_speed : hint_range(0.0, 0.2) = 0.015;
+
+vec3 screen(vec3 base, vec3 blend){
+	return 1.0 - (1.0 - base) * (1.0 - blend);
 }
 
-void fragment() {
-    vec2 scaledUV1 = UV * scale1;
-    vec2 scaledUV2 = UV * scale2;
-    vec2 scrolledUV1 = scaledUV1 + scroll_speed1 * TIME;
-    vec2 scrolledUV2 = scaledUV2 + scroll_speed2 * TIME;
-    scrolledUV1 = mod(scrolledUV1, vec2(1.0, 1.0));
-    scrolledUV2 = mod(scrolledUV2, vec2(1.0, 1.0));
-    scrolledUV1 = floor(scrolledUV1 * float(pixelation_level)) / float(pixelation_level);
-    scrolledUV2 = floor(scrolledUV2 * float(pixelation_level)) / float(pixelation_level);
+void vertex() {
+	// Vertext displacement for waves
+	uv_world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	wave_height = texture(wave_texture, uv_world_pos.xz / wave_scale + TIME * wave_speed).r;
+	VERTEX.y += wave_height * height_scale;
+}
 
-    vec4 water_color1 = texture(water_texture1, scrolledUV1);
-    vec4 water_color2 = texture(water_texture2, scrolledUV2);
-    vec4 blended_water_color = mix(water_color1, water_color2, blend_factor);
-
-    float depthValue = texture(DepthTexture, SCREEN_UV).r;
-    vec4 worldPosition = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
-    worldPosition.xyz /= worldPosition.w;
-    float foamEffect = clamp(1.0 - smoothstep(worldPosition.z + FoamSize, worldPosition.z, VERTEX.z), 0.0, 1.0);
-    float foamOpacity = 1.0 - foamEffect;
-    float foamEffectRounded = round(foamOpacity);
-    float finalOpacity = foamEffectRounded + WaterOpacity;
-
-    ALBEDO = blended_water_color.rgb * albedo;
-    ALPHA = finalOpacity;
-    EMISSION = vec3(foamEffectRounded) * FoamGlowIntensity;
-    METALLIC = 0.0;
-    ROUGHNESS = 1.0;
+void fragment()
+{
+	// Depth texture magic
+	float depth = texture(DEPTH_TEXTURE, SCREEN_UV, 0.0).r;
+  	vec3 ndc = vec3(SCREEN_UV * 2.0 - 1.0, depth);
+	vec4 world = INV_VIEW_MATRIX * INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
+	float depth_texture_y = world.y / world.w;
+	float vertex_y = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).y;
+	float vertical_depth = vertex_y - depth_texture_y;
+	
+	// Changes the color of geometry behind it as the water gets deeper
+	float depth_fade_blend = exp(-vertical_depth / depth_fade_distance);
+	depth_fade_blend = clamp(depth_fade_blend, 0.0, 1.0);
+	
+	// Makes the water more transparent as it gets more shallow
+	float alpha_blend = -vertical_depth * absorbance;
+	alpha_blend = clamp(1.0 - exp(alpha_blend), 0.0, 1.0);
+	
+	// Small layer of foam
+	float foam_blend = clamp(1.0 - (vertical_depth / foam_amount), 0.0, 1.0);
+	vec3 foam = foam_blend * foam_color;
+	
+	// Mix them all together
+	vec3 color_out = mix(deep_color, shallow_color, depth_fade_blend);
+	color_out = screen(color_out, foam);
+	
+	// Normal maps
+	vec2 normal_offset1 = (TIME * wave_dir1) * wave_speed;
+	vec2 normal_offset2 = (TIME * wave_dir2) * wave_speed;
+	vec3 normal_blend = mix(texture(normal1, uv_world_pos.xz / wave_scale + normal_offset1), texture(normal2, uv_world_pos.xz / wave_scale + normal_offset2), 0.5).rgb;
+	
+	ALBEDO = color_out;
+	ALPHA = alpha_blend;
+	ROUGHNESS = roughness;
+	NORMAL_MAP = normal_blend;
 }

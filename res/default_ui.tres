@@ -221,7 +221,7 @@ font_names = PackedStringArray("Arial")
 
 [resource]
 default_font = SubResource("SystemFont_yvfjg")
-default_font_size = 10
+default_font_size = 14
 Button/styles/disabled = SubResource("StyleBoxFlat_6ytdp")
 Button/styles/focus = SubResource("StyleBoxFlat_n8065")
 Button/styles/hover = SubResource("StyleBoxFlat_8ugbn")

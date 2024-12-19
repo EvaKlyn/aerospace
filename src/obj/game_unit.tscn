@@ -97,5 +97,7 @@ team = 2
 script = ExtResource("2_bjbw2")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_i4lhl")
 public_visibility = false

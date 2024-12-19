@@ -24,7 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 shader_type spatial;
 render_mode blend_mix,depth_draw_opaque,cull_disabled,specular_schlick_ggx,world_vertex_coords;
 uniform vec4 albedo : source_color = vec4(1.0);
-uniform sampler2D texture_albedo : source_color,filter_nearest_mipmap,repeat_disable;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_disable;
 uniform vec2 texture_frames = vec2(1.0,1.0);
 uniform int light_mode = 0;
 uniform float alpha_scissor_threshold = 0.5;

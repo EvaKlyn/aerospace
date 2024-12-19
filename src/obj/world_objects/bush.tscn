@@ -87,6 +87,8 @@ stat_melee_range = 0.0
 stat_missile_range = 0.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_2ofbe")
 
 [connection signal="damaged" from="GameUnit" to="." method="_on_game_unit_damaged"]

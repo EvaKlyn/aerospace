@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://crnp1ylxwmb6x"]
+[gd_scene load_steps=21 format=3 uid="uid://crnp1ylxwmb6x"]
 
 [ext_resource type="Script" path="res://src/obj/body_type.gd" id="1_wsmet"]
 [ext_resource type="Texture2D" uid="uid://52bsx8jmtctd" path="res://assets/texture3d/chara/fabric2.png" id="2_52wow"]
 [ext_resource type="Texture2D" uid="uid://c86lom3fuascn" path="res://assets/texture3d/chara/feather.png" id="3_1u1fd"]
 [ext_resource type="Texture2D" uid="uid://bhprwdalvd2vu" path="res://assets/texture3d/chara/hand.png" id="3_fvi6v"]
-[ext_resource type="AnimationLibrary" uid="uid://d22p4e4wjmyje" path="res://res/player_anim_lib.res" id="5_8wydl"]
+[ext_resource type="AnimationLibrary" uid="uid://d22p4e4wjmyje" path="res://res/player_anim_lib.res" id="5_g6ugn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5y2p"]
 albedo_texture = ExtResource("2_52wow")
@@ -73,10 +73,17 @@ height = 0.72
 radial_segments = 6
 rings = 3
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_me53f"]
-properties/0/path = NodePath("AnimationPlayer:current_animation")
-properties/0/spawn = true
-properties/0/replication_mode = 2
+[sub_resource type="Animation" id="Animation_pfs23"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l2mfc"]
+_data = {
+"RESET": SubResource("Animation_pfs23")
+}
+
+[sub_resource type="SphereMesh" id="SphereMesh_yntlk"]
+radial_segments = 6
+rings = 3
 
 [node name="BodyTypeBird" type="Node3D" node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
 script = ExtResource("1_wsmet")
@@ -148,10 +155,14 @@ skeleton = NodePath("../../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"player_anim_lib": ExtResource("5_8wydl")
+"": SubResource("AnimationLibrary_l2mfc"),
+"player_anim_lib": ExtResource("5_g6ugn")
 }
-autoplay = "idle"
+autoplay = "player_anim_lib/idle"
 playback_auto_capture_transition_type = 6
+playback_default_blend_time = 0.1
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_me53f")
+[node name="GrassDisplacer" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.377682, 0)
+layers = 65536
+mesh = SubResource("SphereMesh_yntlk")

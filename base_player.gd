@@ -25,6 +25,7 @@ class_name BasePlayer
 @onready var listener: AudioListener3D = $PhysicsBody/AudioListener3D
 @onready var melee_ring: Sprite3D = $Vis/MeleeRangeDecal
 
+@export var network_anim: StringName = ""
 
 var dummy = 1
 var customize_cooldown = 0.0
@@ -40,6 +41,7 @@ var queued_customization: Dictionary = {}
 	hand_scale = 1.0
 }
 
+var last_frame_hash = customization.hash()
 
 var peer_id = 0
 var network_peer: NetworkPeer
@@ -112,6 +114,8 @@ func _physics_process(delta: float) -> void:
 		vis_body.animator.play("player_anim_lib/casting")
 	else:
 		vis_body.animator.play("player_anim_lib/" + physics_body.animation)
+	
+	network_anim = vis_body.animator.current_animation
 
 func _cast_over(success: bool):
 	pass
@@ -155,14 +159,10 @@ func remote_customize(dict: Dictionary):
 	if customize_cooldown > 0:
 		MmoUtils.rpc_id(multiplayer.get_remote_sender_id(), "eventlog", "Wait a sec to re-customize bro", "system")
 		return
-	else:
-		queued_customization.clear()
 		
-	rpc("update_customization", dict)
-
-@rpc("reliable", "call_local")
-func update_customization(dict) -> void:
 	customization = dict
+
+func update_customization() -> void:
 	customize_cooldown = 10.0
 	target_ring.modulate = customization.get("clothes_color", Color.WHITE)
 	melee_ring.modulate = customization.get("clothes_color", Color.WHITE)
@@ -196,7 +196,12 @@ func update_customization(dict) -> void:
 	vis_body.left_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)
 	vis_body.right_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)
 
+# runs on every client
 func visual_update(delta) -> void:
+	if customization.hash() != last_frame_hash:
+		update_customization()
+		last_frame_hash = customization.hash()
+	
 	$Vis/Label3D.text = network_peer.nickname
 	vis.position = vis.position.lerp(physics_body.position, delta * 50)
 	
@@ -214,6 +219,9 @@ func visual_update(delta) -> void:
 	vis_body.head.position = vis_body.head.position.lerp(target, delta * 2)
 	vis_body.hand_container.position = vis_body.hand_container.position.lerp(target, delta * 2)
 	vis_body.animator.speed_scale = physics_body.anim_speed
+	if not is_multiplayer_authority():
+		if vis_body.animator.current_animation != network_anim:
+			vis_body.animator.play(network_anim)
 
 ## DAMAGE_REPORT SPEC
 ## inflicted: int = amount of damage that was done in reality

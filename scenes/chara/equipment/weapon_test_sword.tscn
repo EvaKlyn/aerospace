@@ -39,10 +39,10 @@ render_priority = 0
 shader = ExtResource("1_jfy66")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/metalness = 1.0
-shader_parameter/emission = null
+shader_parameter/emission = Color(0.820366, 0.820366, 0.820366, 1)
 shader_parameter/lighting_power = 1.0
 shader_parameter/lighting_map = SubResource("NoiseTexture2D_pknvl")
-shader_parameter/reflected_map_power = 0.4
+shader_parameter/reflected_map_power = 0.42
 shader_parameter/reflected_map = SubResource("NoiseTexture2D_pknvl")
 shader_parameter/use_refraction = false
 shader_parameter/refraction_amount = 3.715
@@ -131,6 +131,6 @@ shadow_mesh = SubResource("ArrayMesh_ehl3k")
 [node name="WeaponTestSword" type="Node3D"]
 
 [node name="Cube2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.41, 0, 0, 0, 1.41, 0, 0, 0, 1.41, 0, 0.047042, 0)
+transform = Transform3D(2.01, 0, 0, 0, 2.01, 0, 0, 0, 2.01, 0, 0.115317, 0)
 mesh = SubResource("ArrayMesh_lkpqi")
 skeleton = NodePath("")

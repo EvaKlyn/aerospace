@@ -17,4 +17,6 @@ properties/2/replication_mode = 1
 script = ExtResource("1_rrltg")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_r8c1s")

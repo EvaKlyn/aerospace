@@ -30,10 +30,13 @@ var spawn_pos = Vector3.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	await get_tree().process_frame
+	if !is_multiplayer_authority():
+		return
 	unit_status = game_unit.unit_info
 	velocity = Vector3.ZERO
 	spawn_pos.x += randf_range(-3,3)
 	spawn_pos.z += randf_range(-3,3)
+	SimpleGrass.set_interactive(true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -42,6 +45,8 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
+		
+	SimpleGrass.set_player_position(global_position)
 	network_velocity = velocity
 	move_and_slide()
 
@@ -95,7 +100,7 @@ func _on_actionable_state_physics_processing(delta: float) -> void:
 	if is_on_floor():
 		velocity.x = velocity.move_toward(target_vel, delta * accel).x
 		velocity.z = velocity.move_toward(target_vel, delta * accel).z
-		if velocity.length() > 0:
+		if velocity.length() > 0 and !game_unit.status_effects.has("animating"):
 			animation = "walk"
 			anim_speed = velocity.length() / 7
 		else:

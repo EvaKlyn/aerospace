@@ -18,7 +18,7 @@ var spawn_host_pc = true
 
 @onready var ui_coordinator = $UiCoodinator
 @onready var bootstrapper = $Bootstrapper
-@onready var world_3d = $World3D
+@onready var world_3d = $SubViewportContainer/SubViewport/World3D
 @onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
 
 var peers: Dictionary = {}

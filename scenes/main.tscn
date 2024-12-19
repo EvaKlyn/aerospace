@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://lubma0oweog8"]
+[gd_scene load_steps=14 format=3 uid="uid://lubma0oweog8"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_f2b64"]
 [ext_resource type="PackedScene" uid="uid://bdniqwi3nd2d6" path="res://src/obj/base_player.tscn" id="2_jwlpu"]
@@ -6,6 +6,23 @@
 [ext_resource type="PackedScene" uid="uid://dhnvibhofvmjx" path="res://src/network_peer.tscn" id="3_mnm6m"]
 [ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="5_n1tw6"]
 [ext_resource type="Script" path="res://src/ui_coodinator.gd" id="5_xcw28"]
+
+[sub_resource type="Gradient" id="Gradient_0ey77"]
+offsets = PackedFloat32Array(0.416459, 1)
+colors = PackedColorArray(0.197251, 0.195467, 0.294692, 1, 0.193043, 0.1914, 0.29, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_werda"]
+gradient = SubResource("Gradient_0ey77")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fsifb"]
+texture = SubResource("GradientTexture2D_werda")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nwpf0"]
+texture = SubResource("GradientTexture2D_werda")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_udcsf"]
+texture = SubResource("GradientTexture2D_werda")
 
 [sub_resource type="SystemFont" id="SystemFont_h8suk"]
 font_names = PackedStringArray("Arial")
@@ -20,18 +37,18 @@ font = SubResource("SystemFont_h8suk")
 script = ExtResource("1_f2b64")
 character_scene = ExtResource("2_jwlpu")
 peer_scene = ExtResource("3_mnm6m")
-spawn_root = NodePath("World3D")
+spawn_root = NodePath("SubViewportContainer/SubViewport/World3D")
 peers_parent = NodePath("Peers")
-fps_label = NodePath("PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2/FPSLabel")
-ping_label = NodePath("PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2/PingLabel")
-chatlog = NodePath("PanelContainer/TabContainer/Chat/Log")
-syslog = NodePath("PanelContainer/TabContainer/Events")
+fps_label = NodePath("TabContainer/Session/SessionInfo/HFlowContainer2/FPSLabel")
+ping_label = NodePath("TabContainer/Session/SessionInfo/HFlowContainer2/PingLabel")
+chatlog = NodePath("TabContainer/Chat/Chat/Log")
+syslog = NodePath("TabContainer/Events/Events")
 
 [node name="Bootstrapper" type="Node" parent="." node_paths=PackedStringArray("connect_ui", "noray_address_input", "oid_input", "host_oid_input", "force_relay_check")]
 script = ExtResource("2_l05i4")
 connect_ui = NodePath("../Control")
 noray_address_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2/LineEdit2")
-oid_input = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer/LineEdit")
+oid_input = NodePath("../TabContainer/Session/SessionInfo/HFlowContainer/LineEdit")
 host_oid_input = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/LineEdit")
 force_relay_check = NodePath("../Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/CheckBox")
 
@@ -39,9 +56,9 @@ force_relay_check = NodePath("../Control/CenterContainer/PanelContainer/VBoxCont
 
 [node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_bar", "spell_text", "ancestry_dropdown", "color_picker", "head_slider", "hands_slider")]
 script = ExtResource("5_xcw28")
-chat_log = NodePath("../PanelContainer/TabContainer/Chat/Log")
-chat_line_edit = NodePath("../PanelContainer/TabContainer/Chat/HBoxContainer/LineEdit")
-chat_button = NodePath("../PanelContainer/TabContainer/Chat/HBoxContainer/ChatButton")
+chat_log = NodePath("../TabContainer/Chat/Chat/Log")
+chat_line_edit = NodePath("../TabContainer/Chat/Chat/HBoxContainer/LineEdit")
+chat_button = NodePath("../TabContainer/Chat/Chat/HBoxContainer/ChatButton")
 hotbar = NodePath("../Hotbar")
 hp_text = NodePath("../Hotbar/VBoxContainer/HFlowContainer/Label")
 hp_bar = NodePath("../Hotbar/VBoxContainer/HFlowContainer/ProgressBar")
@@ -50,10 +67,34 @@ atb_bar = NodePath("../Hotbar/VBoxContainer/HFlowContainer/ProgressBar2")
 skills_area = NodePath("../Hotbar/VBoxContainer/HBoxContainer")
 spell_bar = NodePath("../Hotbar/VBoxContainer/SpellBar/ProgressBar")
 spell_text = NodePath("../Hotbar/VBoxContainer/SpellBar/Label")
-ancestry_dropdown = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/GridContainer/OptionButton")
-color_picker = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/GridContainer/ColorPickerButton")
-head_slider = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/GridContainer/HSlider")
-hands_slider = NodePath("../PanelContainer/TabContainer/Session/SessionInfo/GridContainer/HSlider2")
+ancestry_dropdown = NodePath("../TabContainer/Session/SessionInfo/GridContainer/OptionButton")
+color_picker = NodePath("../TabContainer/Session/SessionInfo/GridContainer/ColorPickerButton")
+head_slider = NodePath("../TabContainer/Session/SessionInfo/GridContainer/HSlider")
+hands_slider = NodePath("../TabContainer/Session/SessionInfo/GridContainer/HSlider2")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+use_occlusion_culling = true
+canvas_item_default_texture_filter = 0
+audio_listener_enable_3d = true
+sdf_oversize = 0
+sdf_scale = 0
+size = Vector2i(800, 600)
+render_target_update_mode = 4
+
+[node name="World3D" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
 [node name="ServerUI" type="Control" parent="."]
 visible = false
@@ -134,15 +175,12 @@ text = "PlayerPing"
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -181.0
-offset_right = -319.0
 grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 8
+grow_vertical = 2
+size_flags_vertical = 4
 theme = ExtResource("5_n1tw6")
 
 [node name="CenterContainer" type="CenterContainer" parent="Control"]
@@ -240,90 +278,99 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "server only"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-offset_right = 290.0
-offset_bottom = 160.0
-theme = ExtResource("5_n1tw6")
-
-[node name="TabContainer" type="TabContainer" parent="PanelContainer"]
+[node name="TabContainer" type="TabContainer" parent="."]
 clip_contents = true
-layout_mode = 2
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 357.0
+offset_bottom = 182.0
 theme = ExtResource("5_n1tw6")
-current_tab = 0
+current_tab = 2
 tab_focus_mode = 0
 
-[node name="Chat" type="VBoxContainer" parent="PanelContainer/TabContainer"]
+[node name="Chat" type="PanelContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_fsifb")
 metadata/_tab_index = 0
 
-[node name="Log" type="RichTextLabel" parent="PanelContainer/TabContainer/Chat"]
+[node name="Chat" type="VBoxContainer" parent="TabContainer/Chat"]
+layout_mode = 2
+
+[node name="Log" type="RichTextLabel" parent="TabContainer/Chat/Chat"]
 layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/TabContainer/Chat"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Chat/Chat"]
+modulate = Color(1, 1, 1, 0.631373)
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="PanelContainer/TabContainer/Chat/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Chat/Chat/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "type a message..."
 
-[node name="ChatButton" type="Button" parent="PanelContainer/TabContainer/Chat/HBoxContainer"]
+[node name="ChatButton" type="Button" parent="TabContainer/Chat/Chat/HBoxContainer"]
 layout_mode = 2
 text = "send"
 
-[node name="Events" type="RichTextLabel" parent="PanelContainer/TabContainer"]
+[node name="Events" type="PanelContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
-scroll_following = true
+theme_override_styles/panel = SubResource("StyleBoxTexture_nwpf0")
 metadata/_tab_index = 1
 
-[node name="Session" type="MarginContainer" parent="PanelContainer/TabContainer"]
-visible = false
+[node name="Events" type="RichTextLabel" parent="TabContainer/Events"]
 layout_mode = 2
+scroll_following = true
+
+[node name="Session" type="PanelContainer" parent="TabContainer"]
+layout_mode = 2
+theme = ExtResource("5_n1tw6")
+theme_override_styles/panel = SubResource("StyleBoxTexture_udcsf")
 metadata/_tab_index = 2
 
-[node name="SessionInfo" type="VBoxContainer" parent="PanelContainer/TabContainer/Session"]
+[node name="SessionInfo" type="VBoxContainer" parent="TabContainer/Session"]
 layout_mode = 2
 
-[node name="HFlowContainer3" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+[node name="HFlowContainer3" type="HFlowContainer" parent="TabContainer/Session/SessionInfo"]
 layout_mode = 2
 
-[node name="HFlowContainer2" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+[node name="HFlowContainer2" type="HFlowContainer" parent="TabContainer/Session/SessionInfo"]
 layout_mode = 2
 
-[node name="PingLabel" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2"]
+[node name="PingLabel" type="Label" parent="TabContainer/Session/SessionInfo/HFlowContainer2"]
 layout_mode = 2
 text = "Ping: ??ms"
 
-[node name="FPSLabel" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer2"]
+[node name="FPSLabel" type="Label" parent="TabContainer/Session/SessionInfo/HFlowContainer2"]
 layout_mode = 2
 text = "FPS: ??"
 
-[node name="HFlowContainer" type="HFlowContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+[node name="HFlowContainer" type="HFlowContainer" parent="TabContainer/Session/SessionInfo"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer"]
+[node name="Label" type="Label" parent="TabContainer/Session/SessionInfo/HFlowContainer"]
 layout_mode = 2
 text = "Session ID"
 
-[node name="LineEdit" type="LineEdit" parent="PanelContainer/TabContainer/Session/SessionInfo/HFlowContainer"]
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Session/SessionInfo/HFlowContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "your session id will appear here"
 alignment = 1
 editable = false
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+[node name="GridContainer" type="GridContainer" parent="TabContainer/Session/SessionInfo"]
 layout_mode = 2
 columns = 2
 
-[node name="Label2" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="Label2" type="Label" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 text = "Ancestry"
 
-[node name="OptionButton" type="OptionButton" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="OptionButton" type="OptionButton" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -331,50 +378,54 @@ popup/item_0/text = "Human"
 popup/item_1/text = "Bird"
 popup/item_1/id = 1
 
-[node name="Label5" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="Label5" type="Label" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 text = "Accent Color"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.498039, 1, 0.831373, 1)
 edit_alpha = false
 
-[node name="Label3" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="Label3" type="Label" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 text = "Head Scale"
 
-[node name="HSlider" type="HSlider" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="HSlider" type="HSlider" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 min_value = 0.7
 max_value = 1.4
 step = 0.02
 value = 1.0
 
-[node name="Label4" type="Label" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="Label4" type="Label" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 text = "Hands Scale"
 
-[node name="HSlider2" type="HSlider" parent="PanelContainer/TabContainer/Session/SessionInfo/GridContainer"]
+[node name="HSlider2" type="HSlider" parent="TabContainer/Session/SessionInfo/GridContainer"]
 layout_mode = 2
 min_value = 0.7
 max_value = 1.4
 step = 0.02
 value = 1.0
 
-[node name="CustomizeButton" type="Button" parent="PanelContainer/TabContainer/Session/SessionInfo"]
+[node name="CustomizeButton" type="Button" parent="TabContainer/Session/SessionInfo"]
 layout_mode = 2
 focus_mode = 0
 text = "Commit Changes"
 
 [node name="Hotbar" type="PanelContainer" parent="."]
 visible = false
-anchors_preset = 2
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -50.0
-offset_right = 332.0
+offset_left = -232.5
+offset_top = -82.0
+offset_right = 232.5
+grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
 theme = ExtResource("5_n1tw6")
@@ -429,18 +480,16 @@ value = 20.0
 [node name="HBoxContainer" type="HFlowContainer" parent="Hotbar/VBoxContainer"]
 layout_mode = 2
 
-[node name="World3D" type="Node3D" parent="."]
-
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
-spawn_path = NodePath("../World3D")
+spawn_path = NodePath("../SubViewportContainer/SubViewport/World3D")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../World3D")
+spawn_path = NodePath("../SubViewportContainer/SubViewport/World3D")
 
 [connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer2/Button" to="Bootstrapper" method="connect_to_noray"]
 [connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/ConnectButton" to="Bootstrapper" method="join"]
 [connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3/Button2" to="Bootstrapper" method="host"]
 [connection signal="pressed" from="Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer3/Button3" to="Bootstrapper" method="host_only"]
-[connection signal="pressed" from="PanelContainer/TabContainer/Chat/HBoxContainer/ChatButton" to="UiCoodinator" method="_on_chat_button_pressed"]
-[connection signal="pressed" from="PanelContainer/TabContainer/Session/SessionInfo/CustomizeButton" to="UiCoodinator" method="_on_customize_button_pressed"]
+[connection signal="pressed" from="TabContainer/Chat/Chat/HBoxContainer/ChatButton" to="UiCoodinator" method="_on_chat_button_pressed"]
+[connection signal="pressed" from="TabContainer/Session/SessionInfo/CustomizeButton" to="UiCoodinator" method="_on_customize_button_pressed"]
