@@ -1,6 +1,6 @@
 extends GameSkill
 
-func custom_cast(caster: GameUnit, target: GameUnit) -> SkillResult:
+func custom_cast(caster: GameUnit, _target: GameUnit) -> SkillResult:
 	caster.recalc_stats()
 	var parent = caster.get_parent()
 	if !parent is BasePlayer:

@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0djdi65baeuc"]
+
+[ext_resource type="Script" path="res://src/obj/ui/status_icon.gd" id="1_tertf"]
+[ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="1_wvqft"]
+[ext_resource type="Texture2D" uid="uid://cs4hihm10seqf" path="res://assets/texture2d/icons/status/stun.png" id="2_nanv3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i1cul"]
+bg_color = Color(0.278431, 0.278431, 0.407843, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_size = 1
+shadow_offset = Vector2(0, 2)
+
+[node name="StatusIcon" type="PanelContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_i1cul")
+script = ExtResource("1_tertf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("1_wvqft")
+texture = ExtResource("2_nanv3")
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1

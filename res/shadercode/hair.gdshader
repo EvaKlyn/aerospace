@@ -122,7 +122,7 @@ float cnoise(vec3 P)
 	vec3 fade_xyz = fade(Pf0);
 	vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
 	vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-	float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+	float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
 	return 2.2 * n_xyz;
 }
 
@@ -192,7 +192,7 @@ float pnoise(vec3 P, vec3 rep)
 	vec3 fade_xyz = fade(Pf0);
 	vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
 	vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-	float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+	float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
 	return 2.2 * n_xyz;
 }
 
@@ -482,7 +482,7 @@ vec4 composite_hue_saturation_value(
 void fragment() {
 	float temp_f0, temp_f1, temp_f2;
 	vec4 color_0, color_1;
-	
+
 	// highlight
 	vec2 uv_fy = vec2(UV.x, 1.0 - UV.y);
 	vec3 rot_uv;
@@ -531,7 +531,7 @@ void light() {
 	color_0 = mix(mix_base_color, color_1, temp_f0);
 	vec4 light_part;
 	light_part = mix(color_0, hsv_overlay, _transparency_0);
-	
+
 	temp_f0 = clamp(_shadow_size + _shadow_transition, 0.0, 1.0);
 	float map_shadow_rate = map_range(light_shadow_rate, _shadow_size, temp_f0, 0.0, 1.0);
 	color_0 = mix(mix_base_color, shadow_color, _shadow_opacity);
@@ -539,7 +539,7 @@ void light() {
 	color_1 *= color_0;
 	vec4 shadow_part;
 	shadow_part = mix(color_1, mix_base_color, _smooth_shadow);
-	
+
 	color_0 = mix(shadow_part, light_part, map_shadow_rate);
 	DIFFUSE_LIGHT += color_0.rgb / ALBEDO;
 }

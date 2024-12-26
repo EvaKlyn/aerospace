@@ -27,14 +27,14 @@ uniform float refraction_amount = 0.05;
 uniform float refraction_brightness = 0.1;
 
 void fragment() {
-	
+
 	// matcap implimentation from: https://godotshaders.com/shader/view-matcap/
 	vec2 matcap_uv = (NORMAL.xy * vec2(0.5, -0.5) + vec2(0.5, 0.5));
-	
+
 	ALBEDO = color.rgb;
-	
+
 	vec2 reflected_uv;
-	
+
 	// - Refraction
 	if (use_refraction) {
 		// refraction shader from https://godotshaders.com/shader/3d-low-distortion-refraction-low-poly-glass/
@@ -42,23 +42,22 @@ void fragment() {
 		vec2 displacement = vec2(refraction_amount);
 		displacement.x *= -normx.x*2.0;
 		displacement.y *= -normx.y*2.0;
-		
+
 		reflected_uv = SCREEN_UV + displacement;
-		
+
 		ALBEDO *= pow(texture(screen_texture, reflected_uv).rgb + refraction_brightness, vec3(reflected_map_power));
 	}
 	// - Reflection
 	reflected_uv = matcap_uv - UV;
 	ALBEDO *= pow(texture(reflected_map, reflected_uv).rgb, vec3(reflected_map_power));
-	
-	
+
+
 	// - Lighting
 	ALBEDO *= mix(vec3(1.0), pow(texture(lighting_map, matcap_uv).rgb, vec3(lighting_power)), metalness);
 
 }
-	
+
 void light()
 {
 	DIFFUSE_LIGHT = emission.rgb * emission.a;
 }
-	

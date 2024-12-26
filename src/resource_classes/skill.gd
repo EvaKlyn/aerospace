@@ -19,8 +19,10 @@ enum SkillResult {
 @export var skill_name: String = "Unknown Skill"
 @export var icon: Image
 @export var is_auto_attack: bool = false
+@export var is_internal: bool = false
 @export var base_cooldown: float = 2.0
 @export var cast_time: float = 0.0
+@export var auto_attack_reset: bool = false
 @export_range(0, 100) var atb_gain: int = 0
 @export_range(0, 100) var atb_cost: int = 10
 @export_range(0.0, 1.0) var failure_chance: float = 0.0
@@ -28,6 +30,16 @@ enum SkillResult {
 @export_enum("enemy", "ally", "object", "self") var target_type: String = "enemy"
 @export_enum("skill", "spell", "special", "misc") var category: String = "skill"
 @export_enum("data-driven", "callable") var logic_type: String
+
+@export_category("Text Popup")
+@export_enum("none", "caster", "target") var popup: String = "none"
+@export var popup_text: String = ""
+@export var popup_fill: Color = Color.WHITE
+@export var popup_border: Color = Color.WHITE
+@export var popup_scale = 1.0
+@export var popup_lifetime = 1.0
+
+@export_category("Visuals")
 @export var fx_scene: PackedScene
 @export var cast_animation_name: StringName
 @export var result_offset: float = 0.0
@@ -35,6 +47,7 @@ enum SkillResult {
 @export_category("Damage Details")
 @export var inflicts_damage: bool = false
 @export var base_damage: int = 0
+@export var can_crit: bool = false
 @export_enum("attack", "magic", "true") var damage_type: String = "attack"
 @export_enum("none", "attack_damage", "magic_power", "special") var damage_scales_with: String = "none"
 @export var damage_special_scaler: NodePath = ""
@@ -53,7 +66,7 @@ enum SkillResult {
 
 @export_category("Status Details")
 @export var gives_status: bool = false
-@export var status_names: Array[String] = []
+@export var statuses: Dictionary = {}
 
 func _ready() -> void:
 	add_child(cooldown_timer)
@@ -69,20 +82,27 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 	if target_type != "self" and !target:
 		return SkillResult.INVALID
 	if not is_auto_attack and cooldown_timer.time_left > 0:
+		MmoUtils.rpc("text_popup", caster.unit_positon, str(cooldown_timer.time_left).left(4)+ " sec", 0.5, 1.0, Color.ROSY_BROWN, Color.WEB_MAROON)
 		return SkillResult.ON_COOLDOWN
 	if caster.unit_info.atb < atb_cost:
 		return SkillResult.INVALID
 	
 	if not is_auto_attack:
-		cooldown_timer.one_shot = true
-		cooldown_timer.start(base_cooldown)
+		caster.unit_info.atb -= atb_cost
+		caster.unit_info.atb += atb_gain * caster.atb_gain_mult
+	if is_auto_attack and !caster.status_effects.has("empowered"):
+		caster.unit_info.atb -= atb_cost
+		caster.unit_info.atb += atb_gain * caster.atb_gain_mult
 	
-	caster.unit_info.atb -= atb_cost
-	caster.unit_info.atb += atb_gain * caster.atb_gain_mult
+	if base_cooldown > 0:
+		cooldown_timer.one_shot = true
+		cooldown_timer.start(base_cooldown * caster.unit_info.cooldown_mult)
+	
+	
 	
 	if cast_time > 0:
-		caster.unit_info.cast_time_left = cast_time
-		caster.unit_info.full_cast_time = cast_time
+		caster.unit_info.cast_time_left = cast_time * caster.unit_info.cast_time_mult
+		caster.unit_info.full_cast_time = cast_time * caster.unit_info.cast_time_mult
 		var success = await caster.cast_over
 		
 		if !success:
@@ -94,7 +114,10 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 	
 	await get_tree().create_timer(result_offset).timeout
 	
-	var result = _realcast(caster, target) 
+	var result = await _realcast(caster, target) 
+	
+	if auto_attack_reset:
+		caster.last_autoattack_lockout = 0.0
 	
 	match result:
 		SkillResult.SUCCESS:
@@ -120,7 +143,7 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 		return SkillResult.FIZZLE
 	
 	if logic_type == "callable":
-		result = custom_cast(caster, target)
+		result = await custom_cast(caster, target)
 		match result:
 			SkillResult.FIZZLE:
 				MmoUtils.rpc("eventlog", caster.unit_name + " failed to use " + skill_name + ".")
@@ -129,6 +152,9 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 				MmoUtils.rpc("text_popup", caster.unit_positon, "Interrupted!", 1.0, 1.0, Color.WHITE, Color.BLACK)
 				MmoUtils.rpc("eventlog", caster.unit_name + " was interrupted using " + skill_name + ".")
 		return result
+	
+	if target_type == "self":
+		target = caster
 	
 	if inflicts_damage:
 		var damage = DamageInstance.new()
@@ -156,6 +182,17 @@ func _realcast(caster: GameUnit, target: GameUnit) -> SkillResult:
 		else:
 			str_message = "something went weird lol."
 		MmoUtils.rpc("eventlog", str_message, "combat")
+	
+	if gives_status:
+		for status in statuses:
+			if statuses[status] is float:
+				target.add_status(status, statuses[status])
+		result = SkillResult.SUCCESS
+	
+	if popup == "caster":
+		MmoUtils.rpc("text_popup", caster.unit_positon, popup_text, popup_scale, popup_lifetime, popup_fill, popup_border)
+	if popup == "target":
+		MmoUtils.rpc("text_popup", target.unit_positon, popup_text, popup_scale, popup_lifetime, popup_fill, popup_border)
 	
 	match result:
 		SkillResult.FIZZLE:

@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://bdniqwi3nd2d6"]
+[gd_scene load_steps=23 format=3 uid="uid://bdniqwi3nd2d6"]
 
 [ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="2_3mq61"]
 [ext_resource type="Texture2D" uid="uid://ds1g4py3poq0s" path="res://assets/texture2d/ui_targetring.png" id="2_phblr"]
+[ext_resource type="Script" path="res://src/skills/player_medium_dodge.gd" id="3_j1g7p"]
 [ext_resource type="Script" path="res://src/obj/player_body.gd" id="3_nmnka"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_464ud"]
 [ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="4_sxmj2"]
@@ -13,6 +14,7 @@
 [ext_resource type="Script" path="res://src/skills/great_leap.gd" id="6_mc0xs"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
 [ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="13_8ntcc"]
+[ext_resource type="Shader" path="res://res/shadercode/wireframe.gdshader" id="15_kt54l"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7047k"]
 radius = 3.0
@@ -52,6 +54,22 @@ font_weight = 725
 subpixel_positioning = 0
 oversampling = 2.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jipd4"]
+render_priority = 0
+shader = ExtResource("15_kt54l")
+shader_parameter/modelColor = Color(0, 0, 0, 1)
+shader_parameter/wireframeColor = Color(1, 1, 1, 1)
+shader_parameter/width = 2.0
+shader_parameter/modelOpacity = 0.0
+shader_parameter/filtered = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_1my7c"]
+material = SubResource("ShaderMaterial_jipd4")
+radius = 2.0
+height = 4.0
+radial_segments = 16
+rings = 8
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0u3pd"]
 properties/0/path = NodePath("TargetRing:position")
 properties/0/spawn = true
@@ -68,6 +86,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath(".:network_anim")
 properties/4/spawn = true
 properties/4/replication_mode = 2
+properties/5/path = NodePath("Vis/MeshInstance3D:visible")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("physics_body", "game_unit", "vis_body")]
 script = ExtResource("1_t8tp8")
@@ -78,15 +99,24 @@ vis_body = NodePath("Vis/Body")
 
 [node name="GameUnit" parent="." node_paths=PackedStringArray("auto_attack_skill") instance=ExtResource("2_3mq61")]
 team = 1
-max_target_range = 12.0
+max_target_range = 60.0
 stat_attack_damage = 10
 stat_attack_speed = 1.5
 stat_move_speed = 7.0
 stat_jump_str = 11.0
-stat_melee_range = 3.0
 stat_missile_range = 60.0
 atb_passive_gain = 5.0
 auto_attack_skill = NodePath("TestAttack")
+
+[node name="PlayerDodge" type="Node" parent="GameUnit"]
+script = ExtResource("3_j1g7p")
+skill_name = "Medium Dodge"
+is_internal = true
+base_cooldown = 0.4
+atb_cost = 5
+target_type = "self"
+category = "misc"
+logic_type = "callable"
 
 [node name="TestAttack" type="Node" parent="GameUnit"]
 script = ExtResource("4_sxmj2")
@@ -100,6 +130,25 @@ cast_animation_name = &"player_anim_lib/onehand_swing1"
 result_offset = 0.4
 inflicts_damage = true
 damage_scales_with = "attack_damage"
+
+[node name="Empower" type="Node" parent="GameUnit"]
+script = ExtResource("4_sxmj2")
+skill_name = "Brutal Attack"
+base_cooldown = 0.0
+cast_time = 0.2
+auto_attack_reset = true
+atb_cost = 30
+target_type = "self"
+logic_type = "data-driven"
+popup = "caster"
+popup_text = "Empowered!"
+popup_fill = Color(1, 0.13, 0.13, 1)
+popup_border = Color(0, 0, 0, 1)
+popup_scale = 2.0
+gives_status = true
+statuses = {
+"empowered": 10.0
+}
 
 [node name="VoidBeam" type="Node" parent="GameUnit"]
 script = ExtResource("4_sxmj2")
@@ -118,11 +167,22 @@ damage_type = "magic"
 damage_scales_with = "attack_damage"
 base_magic_pen = 10
 
+[node name="Sprint" type="Node" parent="GameUnit"]
+script = ExtResource("4_sxmj2")
+skill_name = "Sprint"
+base_cooldown = 12.0
+target_type = "self"
+category = "misc"
+logic_type = "data-driven"
+gives_status = true
+statuses = {
+"sprint": 8.0
+}
+
 [node name="GreatLeap" type="Node" parent="GameUnit"]
 script = ExtResource("6_mc0xs")
-skill_name = "Great Leap"
-cast_time = 0.4
-atb_cost = 40
+skill_name = "Test Jump"
+base_cooldown = 0.0
 target_type = "self"
 logic_type = "callable"
 
@@ -266,7 +326,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8749, 0)
 [node name="v" type="Node3D" parent="CameraOrigin/h"]
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin/h/v"]
-spring_length = 11.95
+spring_length = 7.0
 margin = 0.47
 
 [node name="CameraTarget" type="Node3D" parent="CameraOrigin/h/v/SpringArm3D"]
@@ -276,6 +336,7 @@ margin = 0.47
 [node name="MeleeRangeDecal" type="Sprite3D" parent="Vis"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0629038, -2.74961e-09)
 pixel_size = 0.004
+no_depth_test = true
 texture = ExtResource("5_smjeu")
 
 [node name="Label3D" type="Label3D" parent="Vis"]
@@ -292,6 +353,11 @@ outline_size = 8
 
 [node name="Body" parent="Vis" instance=ExtResource("13_8ntcc")]
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Vis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27624, 0)
+visible = false
+mesh = SubResource("SphereMesh_1my7c")
+
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.05
 delta_interval = 0.05
@@ -303,5 +369,7 @@ replication_config = SubResource("SceneReplicationConfig_0u3pd")
 [connection signal="state_exited" from="PhysicsBody/StateChart/States/Actionable" to="PhysicsBody" method="_on_actionable_state_exited"]
 [connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Actionable" to="PhysicsBody" method="_on_actionable_state_physics_processing"]
 [connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Casting" to="PhysicsBody" method="_on_casting_state_physics_processing"]
+[connection signal="state_entered" from="PhysicsBody/StateChart/States/Dodge" to="PhysicsBody" method="_on_dodge_state_entered"]
+[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Dodge" to="PhysicsBody" method="_on_dodge_state_physics_processing"]
 [connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Knockback" to="PhysicsBody" method="_on_knockback_state_physics_processing"]
 [connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Frozen" to="PhysicsBody" method="_on_frozen_state_physics_processing"]

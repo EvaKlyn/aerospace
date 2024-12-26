@@ -24,7 +24,7 @@ class_name BasePlayer
 # @onready var animator: AnimationPlayer = $PhysicsBody/AnimationPlayer
 @onready var listener: AudioListener3D = $PhysicsBody/AudioListener3D
 @onready var melee_ring: Sprite3D = $Vis/MeleeRangeDecal
-
+@onready var dodge_fx: Node3D = $Vis/MeshInstance3D
 @export var network_anim: StringName = ""
 
 var dummy = 1
@@ -52,6 +52,8 @@ var last_autoattack_time: float = 0.0
 func _ready():
 	# Wait a frame so peer_id is set
 	await get_tree().process_frame
+	await get_tree().process_frame
+	
 	add_to_group("players")
 	
 	# Set owner
@@ -61,6 +63,7 @@ func _ready():
 		MmoUtils.main.ui_coordinator.unitinfo = game_unit.unit_info
 		MmoUtils.main.ui_coordinator.base_player = self
 		listener.make_current()
+		MmoUtils.terrain_camera()
 	
 	if not is_multiplayer_authority():
 		return
@@ -69,6 +72,7 @@ func _ready():
 	game_unit.unit_name = network_peer.nickname
 	game_unit.sync.set_visibility_for(peer_id, true)
 	game_unit.cast_over.connect(_cast_over)
+	game_unit.recalc_stats()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and camera.current:
@@ -114,6 +118,9 @@ func _physics_process(delta: float) -> void:
 		vis_body.animator.play("player_anim_lib/casting")
 	else:
 		vis_body.animator.play("player_anim_lib/" + physics_body.animation)
+	
+	if game_unit.status_effects.has("dodge"): dodge_fx.visible = true
+	else: dodge_fx.visible = false
 	
 	network_anim = vis_body.animator.current_animation
 
@@ -214,7 +221,6 @@ func visual_update(delta) -> void:
 	vis.global_rotation.y = lerp_angle(vis.global_rotation.y, physics_body.global_rotation.y, delta * 20)
 	if physics_body.looking_vector != Vector3.ZERO:
 		vis_body.head.global_rotation = vis_body.head.global_rotation.lerp(physics_body.looking_vector, delta * 6)
-	
 	var target = vis_body.head.to_local(vis_body.head.global_position + physics_body.network_velocity.normalized()) * 0.1
 	vis_body.head.position = vis_body.head.position.lerp(target, delta * 2)
 	vis_body.hand_container.position = vis_body.hand_container.position.lerp(target, delta * 2)
@@ -250,4 +256,20 @@ func do_skill(skill_idx):
 		return
 	
 	var result: GameSkill.SkillResult = await game_unit.skills[skill_idx].cast(game_unit, game_unit.current_target)
+	return result
+
+@rpc("any_peer", "call_local", "reliable")
+func do_skill_absolute(node_name: String) -> GameSkill.SkillResult:
+	if multiplayer.get_remote_sender_id() != peer_id:
+		MmoUtils.rpc_id(peer_id, "eventlog", "Someone attempted to use one of your skills remotely lol", "debug")
+		return GameSkill.SkillResult.INVALID
+	
+	if not is_multiplayer_authority():
+		return GameSkill.SkillResult.INVALID
+	
+	var skill = game_unit.get_node_or_null(node_name)
+	if skill == null or !is_instance_of(skill, GameSkill):
+		return GameSkill.SkillResult.INVALID
+	
+	var result: GameSkill.SkillResult = await skill.cast(game_unit, game_unit.current_target)
 	return result

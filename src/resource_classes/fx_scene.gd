@@ -25,7 +25,7 @@ func setup(origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO, data: D
 	return true
 
 ## ok actually do ur setup in an override
-func _setup(origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO, data: Dictionary = {}):
+func _setup(_origin_pos: Vector3, _target_position: Vector3 = Vector3.ZERO, _data: Dictionary = {}):
 	pass
 
 ## Override this when starting

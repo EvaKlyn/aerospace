@@ -12,6 +12,8 @@ signal attacked(attacker: GameUnit)
 signal damaged(attacker: GameUnit, damage_report: Dictionary)
 signal stats_update
 signal cast_over(succeeded: bool)
+signal status_added(status: String, duration: float)
+signal status_removed(status: String)
 
 var skill_map: Array[GameSkill] = []
 
@@ -34,11 +36,12 @@ var skill_map: Array[GameSkill] = []
 @export var stat_attack_drain: int = 0
 @export var stat_magic_drain: int = 0
 @export var stat_attack_speed: float = 1.0
-@export var stat_cooldown_reduce: float = 0.0
+@export var stat_cooldown_mult: float = 1.0
 @export var stat_move_speed: float = 10.0
 @export var stat_jump_str: float = 14.0
 @export var stat_melee_range: float = 4.0
 @export var stat_missile_range: float = 12.0
+@export var stat_crit_rate: float = 0.05
 
 @export_category("ATB")
 @export var atb_passive_gain: float = 3.0
@@ -46,6 +49,7 @@ var skill_map: Array[GameSkill] = []
 
 @export_category("funny stuff")
 @export var gravity_mult: float = 1.0
+@export var cast_time_mult: float = 1.0
 
 @export_category("RPG Statistics")
 @export var rpg_strength: int = 10
@@ -112,8 +116,9 @@ func _physics_process(delta: float) -> void:
 	if current_target: 
 		has_target = true
 		target_position = current_target.unit_positon
-		if current_target.unit_positon.distance_to(unit_positon) > max_target_range:
+		if target_position.distance_to(unit_positon) > unit_info.max_target_range:
 			current_target = null
+			
 	else:
 		has_target = false
 	
@@ -132,8 +137,8 @@ func _physics_process(delta: float) -> void:
 		prune_targeting_me()
 		last_prune = NetworkTime.time
 	
-	if !actionable:
-		last_autoattack_lockout = NetworkTime.time
+	#if !actionable:
+		#last_autoattack_lockout = NetworkTime.time
 		
 	
 	if NetworkTime.time - unit_info.attack_speed > last_autoattack_lockout:
@@ -147,9 +152,10 @@ func _physics_process(delta: float) -> void:
 			continue
 		else:
 			stale_states.append(state)
-	
-	for state in stale_states:
-		remove_status(state)
+	if stale_states.size() > 0:
+		for state in stale_states:
+			remove_status(state)
+		recalc_stats()
 
 func prune_targeting_me():
 	if not is_multiplayer_authority():
@@ -181,14 +187,16 @@ func auto_attack():
 	if current_target == null:
 		return
 	if auto_attack_skill.range_type == "melee":
-		if current_target.unit_positon.distance_to(unit_positon) - 0.4 > stat_melee_range:
+		if current_target.unit_positon.distance_to(unit_positon) > unit_info.melee_range:
 			return
 	elif auto_attack_skill.range_type == "ranged":
-		if current_target.unit_positon.distance_to(unit_positon) - 0.4 > stat_missile_range:
+		if current_target.unit_positon.distance_to(unit_positon) > unit_info.missile_range:
 			return
 	
 	last_autoattack_lockout = NetworkTime.time
 	await auto_attack_skill.cast(self, current_target)
+	if status_effects.has("empowered"):
+		remove_status("empowered")
 
 func recalc_stats():
 	unit_info.max_hp = max_hp
@@ -202,22 +210,27 @@ func recalc_stats():
 	unit_info.attack_drain = stat_attack_drain
 	unit_info.magic_drain = stat_magic_drain
 	unit_info.attack_speed = stat_attack_speed
-	unit_info.cooldown_reduce = stat_cooldown_reduce
+	unit_info.cooldown_mult = stat_cooldown_mult
 	unit_info.move_speed = stat_move_speed
 	unit_info.missile_range = stat_missile_range
 	unit_info.evasion = stat_evasion
 	unit_info.poise = stat_poise
 	unit_info.jump_str = stat_jump_str
 	unit_info.gravity_mult = gravity_mult
+	unit_info.melee_range = stat_melee_range
+	unit_info.cast_time_mult = cast_time_mult
+	unit_info.crit_rate = stat_crit_rate
 	
 	if status_effects.has("low_g"):
 		unit_info.gravity_mult *= 0.5
 	
 	if status_effects. has("sprint"):
-		unit_info.move_speed *= 1.35
+		unit_info.move_speed *= 1.6
 	
 	if status_effects.has("haste"):
-		var haste_mult = 1.6
+		var haste_mult = 1.5
+		unit_info.cooldown_mult *= 0.8
+		unit_info.cast_time_mult *= 0.8
 		unit_info.move_speed *= haste_mult
 		unit_info.jump_str *= haste_mult
 		unit_info.attack_speed *= haste_mult
@@ -228,9 +241,17 @@ func recalc_stats():
 	
 	if status_effects.has("slow"):
 		var slow_mult = 0.6
+		unit_info.cooldown_mult *= 1.1
+		unit_info.cast_time_mult *= 1.3
 		unit_info.move_speed *= slow_mult
 		unit_info.jump_str *= slow_mult
 		unit_info.evasion *= slow_mult
+	
+	if status_effects.has("empowered"):
+		unit_info.attack_damage *= 1.5
+		unit_info.crit_rate = 1.0
+		unit_info.armor_pen += unit_info.attack_damage / 2
+		unit_info.melee_range *= 1.3
 	
 	if status_effects.has("stun"):
 		unit_info.move_speed *= 0
@@ -240,10 +261,14 @@ func recalc_stats():
 	
 	max_target_range = unit_info.missile_range
 	
+	if status_effects.has("dodge"):
+		unit_info.evasion = 1.0
+	
 	skills.clear()
 	unit_info.skills_dict.clear()
 	for child in get_children():
 		if child is GameSkill:
+			if child.is_internal: continue
 			if child.is_auto_attack: continue
 			skills.append(child)
 			unit_info.skills_dict[child.skill_name] = skills.size() - 1
@@ -263,13 +288,15 @@ func take_damage(from: GameUnit, damage: DamageInstance) -> Dictionary:
 	
 	if randf_range(0.0, 1.0) < unit_info.evasion:
 		if damage.can_dodge:
-			MmoUtils.rpc("eventlog", unit_name + " evaded.", "combat")
 			MmoUtils.rpc("text_popup", unit_positon, "Evade!", 1.0, 1.0, Color.AQUA, Color.BLACK)
 			return {"inflicted": 0, "mitigated": damage.raw, "status_code": "evaded"}
 		else: 
 			MmoUtils.rpc("eventlog", unit_name + " would have evaded " + from.unit_name + "'s attack but could not!", "combat")
 	
 	var textcolor = [Color.DARK_RED, Color.MEDIUM_VIOLET_RED]
+	var textscale = 1.0
+	var suffix = ""
+	
 	
 	if damage.damage_type == "attack":
 		var effective_armor: float = unit_info.armor - damage.bonus_armor_pen - from.unit_info.armor_pen
@@ -285,25 +312,33 @@ func take_damage(from: GameUnit, damage: DamageInstance) -> Dictionary:
 		cooked = damage.raw
 		textcolor = [Color.WHITE, Color.BLACK]
 	
+	if randf_range(0.0, 1.0) < from.unit_info.crit_rate:
+		cooked *= 2.0
+		textcolor = [Color.GOLD, Color.BLACK]
+		MmoUtils.rpc("eventlog", from.unit_name + "'s attack was critical!", "combat")
+		suffix = "!!!"
+	
 	var final_dmg = ceili(cooked)
 	var dmg_report = {"inflicted": final_dmg, "mitigated": damage.raw - final_dmg, "status_code": "normal"}
 	if final_dmg > 0:
 		damaged.emit(from, dmg_report)
 	
-	MmoUtils.rpc("text_popup", unit_positon, str(final_dmg), 1.0, 1.0, Color.CRIMSON, Color.WHITE)
+	MmoUtils.rpc("text_popup", unit_positon, str(final_dmg) + suffix, textscale, 1.0, textcolor[0], textcolor[1])
 	current_hp -= final_dmg
 	recalc_stats()
 	return dmg_report
 
 func add_status(state: String, duration: float):
 	status_effects[state] = duration
+	status_added.emit(state, duration)
+	
 	recalc_stats()
-	if team == Teams.FRIENDLY:
-		MmoUtils.rpc("eventlog", unit_name + " is " + state + " for " + str(duration), "status")
+	#if team == Teams.FRIENDLY:
+		#MmoUtils.rpc("eventlog", unit_name + " is " + state + " for " + str(duration), "status")
 
 func remove_status(state: String):
 	status_effects.erase(state)
 	recalc_stats()
+	status_removed.emit(state)
 	#if team == Teams.FRIENDLY:
 		#MmoUtils.rpc("eventlog", unit_name + " is no longer " + str(state), "status")
-	

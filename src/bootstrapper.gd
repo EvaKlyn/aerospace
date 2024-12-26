@@ -3,11 +3,12 @@ extends Node
 enum Role { NONE, HOST, CLIENT }
 
 @export_category("UI")
-@export var connect_ui: Control
+@export var connect_ui: Window
 @export var noray_address_input: LineEdit
 @export var oid_input: LineEdit
 @export var host_oid_input: LineEdit
 @export var force_relay_check: CheckBox
+@export var game_view: Control
 
 var role = Role.NONE
 
@@ -22,9 +23,9 @@ func connect_to_noray():
 	var address = noray_address_input.text
 	if address.contains(":"):
 		var parts = address.split(":")
-		var host = parts[0]
+		var ip = parts[0]
 		var port = (parts[1] as String).to_int()
-		err = await Noray.connect_to_host(host, port)
+		err = await Noray.connect_to_host(ip, port)
 	else:
 		err = await Noray.connect_to_host(address)
 	
@@ -87,6 +88,7 @@ func host():
 	
 	role = Role.HOST
 	connect_ui.hide()
+	game_view.show()
 	# NOTE: This is not needed when using NetworkEvents
 	# However, this script also runs in multiplayer-simple where NetworkEvents
 	# are assumed to be absent, hence starting NetworkTime manually
@@ -163,6 +165,7 @@ func _handle_connect(address: String, port: int) -> Error:
 			return ERR_CANT_CONNECT
 		
 		connect_ui.hide()
+		game_view.show()
 		# NOTE: This is not needed when using NetworkEvents
 		# However, this script also runs in multiplayer-simple where NetworkEvents
 		# are assumed to be absent, hence starting NetworkTime manually

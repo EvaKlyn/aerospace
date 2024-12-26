@@ -4,15 +4,19 @@ extends Node
 @export var chat_line_edit: LineEdit
 @export var chat_button: Button
 
-@export var hotbar: PanelContainer
+@export var hotbar: Control
 @export var hp_text: Label
 @export var hp_bar: ProgressBar
 @export var atb_text: Label
 @export var atb_bar: ProgressBar
 @export var skills_area: Control
 
+@export var spell_window: PanelContainer
 @export var spell_bar: ProgressBar
 @export var spell_text: Label
+
+@export var status_window: PanelContainer
+@export var status_container: Container
 
 @export_category("customization_menu")
 @export var ancestry_dropdown: OptionButton
@@ -22,9 +26,13 @@ extends Node
 
 var base_player: BasePlayer
 var unitinfo: UnitInfo
-var unit: GameUnit
+var unit: GameUnit:
+	set(newu):
+		unit = newu
+		unit.status_removed.connect(_remove_status_icon)
+		last_status_effects = unit.status_effects.keys()
 var dict_hash
-
+var last_status_effects: Array = []
 var just_connected = true
 
 # Called when the node enters the scene tree for the first time.
@@ -33,9 +41,11 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not unitinfo or not base_player:
 		return
+	if not unit:
+		unit = unitinfo.get_parent()
 	if just_connected:
 		var customization = {
 		"ancestry" = ancestry_dropdown.text.to_lower(),
@@ -57,11 +67,9 @@ func _process(delta: float) -> void:
 		spell_bar.max_value = unitinfo.full_cast_time
 		spell_bar.value = unitinfo.full_cast_time - unitinfo.cast_time_left
 		spell_text.text = str(unitinfo.cast_time_left).left(4) + "!"
-		spell_bar.visible = true
-		spell_text.visible = true
+		spell_window.modulate = Color.WHITE
 	else:
-		spell_bar.visible = false
-		spell_text.visible = false
+		spell_window.modulate = Color.TRANSPARENT
 	
 	var last_hash = dict_hash
 	dict_hash = unitinfo.skills_dict.hash()
@@ -81,6 +89,35 @@ func _process(delta: float) -> void:
 			new_button.pressed.connect(_on_skill_button_pressed.bind(new_button))
 			skills_area.add_child(new_button)
 			i += 1
+	
+	if unit:
+		if unit.status_effects.keys() != last_status_effects:
+			last_status_effects = unit.status_effects.keys()
+			for key in last_status_effects:
+				if status_container.get_node_or_null(key):
+					continue
+				_add_status_icon(key, unit.status_effects[key])
+		
+		if status_container.get_child_count() == 0:
+			status_window.modulate = Color.TRANSPARENT
+		else:
+			status_window.modulate = Color.WHITE
+
+func _add_status_icon(state: String, duration: float):
+	var path = "res://assets/texture2d/icons/status/" + state + ".png"
+	if !ResourceLoader.exists(path):
+		return
+	var img = load("res://assets/texture2d/icons/status/" + state + ".png")
+	
+	var new_status_icon: UiStatusIcon = preload("res://src/obj/ui/status_icon.tscn").instantiate()
+	new_status_icon.name = state
+	status_container.add_child(new_status_icon)
+	new_status_icon.img = img
+	new_status_icon.number = duration
+
+func _remove_status_icon(state: String):
+	var node = status_container.get_node_or_null(state)
+	if node: node.queue_free()
 
 func _on_chat_button_pressed() -> void:
 	if NetworkTime._is_active():

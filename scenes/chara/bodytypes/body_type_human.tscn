@@ -1,9 +1,9 @@
-[gd_scene load_steps=36 format=4 uid="uid://cstkb6ilx4y0w"]
+[gd_scene load_steps=30 format=4 uid="uid://cstkb6ilx4y0w"]
 
 [ext_resource type="Script" path="res://src/obj/body_type.gd" id="1_0wwr0"]
 [ext_resource type="Texture2D" uid="uid://c3v1u7c7f8vp0" path="res://assets/texture3d/chara/fabric1.png" id="2_m56t3"]
 [ext_resource type="Texture2D" uid="uid://52bsx8jmtctd" path="res://assets/texture3d/chara/fabric2.png" id="3_bss7y"]
-[ext_resource type="Shader" path="res://res/shadercode/hair.gdshader" id="4_e32ml"]
+[ext_resource type="Texture2D" uid="uid://coo4g3mirkaww" path="res://assets/texture3d/chara/hair1.png" id="4_jvag0"]
 [ext_resource type="Texture2D" uid="uid://bhprwdalvd2vu" path="res://assets/texture3d/chara/hand.png" id="4_ncwhr"]
 [ext_resource type="PackedScene" uid="uid://cjymfh3s7sowj" path="res://scenes/chara/equipment/weapon_test_sword.tscn" id="5_v1ck2"]
 [ext_resource type="AnimationLibrary" uid="uid://d22p4e4wjmyje" path="res://res/player_anim_lib.res" id="6_yu1jq"]
@@ -59,55 +59,16 @@ height = 0.2
 radial_segments = 8
 rings = 4
 
-[sub_resource type="Gradient" id="Gradient_t42td"]
-colors = PackedColorArray(0.2, 0.146, 0.146, 1, 0.32, 0.1888, 0.1888, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_hmh1j"]
-gradient = SubResource("Gradient_t42td")
-width = 128
-
-[sub_resource type="Gradient" id="Gradient_8xkcl"]
-offsets = PackedFloat32Array(0, 0.1491, 0.838046)
-colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_3q04w"]
-gradient = SubResource("Gradient_8xkcl")
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_b21hf"]
-gradient = SubResource("Gradient_8xkcl")
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_rpmtf"]
-gradient = SubResource("Gradient_t42td")
-width = 128
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w87ro"]
-render_priority = 0
-shader = ExtResource("4_e32ml")
-shader_parameter/_sharpness = 0.0
-shader_parameter/_thinness = 0.0
-shader_parameter/_density = 15.7
-shader_parameter/_smoothness = -0.9
-shader_parameter/_blur = 0.6
-shader_parameter/_height = 0.0
-shader_parameter/_transparency_0 = 0.0
-shader_parameter/_spaces = -15.219
-shader_parameter/_detail = 1.0
-shader_parameter/_transparency_1 = 0.0
-shader_parameter/_overlay_shadow = 0.0
-shader_parameter/_overlaypure_color = 0.0
-shader_parameter/_overlay_hue = 0.334
-shader_parameter/_brightness = 0.349
-shader_parameter/_overlay_saturation = 1.231
-shader_parameter/_shadow_size = 0.314
-shader_parameter/_shadow_opacity = 1.0
-shader_parameter/_shadow_transition = 0.001
-shader_parameter/_smooth_shadow = 0.0
-shader_parameter/_rotate_90_degrees = 0.0
-shader_parameter/_normal_strength = 0.15
-shader_parameter/_base_color = SubResource("GradientTexture1D_hmh1j")
-shader_parameter/_shadow_color = SubResource("GradientTexture1D_rpmtf")
-shader_parameter/_highlight_gradient_1 = SubResource("GradientTexture1D_3q04w")
-shader_parameter/_highlight_gradient_2 = SubResource("GradientTexture1D_b21hf")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h4dpu"]
+diffuse_mode = 3
+specular_mode = 2
+albedo_color = Color(0.321398, 0.448848, 0.727776, 1)
+metallic = 1.0
+metallic_specular = 0.0
+metallic_texture = ExtResource("4_jvag0")
+metallic_texture_channel = 1
+roughness = 0.0
+uv1_scale = Vector3(2.805, 2.805, 2.805)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_5550q"]
 _surfaces = [{
@@ -133,7 +94,7 @@ _surfaces = [{
 "index_count": 2112,
 "index_data": PackedByteArray("OgBlAfkAOgCVAGUB+gB8ADcA+gBmAXwAZQEEAHsAZQGOAAQAlQCOAGUBlQALAI4AFgBnAaIAFgCUAGcBogCAABIAogBnAYAAZwEBAIAAZwGPAAEAlACPAGcBlAAMAI8AQwBpAekAQwD4AGkB6ACWAA8A6ABoAZYAaAEAAJYAaAGDAAAA+ACEAGkB+AA5AIQAKABqAbUAKADGAGoBtQCJABMAtQBqAYkAagEKAIkAagGIAAoAxgCIAGoBxgAiAIgAJABrAcQAJACSAGsBxACHACEAxABrAYcAawEJAIcAawGQAAkAkgCQAGsBkgANAJAALABtAcMALACtAG0BwgCSACQAwgBsAZIAbAENAJIAbAGlAA0ArAClAGwBrAAZAKUAGwBuAacAGwCqAG4BpwCTABUApwBuAZMAbwEMAJQAbwGkAAwAqwCkAG8BqwAYAKQAPQBwAfcAPQCpAHAB9wCVADoA9wBwAZUAcAELAJUAcAGjAAsAqQCjAHABqQAXAKMAFwBxAaMAFwCoAHEBowCaAAsAowBxAZoAcQEVAJoAcQGnABUAqACnAHEBqAAbAKcAHAByAa4AHAC/AHIBrgCYAAcArgByAZgAcgETAJgAcgG1ABMAvwC1AHIBvwAoALUAPgBzAeQAPgD2AHMB5AB+AAIA5ABzAX4AcwEPAH4AcwHoAA8A9gDoAHMB9gBCAOgACwB0AY4ACwCaAHQBjgCXAAQAjgB0AZcAdAERAJcAdAGhABEAmgChAHQBmgAVAKEALQB1AcoALQDbAHUBygCoABcAygB1AagAdQEbAKgAdQHOABsA2wDOAHUB2wAyAM4ARwB2AfUARwDaAHYB9QCpAD0A9QB2AakAdgEXAKkAdgHKABcA2gDKAHYB2gAtAMoAMgB3Ac4AMgDYAHcBzgCqABsAzgB3AaoAeAEYAKsAeAHLABgA2QDLAHgB2QAuAMsANAB6Ac8ANADXAHoBzwCtACwAzwB6Aa0AeQEZAKwAeQHMABkA1QDMAHkB1QAvAMwARgB7AfQARgDUAHsB9AC5AEQA9AB7AbkAewEsALkAewHPACwA1ADPAHsB1AA0AM8AMQB8Ac0AMQDSAHwBzQC4ABoAzQB8AbgAfAErALgAfAHRACsA0gDRAHwB0gA1ANEABQB9AYUABQCZAH0BhQC+AB4AhQB9Ab4AfQEpAL4AfQGgACkAmQCgAH0BmQAUAKAANwB+AdwANwDzAH4B3AC/ABwA3AB+Ab8AfgEoAL8AfgHhACgA8wDhAH4B8wA7AOEAGgB/AaYAGgC4AH8BpgC0AA4ApgB/AbQAfwEnALQAfwHBACcAuADBAH8BuAArAMEARACAAfIARAC5AIAB8gCzAEEA8gCAAbMAgAElALMAgAHDACUAuQDDAIABuQAsAMMAQQCBAfEAQQCzAIEB8QCyAEAA8QCBAbIAgQEjALIAgQHFACMAswDFAIEBswAlAMUAPACDAeIAPADwAIMB4QDGACgA4QCCAcYAgwEjAMcAgwGyACMA8ACyAIMB8ABAALIAFACEAaAAFACKAIQBoADIACkAoACEAcgAhAEdAMgAhAGvAB0AigCvAIQBigAIAK8ADgCFAZEADgC0AIUBkQCuAAcAkQCFAa4AhQEcAK4AhQHJABwAtADJAIUBtAAnAMkABgCHAY0ABgCGAIcBjADSADEAjACGAdIAhgE1ANIAhgG7ADUAhgC8AIcBhgAfALwAOACIAe8AOADdAIgB7wDTAEUA7wCIAdMAiAEzANMAiAG6ADMA3QC6AIgB3QAdALoAHQCJAboAHQCvAIkBugDWADMAugCJAdYAiQEwANYAiQGLADAArwCLAIkBrwAIAIsADwCKAZsADwCWAIoBnADYADIAnACLAdgAjAEuANkAjAGCAC4AlgCBAIoBlgAAAIEAPwCNAe4APwDlAI0B7gDaAEcA7gCNAdoAjQEtANoAjQF9AC0A5QB9AI0B5QADAH0AAwCOAX0AAwB/AI4BfQDbAC0AfQCOAdsAjgEyANsAjgGcADIAfwCcAI4BfwAQAJwAIACPAb0AIACxAI8BvQDtADYAvQCPAe0AjwFHAO0AjwHuAEcAsQDuAI8BsQA/AO4AAACQAYEAAACDAJABggDsAC4AggCRAewAkAFFAOsAkAHvAEUAgwDvAJABgwA4AO8AEgCSAZ8AEgCAAJIBnwDwADwAnwCSAfAAkgFAAPAAkgHmAEAAgADmAJIBgAABAOYADACTAY8ADADnAJMBjwDmAAEAjwCTAeYAkwFAAOYAkwHxAEAA5wDxAJMB5wBBAPEAGACUAaQAGADqAJQBpADnAAwApACUAecAlAFBAOcAlAHyAEEA6gDyAJQB6gBEAPIABACVAXsABACXAJUBfADzADcAfACWAfMAlgE7APMAlgGeADsAlwCdAJUBlwARAJ0ALgCXAcsALgDsAJcBywDqABgAywCXAeoAlwFEAOoAlwH0AEQA7AD0AJcB7ABGAPQANgCYAdAANgDtAJgB0ADjACoA0ACYAeMAmAE9AOMAmAH1AD0A7QD1AJgB7QBHAPUAHgCZAbAAHgC+AJkBsAD2AD4AsACZAfYAmQFCAPYAmQG2AEIAvgC2AJkBvgApALYAKgCaAcAAKgDjAJoBwADfACYAwACaAd8AmgE6AN8AmgH3ADoA4wD3AJoB4wA9APcAKQCbAbYAKQDIAJsBtwD4AEMAtwCcAfgAnAE5APgAnAHeADkAyADdAJsByAAdAN0AJwCeAckAJwDgAJ4ByQDcABwAyQCeAdwAngE3ANwAngH6ADcA3wD5AJ0B3wA6APkAbQCfAQwBbQBkAZ8BDAEHAUwADAGfAQcBnwFLAAcBnwH7AEsAZAH7AJ8BZAFrAPsAUwCgAQsBUwAWAaABCwEJAU4ACwGgAQkBoAFJAAkBoAH/AEkAFgH/AKABFgFRAP8AdgChAWMBdgBTAaEBYwECAWwAYwGhAQIBoQFIAAIBoQEOAUgAUwEOAaEBUwFPAA4BYACjATUBYAApAaMBNAEFAV0ANAGiAQUBowEKAAYBowGJAAoAKQGJAKMBKQETAIkAXgCkAQoBXgAzAaQBCgGQAA0ACgGkAZAApAEJAJAApAEFAQkAMwEFAaQBMwFdAAUBZAClASEBZAAyAaUBIQGlABkAIQGlAaUApQENAKUApQEKAQ0AMgEKAaUBMgFeAAoBVwCmAR8BVwAbAaYBHwEaAVYAHwGmARoBpgFOABoBpgELAU4AGwELAaYBGwFTAAsBcQCnAR4BcQBiAacBHgEZAVUAHgGnARkBpwFNABkBpwENAU0AYgENAacBYgFuAA0BVQCoAR0BVQAZAagBHQEcAVgAHQGoARwBqAFUABwBqAERAVQAGQERAagBGQFNABEBWQCpATABWQAiAakBMAEpAWAAMAGpASkBqQETACkBqQGYABMAIgGYAKkBIgEHAJgAcgCqAWABcgBPAaoBYAFTAXYAYAGqAVMBqgFPAFMBqgH9AE8AUAH+AKsBUAFKAP4ATQCtAREBTQAIAa0BEQEYAVQAEQGtARgBrAFSABcBrAEQAVIABwEQAawBBwFLABABZQCuAUcBZQA4Aa4BRwE6AWcARwGuAToBrgFYADoBrgEdAVgAOAEdAa4BOAFVAB0BegCvAUYBegBfAa8BRgE4AWUARgGvATgBrwFVADgBrwEeAVUAXwEeAa8BXwFxAB4BZwCxAUUBZwA6AbEBRAE5AWYARAGwATkBsAFWADkBsAEfAVYAOgEgAbEBOgFYACABaACyAUIBaAA7AbIBQgHMAC8AQgGyAcwAsgEZAMwAsgEhARkAOwEhAbIBOwFkACEBeACzAUABeABeAbMBQAE7AWgAQAGzATsBswFkADsBswEsAWQAXgEsAbMBXgF3ACwBMQC0AT4BMQDNALQBPwE9AWoAPwG1AT0BtAFiADwBtAErAWIAzQArAbQBzQAaACsBBQC2AZkABQADAbYBmQAVARQAmQC2ARUBtgFhABUBtgEvAWEAAwEvAbYBAwFbAC8BawC3AV0BawBIAbcBXQFMAXAAXQG3AUwBtwFgAEwBtwEwAWAASAEwAbcBSAFZADABGgC4ASsBGgCmALgBKwExAWIAKwG4ATEBuAFfADEBuAEoAV8ApgAoAbgBpgAOACgBdwC5ASwBdwBcAbkBLAEyAWQALAG5ATIBuQFeADIBuQEnAV4AXAEnAbkBXAF1ACcBdQC6AScBdQBbAboBJwEzAV4AJwG6ATMBugFdADMBugEmAV0AWwEmAboBWwF0ACYBbwC7AVoBbwBLAbsBWgEmAXQAWgG7ASYBuwFdACYBuwE0AV0ATAE1AbwBTAFgADUBFAC9AYoAFAAVAb0BigAjAQgAigC9ASMBvQFaACMBvQE2AVoAFQE2Ab0BFQFhADYBDgC+ASgBDgCRAL4BKAE3AV8AKAG+ATcBvgFZADcBvgEiAVkAkQAiAb4BkQAHACIBBgDAAQQBBgCNAMABBAEuAVwABAHAAS4BwAFqAC4BwAE/AWoAjAA+Ab8BjAAxAD4BbADBAUkBbABZAcEBSQEtAVoASQHBAS0BwQFpAC0BwQFBAWkAWQFBAcEBWQF5AEEBWgDCASMBWgAtAcIBIwGLAAgAIwHCAYsAwgEwAIsAwgFDATAALQFDAcIBLQFpAEMBUADFAQ8BUAASAcUBDgEBAUgADgHEAQEBwwFmAAABwwFEAWYAEgFFAcUBEgFnAEUBcwDGAVABcwBXAcYBUAH8AEoAUAHGAfwAxgFlAPwAxgFGAWUAVwFGAcYBVwF6AEYBSgDHAf4ASgD8AMcB/gASAVAA/gDHARIBxwFnABIBxwFHAWcA/ABHAccB/ABlAEcBXADIASUBXAAuAcgBJQFXAXMAJQHIAVcByAF6AFcByAFWAXoALgFWAcgBLgFqAFYBSADKAQIBSAABAcoBAgFZAWwAAgHKAVkByQF4AFgByQFVAXgAAAFVAckBAAFmAFUBUQDLAf8AUQATAcsB/wBRAUkA/wDLAVEBywF0AFEBywFaAXQAEwFaAcsBEwFvAFoBTgDMAVIBTgAJAcwBUgFbAXUAUgHMAVsBzAF0AFsBzAFRAXQACQFRAcwBCQFJAFEBVgDNAVQBVgAaAc0BVAFcAXcAVAHNAVwBzQF1AFwBzQFSAXUAGgFSAc0BGgFOAFIBSwDOARABSwD7AM4BEAEUAVIAEAHOARQBzgFwABQBzgFdAXAA+wBdAc4B+wBrAF0BZgDPAVUBZgA5Ac8BVQFeAXgAVQHPAV4BzwF3AF4BzwFUAXcAOQFUAc8BOQFWAFQBagDQAVYBagA9AdABVgFfAXoAVgHQAV8B0AFxAF8B0AFOAXEAPQFOAdABPQFjAE4BWwDRAS8BWwAkAdEBLwEqAWEALwHRASoB0QF2ACoB0QFgAXYAJAFgAdEBJAFyAGABYgDSAU0BYgAxAdIBTgFiAXEATgHTAWIB0gFtAGEB0gFKAW0AMQFKAdIBMQFfAEoBYQDUATYBYQAqAdQBNgFJAVoANgHUAUkB1AFsAEkB1AFjAWwAKgFjAdQBKgF2AGMBXwDVAUoBXwA3AdUBSgFkAW0ASgHVAWQB1QFrAGQB1QFIAWsANwFIAdUBNwFZAEgB"),
 "lods": [0.0506209, PackedByteArray("ewB0AREAEQCdAHsAdAGhABEAlQB0AXsAygChAHQBygB0AZUA3wCVAHsAygBuAaEA0ADfACYA0AD1AN8A9QCVAN8ANgD1ANAA9QB2AZUAdgHKAJUANgDtAPUA7QB2AfUAvQDtADYAvQBxAu0A7QBxAnYBcQLKAHYBzgBuAcoAzgB3AW4BcQJ9AMoAfQDOAMoAnAB3Ac4AnADOAH0AnACLAXcBYgJ9AHECYgKcAH0AYgJ/AJwAfwAQAJwAXwJiAnECXwJxAmECVgJfAmECbwGkAKIAeAGkAG8BpADxAKIAEgCiAPEAeAEuAKQAjAEuAHgBjAGCAC4AEgDxAJ8A4gCfAMcAnwAjAMcAnwDxACMA8QDFACMAgAHFAPEApACAAfEAgAFtAcUApAD0AIABLgD0AKQAzwBtAYAB9ADPAIABzwB6AW0BLgBGAPQARgDPAPQAggBGAC4AggCRAUYARgDUAM8A1AA0AM8ANAB6Ac8ANADXAHoBQwBpAekAQwD4AGkB+ACEAGkBQwCcAfgA+AA5AIQAnAE5APgA6ABcAlMCUwJwAl0CUwJcAnACXAJaAnACXAIAAFoC6ABtAlwCbQJRAlwCUQKQAVoCbQKDAFECUQKDAJABgwDvAJABkAHvAEUA7wDTAEUAgwA4AO8A7wCIAdMAOACIAe8AiAEzANMAiAG6ADMAOAC6AIgBugDWADMAOACvALoAugCJAdYArwCJAboAiQFqAtYAmwGvADgAiQGLAGoCrwCLAIkBwgFqAosAhAGvAJsBLQFqAsIBoACEAZsBLQFpAGoCoACbAUIAWgDCAYsAWgAtAcIBWgCLAK8AigCvAIQBigBaAK8AigCEAaAAigC9AVoAwQFpAC0BwQFBAWkAbAAtAVoAbADBAS0BWQFBAcEBbABZAcEBWQF5AEEBNgFsAFoAvQE2AVoAAgFZAWwAFQE2Ab0BigAVAb0BAgHKAVkBNgFjAWwAYwECAWwAdgBjATYBFQF2ADYBYwGhAQIBdgChAWMBSADKAQIBoQFIAAIBSABjAsoBZQJjAkgAoQFlAkgAZQJ0AmMCUwFlAqEBdgBTAaEBUwFXAmUCqgFXAlMBqgH9AFcCYAFTAXYAYAGqAVMBZwKqAWABZwJrAqoB0QFgAXYAZwJgAdEBWwBnAtEB0QF2ABUBAwFbANEBAwHRAbYBtgHRARUBBQADAbYBmQC2ARUBBQC2AZkAmQAVAYoAmQCKAKAABQCZAH0BmQCgAH0BBQB9AYUAfQGgAL4AhQB9Ab4AvgCgAEIAhQC+AFQCvgBCAPYAVAK+APYA9gBCAOgAVAL2AF4C9gDoAG4CXgL2AG4CbgLoAFMCXgJuAuQAbgJTAn4A5ABuAn4AxgAiAIgANQHGAIgANQGIAAYBIgHGADUB+wAiATUB+wA1AUwBIgGuAMYA+wBMAVIA4QDGAK4ArAH7AFIArAFSABcBbQD7AKwBDAFtAKwBNwH7AG0A+wA3ASIB0gE3AW0AfADhAK4AfACeAOEAvgGuACIBvgEiATcBJwB8AK4AvgEnAK4AJwDgAHwAtAAnAL4BKwG+ATcBtAC+ASsBuAAnALQAuAC0ACsBuADRACcAYgA3AdIBKwE3AWIAYgDSAU0BfAG4ACsBfAHRALgAtAErAWIAfAErAbQBtAFiADwB0gDRAHwB0gB8AbQB0gA1ANEA0gC0AT4BhgE1ANIAhgHSAD4BhgG7ADUAhgE+Ab8BxACHACEAxACSAIcAbAGSAMQACgGHAJIACgEFAYcApQGSAGwBpQEKAZIAMwEFAQoBpQEzAQoBNAEFATMBOwGlAWwBOwFsAXkBdQAzAaUBOwF1AKUBNAEzAXQASwE0AXQAUQBLAXQAWwF0ADMBUQB0AFsBdQBbATMBFgFRAFsBCQFbAXUAFgFbAQkBGgEWAQkBGgEJAXUAGwEWARoBVwAbARoBsAFXABoBGgF1AF4BXgF1ADsBsAEaAWYAZgAaAV4BwwGwAWYAwwFmAAABZgBeAXgAAAFmAHgAeABeATsBAAF4AMkByQF4AFgBeAA7AUABQAE7AWgAaAA7AUIBQgE7AXkB1QBCAXkBUgJbAm8CWwJgAm8CWwJVAmACUgJvAnMCUgJzAmQCZAJzAmkCZAJpAlkCWQJpAmgCcwJqAGkCcwI/AWoAPwE9AWoAPwG1AT0BagA9AU4BPQFjAE4BaQJqAHoAagBOAXoAaAJpAnUCaQJ6AHUCaAJ1AmwCTgHTAW4ATgFuAA0BegBOAQ0BbAJ1AvwAdQJ6APwAegANAVUAegBVAPwAVQANAa0B/ABVAB0BVQCtAR0BHQGtARwBrQEYARwBHQEcAVgAHQFYADoB/AAdAToBOgFYALEBEgH8ADoBEgE6AbEBbAL8ABIBEgGxAcUBbAISAf4AbAL+AHIC/gASAVgCWAISAcUBWALFAWYC"), 0.0764363, PackedByteArray("ewCVABEAEQCdAHsAlQBuAREA3wCVAHsAdwFuAZUA9QCVAN8A0AD1AN8ANgD1ANAAMgKVAPUANgAyAvUAMgJ3AZUAvQAyAjYAnAB3ATICnACLAXcBOwKcADICOwIQAJwANwI7AjICNwIyAjkCLAI3AjkCbwGkABIAeAGkAG8BeAGMAaQApADxABIAEgDxAJ8AjAH0AKQApAD0APEAjAFGAPQAggBGAIwBRgA0APQANAB6AfQA9AB6AfEANADXAHoB8QB6AcUA8QDFACMAnwDxACMAnwAjAMcASQI1AigCSQI4ADUCNQI4ADQCcwFJAigCcwEoAjoCsABzAToC9gBJAnMBsAD2AHMB9gBCAEkCKgL2ALAAKgK+APYAvgBCAPYABQC+ACoCvgCZAEIABQCZAL4AmQCbAUIABQDRAZkAmQCvAJsBmwGvADgABQBBAtEBQQKqAdEBQQJFAqoBmQDRATYBmQA2Aa8A0QGqAUsC0QFLAjYBqgEuAksCSwIuAj4CNgFLAmwASwI+AmwAPgJIAmwAPgI9AkgCPwJQAj0CbABIAi0BSAIxAi0BLQExAmkALQFpAEQCNgFsAFoAbAAtAVoArwA2AVoALQFEAokBWgAtAYkBWgCJAa8AiQFEAtYArwCJAboAugCJAdYAugDWADMAOACvALoAugAzAC0COAC6AC0COAAtAjMCNgIzAkoCKAI2AkoCKQJKApsAxgAiADUBfACeAMYAtAB8AMYAtADgAHwA0QDgALQANwG0AMYANwHGADUB0QC0AGIAtAA3AWIA0QBiAD4BNQDRAD4BTQI1AD4BTQK7ADUAYgA3AU0B+wA3ATUBNwH7AE0B+wA1AVIATQH7AEwATAD7AFIATABSABcBxAA0ASEAMwE0AcQAMwHEAHkBNAEzAVsBUQA0AVsBFgFRAFsBOwFbATMBOwEzAXkBQgE7AXkB1QBCAXkBaAA7AUIBMAI7AWgAMAJbATsBGgEWAVsBGgFbATACVwAWARoBsAFXABoBsAEaAcMBwwEaATACAAHDATACAAEwAkcCJwI4Ak4CJwIrAjgCJwJOAkICQwCcAWkBnAE5AGkBRgIvAkwCRgLFAS8CLwLFAUACRgI8AsUBxQE8ArEBQwI8AkYCPAJYALEBQwJPAjwCPAJNAFgATQAYAVgATwJ6ADwCegBNADwCTwI/AXoAegBOAU0APwFOAXoAPwFjAE4B"), 0.118754, PackedByteArray("ewDfAG4BbgGdAHsAIAJuAd8ANgAgAt8AvQAgAjYADgJuASACDgIeAm4BDgIgAgsCAQIPAgsCxgAiABUCbQAVAhcBbQAhAhUCIQLGABUCIQJ8AMYAfACeAMYAIQLgAHwANQDgACECNQAhAgYCNQAGAiICIgK7ADUAGwIUAiEAOwEUAhsCQgE7ARsC1QBCAXkBeAA7AUIBFAI7AXUAeAB1ADsBFgEUAnUAJQJ1AHgAVwAWAXUAVwB1ACUC9gAZAg0CDQIZAh0C/wH2AA0CGQIDAh0CGgICAgMCCQIZAvYA/wEJAvYACQI4ABkCOAAMAgMCBQAJAv8BOACvAAwCCQKvADgALQEMAq8ALQEWAgwCLQEHAhYCrwAFAi0BBQIHAi0BCQIFAq8AEgIHAgUCEgLEAQgCCQLRAQUCBQDRAQkCBQAXAtEB0QGhAQUC0QEXAqEBoQERAgUCFwIRAqEBbwEfAvEAHwIEAvEAbwHxAJ8ABAIcAvEABALXABwC8QAcAiMAnwDxACMAnwAjAMcA/gEKAiMC/gEAAgoC/gEjAhgCGAImAhMCGAIQAiYCGAIkAhACJgIQAlgAJAJuABACEAJuAFgAbgAYAVgA"), 0.31329, PackedByteArray("8wH6AeYB7wHzAeYBHgDvAeYB+wHzAdgB8wHdAdgB2AHdAdYA7wH9Ad0B7wHdAWgBxgAiAOsB7AHrAekB5AHGAOsB5AGeAMYAPgHkAesBPgHeATUANQDlAT4B9gE0ASEA2wE0AfYBNgDhAeMB4QH0AeMB9AGdAOMB5wH0AeEB5wH8AfQB2QHXAPgB9QHZAfgBjAHaAfUB9QH5AZ8AnwD5ASMAnwAjAMcA1QBoAPcB8AHfAe0B8QHWAeAB1wHoAeIBVwAWAeoBVwDqAdwBwwFXANwB7gEYAVgA8gHuAVgAxQHyAVgA")],
-"material": SubResource("ShaderMaterial_w87ro"),
+"material": SubResource("StandardMaterial3D_h4dpu"),
 "name": "Material.001",
 "primitive": 3,
 "uv_scale": Vector4(3.48349, 3.44761, 0, 0),
@@ -151,7 +112,10 @@ keep_compressed_buffer = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gf0yd"]
 resource_name = "Material"
 cull_mode = 2
+diffuse_mode = 3
+specular_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_mcwmk")
+roughness = 0.0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_1seyx"]
 _surfaces = [{
@@ -189,7 +153,11 @@ shadow_mesh = SubResource("ArrayMesh_1seyx")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u8mto"]
 resource_local_to_scene = true
+diffuse_mode = 3
+specular_mode = 2
 albedo_texture = ExtResource("2_m56t3")
+metallic_specular = 0.0
+roughness = 0.0
 uv1_scale = Vector3(4.78, 4.78, 4.78)
 texture_filter = 2
 
@@ -203,13 +171,17 @@ radial_segments = 16
 rings = 0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ae6f"]
+diffuse_mode = 3
+specular_mode = 2
 albedo_texture = ExtResource("3_bss7y")
+metallic_specular = 0.0
+roughness = 0.0
 uv1_scale = Vector3(4.78, 4.78, 4.78)
 texture_filter = 2
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_b2dns"]
 material = SubResource("StandardMaterial3D_1ae6f")
-top_radius = 0.4
+top_radius = 0.3
 bottom_radius = 0.2
 height = 0.55
 radial_segments = 16
@@ -217,6 +189,18 @@ rings = 0
 
 [sub_resource type="Animation" id="Animation_pfs23"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Neck:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.346, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l2mfc"]
 _data = {
@@ -233,23 +217,23 @@ clothes_parts = [NodePath("Body/Body"), NodePath("Neck/Head/HatMesh")]
 right_hand = NodePath("Hands/RightHand")
 left_hand = NodePath("Hands/LeftHand")
 hand_container = NodePath("Hands")
-head = NodePath("Neck/Head")
+head = NodePath("Neck")
 animator = NodePath("AnimationPlayer")
 
 [node name="Neck" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.346, 0)
 
 [node name="Head" type="Node3D" parent="Neck"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000111818, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.363908, 0)
 
 [node name="HeadMesh" type="MeshInstance3D" parent="Neck/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
 visible = false
 mesh = SubResource("SphereMesh_sq8oq")
 skeleton = NodePath("../../..")
 
 [node name="HatMesh" type="MeshInstance3D" parent="Neck/Head"]
 transform = Transform3D(1, 0, 0, 0, 0.959618, -0.281303, 0, 0.281303, 0.959618, 0, 0.380748, 0.0129369)
+visible = false
 mesh = SubResource("SphereMesh_xrx7l")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Neck/Head/HatMesh"]
@@ -266,20 +250,19 @@ visible = false
 mesh = SubResource("SphereMesh_l4ffk")
 
 [node name="Cube_001" type="MeshInstance3D" parent="Neck/Head"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.64469e-09, 0.314218, 0.0302517)
-visible = false
+transform = Transform3D(-0.87, 0, -1.31366e-07, 0, 0.87, 0, 1.31366e-07, 0, -0.87, 0, 0, 0)
 mesh = SubResource("ArrayMesh_ceh8t")
 skeleton = NodePath("")
 
 [node name="Cube" type="MeshInstance3D" parent="Neck/Head"]
-transform = Transform3D(-0.93, 0, -1.40426e-07, 0, 0.93, 0, 1.40426e-07, 0, -0.93, -2.88683e-09, 0.364783, 0.0594292)
+transform = Transform3D(-0.93, 0, -1.40426e-07, 0, 0.93, 0, 1.40426e-07, 0, -0.93, 0, 0, 0)
 mesh = SubResource("ArrayMesh_jp2ww")
 skeleton = NodePath("")
 
 [node name="Hands" type="Node3D" parent="."]
 
 [node name="RightHand" type="Sprite3D" parent="Hands"]
-transform = Transform3D(0.913808, 0.177844, 0.365139, -0.272538, 0.935074, 0.226625, -0.301128, -0.306606, 0.902948, -0.339795, 0.668556, -0.885474)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.54, 0)
 pixel_size = 0.013
 billboard = 1
 shaded = true
@@ -289,7 +272,7 @@ texture = ExtResource("4_ncwhr")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 
 [node name="LeftHand" type="Sprite3D" parent="Hands"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.69, 0.922, -0.448)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.54, 0)
 pixel_size = 0.013
 billboard = 1
 shaded = true

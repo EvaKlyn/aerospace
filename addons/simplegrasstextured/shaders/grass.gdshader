@@ -25,6 +25,8 @@ shader_type spatial;
 render_mode blend_mix,depth_draw_opaque,cull_disabled,specular_schlick_ggx,world_vertex_coords;
 uniform vec4 albedo : source_color = vec4(1.0);
 uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_disable;
+uniform sampler2D texture_noise : source_color,filter_linear_mipmap,repeat_disable;
+uniform float noise_scale = 1.4;
 uniform vec2 texture_frames = vec2(1.0,1.0);
 uniform int light_mode = 0;
 uniform float alpha_scissor_threshold = 0.5;
@@ -118,7 +120,6 @@ void vertex() {
 
 	vec3 scale = vec3(scale_w, scale_h, scale_w) * (1.0 + scale_rand);
 	VERTEX = NODE_POSITION_WORLD + (align * dist * scale);
-
 	if(dist > 0.0 && interactive_mode) {
 		float node_x = NODE_POSITION_WORLD.x / 50.0;
 		float node_z = NODE_POSITION_WORLD.z / 50.0;
@@ -152,7 +153,8 @@ void light() {
 void fragment() {
 	vec2 uv = (UV * uv_scale) + uv_align;
 	vec4 albedo_tex = texture(texture_albedo, uv);
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	vec4 noise_tex = texture(texture_noise, vec2(NODE_POSITION_WORLD.x, NODE_POSITION_WORLD.z));
+	ALBEDO = albedo.rgb * albedo_tex.rgb * COLOR.rgb;
 	NORMAL_MAP = texture(texture_normal, uv).rgb;
 	NORMAL_MAP_DEPTH = normal_scale;
 	METALLIC = metallic;

@@ -9,6 +9,7 @@ var twist_input = 0.0
 var pitch_input = 0.0
 var jump: bool = false
 var target: bool = false
+var dodge: bool = false
 
 var twist_pivot = Node3D.new()
 var pitch_pivot = Node3D.new()
@@ -43,6 +44,7 @@ func _physics_process(delta: float) -> void:
 	
 	jump = Input.is_action_pressed("input_jump")
 	target = Input.is_action_just_pressed("menu_target")
+	dodge = Input.is_action_pressed("input_dodge")
 	
 	if get_viewport().gui_get_focus_owner():
 		movement = Vector3.ZERO

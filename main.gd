@@ -4,7 +4,7 @@ class_name GameMainNode
 var is_host = false
 var spawn_host_pc = true
 
-@onready var name_input: LineEdit = $Control/CenterContainer/PanelContainer/VBoxContainer/GridContainer/NicknameEdit
+@onready var name_input: LineEdit = $ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer/NicknameEdit
 
 @export var character_scene: PackedScene
 @export var peer_scene: PackedScene
@@ -18,7 +18,7 @@ var spawn_host_pc = true
 
 @onready var ui_coordinator = $UiCoodinator
 @onready var bootstrapper = $Bootstrapper
-@onready var world_3d = $SubViewportContainer/SubViewport/World3D
+@export var world_3d: Node3D
 @onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
 
 var peers: Dictionary = {}
@@ -47,7 +47,6 @@ func _client_handle_connect(address: String, port: int) -> Error:
 	err = peer.create_client(address, port, 0, 0, 0, Noray.local_port)
 	if err != OK:
 		return err
-	
 	return OK
 
 func _handle_connected(id: int):
@@ -115,6 +114,7 @@ func _spawn_player(data: Dictionary) -> BasePlayer:
 	new_pc.physics_body.network_peer = new_pc.network_peer
 	new_pc.set_multiplayer_authority(1)
 	new_pc.physics_body.velocity = Vector3.ZERO
+	
 	new_pc.physics_body.set_multiplayer_authority(data["id"])
 	print("Spawned Playercharacter %s for %s" % [new_pc.name, multiplayer.get_unique_id()])
 	return new_pc
@@ -131,3 +131,6 @@ func _physics_process(delta: float) -> void:
 	if !spawn_host_pc and get_viewport().get_camera_3d():
 		get_viewport().get_camera_3d().current = false
 	MmoUtils.peers = peers
+
+func _on_multiplayer_spawner_spawned(node: Node) -> void:
+	MmoUtils.terrain_camera()

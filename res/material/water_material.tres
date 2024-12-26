@@ -1,0 +1,63 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cf5yq4x0wcvie"]
+
+[ext_resource type="Shader" path="res://res/shadercode/ocean_water.gdshader" id="1_hb1o8"]
+[ext_resource type="Texture2D" uid="uid://d1lepc7puunia" path="res://assets/texture3d/overworld/waterbw.png" id="2_6xnrj"]
+
+[sub_resource type="Gradient" id="Gradient_0pkbe"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s1ou7"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_girk7"]
+color_ramp = SubResource("Gradient_0pkbe")
+noise = SubResource("FastNoiseLite_s1ou7")
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_hb1o8")
+shader_parameter/sync_time = 0.0
+shader_parameter/wave_speed = 0.05
+shader_parameter/caustic_speed = 0.01
+shader_parameter/edge_fade_power = 2.0
+shader_parameter/transmittence = 0.04
+shader_parameter/h_dist_trans_weight = 3.0
+shader_parameter/transmit_color = Color(0.230884, 0.566046, 0.561596, 1)
+shader_parameter/depth_fade = 0.3
+shader_parameter/depth_fade_distance = 5.0
+shader_parameter/surface_albedo = Color(0.467298, 0.742745, 0.932481, 1)
+shader_parameter/surface_bottom = Color(0.35013, 0.714075, 0.828261, 1)
+shader_parameter/opacity = 5.0
+shader_parameter/opacity_floor = 0.1
+shader_parameter/opacity_ceiling = 0.8
+shader_parameter/roughness = 0.4
+shader_parameter/height_scale = 1.0
+shader_parameter/amplitude1 = 2.0
+shader_parameter/amplitude2 = 0.5
+shader_parameter/v_noise_tile = 200
+shader_parameter/normal_noise_size = 5.12
+shader_parameter/normal_noise_speed = 0.05
+shader_parameter/v_normal_scale = 1.0
+shader_parameter/normal_map_w = 256
+shader_parameter/wobble_power = 0.01
+shader_parameter/sky_color = Color(0.586263, 0.849038, 0.924417, 1)
+shader_parameter/vertex_noise_big = ExtResource("2_6xnrj")
+shader_parameter/normal_noise = ExtResource("2_6xnrj")
+shader_parameter/normal_noise2 = ExtResource("2_6xnrj")
+shader_parameter/under_wobble_noise = SubResource("NoiseTexture2D_girk7")
+shader_parameter/foam_color = Color(0, 0, 0, 1)
+shader_parameter/foam_mask_size = 0.0
+shader_parameter/foam_mask_offset = Vector2(5.565, 0)
+shader_parameter/foam_wobble = 1.065
+shader_parameter/foam_wobble_size = 10.0
+shader_parameter/high_color = Color(0.786347, 0.786347, 0.786347, 1)
+shader_parameter/low_color = Color(0.752582, 0.752582, 0.752582, 1)
+shader_parameter/wave_color_range = 2.0
+shader_parameter/enable_fake_lighting = false
+shader_parameter/shine_strength = 0.17
+shader_parameter/shine_shininess = 18.0
+shader_parameter/shadow = 0.72
+shader_parameter/shadow_width = 0.18
+shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
+shader_parameter/_specular_smoothness = 0.199
+shader_parameter/_specular_strength = 0.075
+shader_parameter/_glossiness = 0.067

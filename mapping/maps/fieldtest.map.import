@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://ck1s0ii8p4t8c"
+path="res://.godot/imported/fieldtest.map-4aa7b18bcc697c59186f3b6a86f1a4e5.tres"
+
+[deps]
+
+source_file="res://mapping/maps/fieldtest.map"
+dest_files=["res://.godot/imported/fieldtest.map-4aa7b18bcc697c59186f3b6a86f1a4e5.tres"]
+
+[params]
+

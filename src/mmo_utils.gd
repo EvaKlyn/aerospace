@@ -40,7 +40,7 @@ func chatlog(message: String, nickname: String = "system"):
 		chat_log.append_text("\n" + "<" + nickname + "> " + message)
 
 @rpc("reliable", "call_local", "any_peer")
-func sendchat(message: String, scope: String = "say"):
+func sendchat(message: String, _scope: String = "say"):
 	if !is_multiplayer_authority():
 		return
 	
@@ -77,4 +77,11 @@ func do_fx(fx_path, origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO
 	var new_scene: FxScene = fx_scene.instantiate()
 	main.world_3d.add_child(new_scene)
 	new_scene.setup(origin_pos, target_position, data)
-	
+
+func terrain_camera():
+	for node in get_tree().get_nodes_in_group("terrains"):
+		print(node.name)
+		if node is Terrain3D:
+			assert(node is Terrain3D)
+			print(main.world_3d.get_viewport().get_camera_3d())
+			node.set_camera(main.world_3d.get_viewport().get_camera_3d())

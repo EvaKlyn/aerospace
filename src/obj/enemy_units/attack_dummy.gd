@@ -11,7 +11,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	vis.position = physics_body.position
 	label.text = unit.unit_name
 	unit.unit_positon = physics_body.global_position
