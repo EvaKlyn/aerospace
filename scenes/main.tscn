@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://lubma0oweog8"]
+[gd_scene load_steps=19 format=3 uid="uid://lubma0oweog8"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_f2b64"]
 [ext_resource type="PackedScene" uid="uid://bdniqwi3nd2d6" path="res://src/obj/base_player.tscn" id="2_jwlpu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="5_n1tw6"]
 [ext_resource type="Script" path="res://src/ui_coodinator.gd" id="5_xcw28"]
 [ext_resource type="Texture2D" uid="uid://0ld1sijgqxco" path="res://assets/texture2d/xp.png" id="6_qxnqs"]
+[ext_resource type="PackedScene" uid="uid://cb83wlwvwpwsp" path="res://scenes/ui/settings_window.tscn" id="8_yd0p5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycnv4"]
 bg_color = Color(0.363273, 0.3596, 0.58, 1)
@@ -110,7 +111,7 @@ game_view = NodePath("../GameView")
 
 [node name="Peers" type="Node" parent="."]
 
-[node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_window", "spell_bar", "spell_text", "status_window", "status_container", "ancestry_dropdown", "color_picker", "head_slider", "hands_slider")]
+[node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_window", "spell_bar", "spell_text", "status_window", "status_container", "viewport", "settings_window", "ancestry_dropdown", "color_picker", "head_slider", "hands_slider")]
 script = ExtResource("5_xcw28")
 chat_log = NodePath("../ChatWindow/Chat/Chat/Chat/Log")
 chat_line_edit = NodePath("../ChatWindow/Chat/Chat/Chat/HBoxContainer/LineEdit")
@@ -126,6 +127,8 @@ spell_bar = NodePath("../Hotbar/GridContainer/PanelContainer2/SpellBar/ProgressB
 spell_text = NodePath("../Hotbar/GridContainer/PanelContainer2/SpellBar/Label")
 status_window = NodePath("../Hotbar/GridContainer/StatusWindow")
 status_container = NodePath("../Hotbar/GridContainer/StatusWindow/HFlowContainer")
+viewport = NodePath("../GameView/AspectRatioContainer/SubViewportContainer/SubViewport")
+settings_window = NodePath("../SettingsWindow")
 ancestry_dropdown = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/OptionButton")
 color_picker = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/ColorPickerButton")
 head_slider = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/HSlider")
@@ -356,6 +359,10 @@ value = 20.0
 [node name="HBoxContainer" type="HFlowContainer" parent="Hotbar/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="Control2" type="Control" parent="Hotbar"]
+custom_minimum_size = Vector2(0, 12.75)
+layout_mode = 2
+
 [node name="ConnectMenuWindow" type="Window" parent="."]
 transparent_bg = true
 initial_position = 1
@@ -425,9 +432,9 @@ text = "nickname:"
 [node name="NicknameEdit" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "nickname5"
+placeholder_text = "nickname here"
 alignment = 1
-max_length = 8
+max_length = 16
 
 [node name="ConnectButton" type="Button" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -599,6 +606,9 @@ value = 1.0
 layout_mode = 2
 focus_mode = 0
 text = "Commit Changes"
+
+[node name="SettingsWindow" parent="." instance=ExtResource("8_yd0p5")]
+visible = false
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")

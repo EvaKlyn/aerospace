@@ -17,7 +17,7 @@ enum SkillResult {
 
 @export_category("Basic Info")
 @export var skill_name: String = "Unknown Skill"
-@export var icon: Image
+@export var icon: Texture2D = PlaceholderTexture2D.new()
 @export var is_auto_attack: bool = false
 @export var is_internal: bool = false
 @export var base_cooldown: float = 2.0

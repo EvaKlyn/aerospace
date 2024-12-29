@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bdniqwi3nd2d6"]
+[gd_scene load_steps=25 format=3 uid="uid://bdniqwi3nd2d6"]
 
 [ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="2_3mq61"]
@@ -8,9 +8,11 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_464ud"]
 [ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="4_sxmj2"]
 [ext_resource type="PackedScene" uid="uid://dogwtl8hqdpcd" path="res://scenes/fx_scenes/class_test/fx_laser_blast.tscn" id="5_k72ke"]
+[ext_resource type="PackedScene" uid="uid://cpws752hbit6x" path="res://scenes/fx_scenes/fx_blood_splat.tscn" id="5_l0g5k"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_o54a7"]
 [ext_resource type="Texture2D" uid="uid://c6fp2r011bpc6" path="res://assets/texture2d/ui_rangering.png" id="5_smjeu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_28du0"]
+[ext_resource type="Texture2D" uid="uid://by28rmh11sk2q" path="res://assets/texture2d/icons/skills/empower auto.png" id="6_212h4"]
 [ext_resource type="Script" path="res://src/skills/great_leap.gd" id="6_mc0xs"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
 [ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="13_8ntcc"]
@@ -20,28 +22,28 @@
 radius = 3.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7jxna"]
-properties/0/path = NodePath(".:position")
+properties/0/path = NodePath(".:is_actionable")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath(".:network_velocity")
 properties/1/spawn = true
-properties/1/replication_mode = 2
-properties/2/path = NodePath(".:is_actionable")
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:looking_vector")
 properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:network_velocity")
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:move_dir")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:looking_vector")
+properties/4/path = NodePath(".:animation")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath(".:move_dir")
+properties/5/path = NodePath(".:anim_speed")
 properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath(".:animation")
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:position")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-properties/7/path = NodePath(".:anim_speed")
+properties/7/path = NodePath(".:rotation")
 properties/7/spawn = true
 properties/7/replication_mode = 2
 
@@ -105,7 +107,7 @@ stat_attack_speed = 1.5
 stat_move_speed = 7.0
 stat_jump_str = 11.0
 stat_missile_range = 60.0
-atb_passive_gain = 5.0
+atb_passive_gain = 2.0
 auto_attack_skill = NodePath("TestAttack")
 
 [node name="PlayerDodge" type="Node" parent="GameUnit"]
@@ -123,9 +125,10 @@ script = ExtResource("4_sxmj2")
 skill_name = "Basic Attack"
 is_auto_attack = true
 base_cooldown = 0.0
-atb_gain = 10
+atb_gain = 5
 atb_cost = 0
 logic_type = "data-driven"
+fx_scene = ExtResource("5_l0g5k")
 cast_animation_name = &"player_anim_lib/onehand_swing1"
 result_offset = 0.4
 inflicts_damage = true
@@ -134,6 +137,7 @@ damage_scales_with = "attack_damage"
 [node name="Empower" type="Node" parent="GameUnit"]
 script = ExtResource("4_sxmj2")
 skill_name = "Brutal Attack"
+icon = ExtResource("6_212h4")
 base_cooldown = 0.0
 cast_time = 0.2
 auto_attack_reset = true

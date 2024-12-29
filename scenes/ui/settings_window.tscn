@@ -1,0 +1,176 @@
+[gd_scene load_steps=4 format=3 uid="uid://cb83wlwvwpwsp"]
+
+[ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="1_wf88j"]
+[ext_resource type="Script" path="res://scenes/ui/settings_window.gd" id="2_xgdes"]
+
+[sub_resource type="SystemFont" id="SystemFont_74c2g"]
+font_names = PackedStringArray("Arial")
+font_weight = 999
+subpixel_positioning = 0
+multichannel_signed_distance_field = true
+
+[node name="SettingsWindow" type="Window" node_paths=PackedStringArray("cursor_opt", "ui_scale_slider", "game_scale_slider", "scale_mode_opt", "debug_draw_opt", "relay_host_edit")]
+auto_translate_mode = 1
+transparent_bg = true
+title = "Settings"
+position = Vector2i(0, 36)
+size = Vector2i(410, 240)
+transparent = true
+theme = ExtResource("1_wf88j")
+script = ExtResource("2_xgdes")
+cursor_opt = NodePath("Control/VBoxContainer/GridContainer/MouseMode")
+ui_scale_slider = NodePath("Control/VBoxContainer/GridContainer/UiScaleSlider")
+game_scale_slider = NodePath("Control/VBoxContainer/GridContainer/DownscaleSlider")
+scale_mode_opt = NodePath("Control/VBoxContainer/GridContainer/OptionButton")
+debug_draw_opt = NodePath("Control/VBoxContainer/GridContainer/DebugDrawOption")
+relay_host_edit = NodePath("Control/VBoxContainer/GridContainer/HostEdit")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="Label2" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_74c2g")
+text = "Gameplay Options"
+uppercase = true
+
+[node name="HSeparator2" type="HSeparator" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="MouseModeLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cursor release behavior"
+
+[node name="MouseMode" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Toggle capture"
+popup/item_1/text = "Hold to release"
+popup/item_1/id = 1
+popup/item_2/text = "Hold to capture"
+popup/item_2/id = 2
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_74c2g")
+text = "Rendering Options"
+uppercase = true
+
+[node name="HSeparator" type="HSeparator" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ScaleLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Global UI Scale"
+
+[node name="UiScaleSlider" type="HSlider" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 4.0
+step = 0.25
+value = 1.0
+tick_count = 16
+
+[node name="DownscaleLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3D internal scale"
+
+[node name="DownscaleSlider" type="HSlider" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "
+"
+min_value = 0.25
+max_value = 2.0
+step = 0.05
+value = 1.0
+
+[node name="3D Scaling Mode" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3D scaling mode"
+
+[node name="OptionButton" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Bilinear (fastest)"
+popup/item_1/text = "FSR 1.0 (fast)"
+popup/item_1/id = 1
+popup/item_2/text = "FSR 2.0 (Slow)"
+popup/item_2/id = 2
+
+[node name="DebugDrawLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Debug draw"
+
+[node name="DebugDrawOption" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Normal"
+popup/item_1/text = "Unshaded"
+popup/item_1/id = 1
+popup/item_2/text = "Wireframe"
+popup/item_2/id = 2
+popup/item_3/text = "Overdraw"
+popup/item_3/id = 3
+
+[node name="Label3" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_74c2g")
+text = "Networking Options"
+uppercase = true
+
+[node name="HSeparator3" type="HSeparator" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="3D Scaling Mode2" type="Label" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Relay host address"
+
+[node name="HostEdit" type="LineEdit" parent="Control/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "localhost"
+placeholder_text = "IP address or URL"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save/apply settings"
+
+[node name="ResetButton" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Set to defaults"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]

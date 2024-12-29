@@ -32,6 +32,8 @@ WindowTiler="*res://addons/netfox.extras/window-tiler.gd"
 Async="*res://src/async.gd"
 MmoUtils="*res://src/mmo_utils.gd"
 SimpleGrass="*res://addons/simplegrasstextured/singleton.tscn"
+SaveSystem="*res://addons/save_system/save_system.gd"
+MetaManager="*res://src/metagame_manager.gd"
 
 [debug]
 
@@ -43,18 +45,21 @@ gdscript/warnings/unused_parameter=0
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/boujie_water_shader/plugin.cfg", "res://addons/destronoi/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/netfox.extras/plugin.cfg", "res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg", "res://addons/netfox/plugin.cfg", "res://addons/proton_scatter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/yamms/plugin.cfg")
+enabled=PackedStringArray("res://addons/boujie_water_shader/plugin.cfg", "res://addons/destronoi/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/netfox.extras/plugin.cfg", "res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg", "res://addons/netfox/plugin.cfg", "res://addons/proton_scatter/plugin.cfg", "res://addons/save_system/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
 
 [global_group]
 
 players="Player units"
 terrains=""
+
+[gui]
+
+timers/tooltip_delay_sec=0.0
 
 [importer_defaults]
 
@@ -145,7 +150,7 @@ rollback/enabled=false
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3
 lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
 shading/overrides/force_lambert_over_burley=true
 textures/default_filters/use_nearest_mipmap_filter=true

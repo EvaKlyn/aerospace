@@ -18,6 +18,10 @@ extends Node
 @export var status_window: PanelContainer
 @export var status_container: Container
 
+@export var viewport: SubViewport
+
+@export var settings_window: Window
+
 @export_category("customization_menu")
 @export var ancestry_dropdown: OptionButton
 @export var color_picker: ColorPickerButton
@@ -29,15 +33,16 @@ var unitinfo: UnitInfo
 var unit: GameUnit:
 	set(newu):
 		unit = newu
-		unit.status_removed.connect(_remove_status_icon)
-		last_status_effects = unit.status_effects.keys()
+		last_status_effects = unit.status_effects.duplicate()
 var dict_hash
-var last_status_effects: Array = []
+var last_status_effects: Dictionary = {}
 var just_connected = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hotbar.visible = false
+	MetaManager.ui_coordinator = self
+	MetaManager.settings_updated.connect(_on_settings_updated)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -87,27 +92,35 @@ func _process(_delta: float) -> void:
 			new_button.shortcut = Shortcut.new()
 			new_button.shortcut.events = [keypress]
 			new_button.pressed.connect(_on_skill_button_pressed.bind(new_button))
+			if ResourceLoader.exists(unitinfo.skills_dict[key][1]):
+				new_button.icon = load(unitinfo.skills_dict[key][1])
 			skills_area.add_child(new_button)
 			i += 1
 	
 	if unit:
-		if unit.status_effects.keys() != last_status_effects:
-			last_status_effects = unit.status_effects.keys()
-			for key in last_status_effects:
-				if status_container.get_node_or_null(key):
+		for key in unit.status_effects:
+			if status_container.get_node_or_null(key):
+				if unit.status_effects[key] <= last_status_effects[key]:
 					continue
-				_add_status_icon(key, unit.status_effects[key])
+				else:
+					print(unit.status_effects[key] - last_status_effects[key])
+					_remove_status_icon(key)
+			_add_status_icon(key, unit.status_effects[key])
+		for child in status_container.get_children():
+			if !unit.status_effects.has(child.name):
+				_remove_status_icon(child.name)
 		
 		if status_container.get_child_count() == 0:
 			status_window.modulate = Color.TRANSPARENT
 		else:
 			status_window.modulate = Color.WHITE
+		last_status_effects = unit.status_effects.duplicate()
 
 func _add_status_icon(state: String, duration: float):
 	var path = "res://assets/texture2d/icons/status/" + state + ".png"
 	if !ResourceLoader.exists(path):
 		return
-	var img = load("res://assets/texture2d/icons/status/" + state + ".png")
+	var img = load(path)
 	
 	var new_status_icon: UiStatusIcon = preload("res://src/obj/ui/status_icon.tscn").instantiate()
 	new_status_icon.name = state
@@ -125,7 +138,8 @@ func _on_chat_button_pressed() -> void:
 		chat_line_edit.clear()
 
 func _on_skill_button_pressed(skillbutton: Button):
-	base_player.rpc("do_skill", unitinfo.skills_dict[skillbutton.text.substr(4)])
+	print(unitinfo.skills_dict[skillbutton.text.substr(4)])
+	base_player.rpc("do_skill", unitinfo.skills_dict[skillbutton.text.substr(4)][0])
 
 
 #var customization: Dictionary = {
@@ -147,3 +161,8 @@ func _on_customize_button_pressed() -> void:
 	}
 	print(customization)
 	base_player.rpc("remote_customize", customization)
+
+func _on_settings_updated():
+	viewport.scaling_3d_scale = MetaManager.game_scale
+	viewport.scaling_3d_mode = MetaManager.game_scale_mode
+	viewport.debug_draw = MetaManager.debug_draw_mode

@@ -32,7 +32,7 @@ func _ready():
 		return
 	
 	nickname = get_node("/root/Main").name_input.text
-	nickname = nickname.left(12)
+	nickname = nickname.left(16)
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
@@ -50,16 +50,32 @@ func _physics_process(delta: float) -> void:
 		movement = Vector3.ZERO
 		jump = false
 		target = false
+		dodge = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 	
+	if Input.is_action_just_pressed("ui_cancel"):
+		MetaManager.ui_coordinator.settings_window.visible = true
+	
 	if Input.is_action_just_pressed("menu_capture"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			release_mouse()
-		else:
-			capture_mouse()
+		match MetaManager.mouse_release_mode:
+			MetaManager.MouseReleaseMode.TOGGLE:
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					release_mouse()
+				else:
+					capture_mouse()
+			MetaManager.MouseReleaseMode.HOLD_CAPTURE:
+				capture_mouse()
+			MetaManager.MouseReleaseMode.HOLD_RELEASE:
+				release_mouse()
+	if Input.is_action_just_released("menu_capture"):
+		match MetaManager.mouse_release_mode:
+			MetaManager.MouseReleaseMode.HOLD_CAPTURE:
+				release_mouse()
+			MetaManager.MouseReleaseMode.HOLD_RELEASE:
+				capture_mouse()
 	
 
 func capture_mouse():

@@ -24,6 +24,18 @@ var skill_map: Array[GameSkill] = []
 @export var current_hp: int = 10
 @export var max_target_range: float = 20.0
 
+@export_category("RPG Statistics")
+@export var rpg_might: int = 10
+@export var rpg_agility: int = 10
+@export var rpg_vitality: int = 10
+@export var rpg_arcana: int = 10
+@export var rpg_astrology: int = 10
+@export var rpg_charisma: int = 10
+@export var rpg_luck: int = 10
+@export var rpg_guts: int = 10
+@export var rpg_psycho: int = 10
+@export var rpg_: int = 10
+
 @export_category("Combat Statistics")
 @export var stat_attack_damage: int = 0
 @export var stat_armor: int = 0
@@ -50,14 +62,6 @@ var skill_map: Array[GameSkill] = []
 @export_category("funny stuff")
 @export var gravity_mult: float = 1.0
 @export var cast_time_mult: float = 1.0
-
-@export_category("RPG Statistics")
-@export var rpg_strength: int = 10
-@export var rpg_dexterity: int = 10
-@export var rpg_constitution: int = 10
-@export var rpg_intelligence: int = 10
-@export var rpg_wisdom: int = 10
-@export var rpg_charisma: int = 10
 
 @export_category("State")
 @export var actionable: bool = true
@@ -271,7 +275,7 @@ func recalc_stats():
 			if child.is_internal: continue
 			if child.is_auto_attack: continue
 			skills.append(child)
-			unit_info.skills_dict[child.skill_name] = skills.size() - 1
+			unit_info.skills_dict[child.skill_name] = [skills.size() - 1, child.icon.resource_path]
 	
 	stats_update.emit()
 
