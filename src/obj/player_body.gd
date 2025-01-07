@@ -14,11 +14,6 @@ class_name PlayerBody
 @export var anim_speed: float = 1.0
 @export var move_dir: Vector3 = Vector3.ZERO
 
-@export var dodge_cooldown: float = 0.6
-@export var dodge_time_total: float = 0.4
-@export var dodge_time_iframe: float = 0.3
-@export var dodge_time_impulse: float = 0.4
-
 var unit_status: UnitInfo
 var network_peer: NetworkPeer
 
@@ -143,7 +138,7 @@ func _on_actionable_state_physics_processing(delta: float) -> void:
 		if target_vel != Vector3.ZERO and !dodge_cooldown_left > 0:
 			if is_on_floor() or has_airdodge:
 				state_chart.send_event("dodge")
-				dodge_cooldown_left = dodge_cooldown
+				dodge_cooldown_left = base.dodge_array[4]
 
 func _on_casting_state_physics_processing(delta: float) -> void:
 	if !is_multiplayer_authority():
@@ -184,7 +179,7 @@ func _on_dodge_state_entered() -> void:
 	if !unit_status:
 		return
 	
-	var result = base.rpc("do_skill_absolute", "PlayerDodge")
+	var result = base.rpc("do_skill", "dodge")
 	
 	var move_basis = base.cam_h.transform
 	move_dir = move_basis * network_peer.movement
@@ -192,17 +187,17 @@ func _on_dodge_state_entered() -> void:
 	move_dir = move_dir.normalized()
 	
 	if !is_on_floor():
-		velocity = move_dir * unit_status.move_speed * 6
+		velocity = move_dir * unit_status.move_speed * base.dodge_array[0]
 		velocity.y = 8.0
 		has_airdodge = false
-		dodge_impulse_left = dodge_time_impulse
-		dodge_time_left = dodge_time_total * 1.2
+		dodge_impulse_left = base.dodge_array[2]
+		dodge_time_left = base.dodge_array[3]
 	else:
-		velocity = move_dir * unit_status.move_speed * 6
-		dodge_impulse_left = dodge_time_impulse
-		dodge_time_left = dodge_time_total
+		velocity = move_dir * unit_status.move_speed * base.dodge_array[0]
+		dodge_impulse_left = base.dodge_array[2]
+		dodge_time_left = base.dodge_array[3]
 	
-	dodge_iframes_left = dodge_time_iframe
+	dodge_iframes_left = base.dodge_array[1]
 	
 
 func _on_dodge_state_physics_processing(delta: float) -> void:
@@ -221,7 +216,7 @@ func _on_dodge_state_physics_processing(delta: float) -> void:
 	if dodge_iframes_left > 0:
 		dodge_iframes_left -= delta
 	
-	var fac = (dodge_time_impulse - dodge_impulse_left)/dodge_time_impulse
+	var fac = (base.dodge_array[2] - dodge_impulse_left)/base.dodge_array[2]
 	
 	if fac == 0: fac = .99
 	

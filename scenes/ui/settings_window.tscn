@@ -9,19 +9,20 @@ font_weight = 999
 subpixel_positioning = 0
 multichannel_signed_distance_field = true
 
-[node name="SettingsWindow" type="Window" node_paths=PackedStringArray("cursor_opt", "ui_scale_slider", "game_scale_slider", "scale_mode_opt", "debug_draw_opt", "relay_host_edit")]
+[node name="SettingsWindow" type="Window" node_paths=PackedStringArray("cursor_opt", "ui_scale_slider", "game_scale_opt", "debug_draw_opt", "relay_host_edit")]
 auto_translate_mode = 1
 transparent_bg = true
+gui_snap_controls_to_pixels = false
 title = "Settings"
 position = Vector2i(0, 36)
-size = Vector2i(410, 240)
+size = Vector2i(385, 255)
 transparent = true
+content_scale_size = Vector2i(385, 255)
 theme = ExtResource("1_wf88j")
 script = ExtResource("2_xgdes")
 cursor_opt = NodePath("Control/VBoxContainer/GridContainer/MouseMode")
 ui_scale_slider = NodePath("Control/VBoxContainer/GridContainer/UiScaleSlider")
-game_scale_slider = NodePath("Control/VBoxContainer/GridContainer/DownscaleSlider")
-scale_mode_opt = NodePath("Control/VBoxContainer/GridContainer/OptionButton")
+game_scale_opt = NodePath("Control/VBoxContainer/GridContainer/ResOption")
 debug_draw_opt = NodePath("Control/VBoxContainer/GridContainer/DebugDrawOption")
 relay_host_edit = NodePath("Control/VBoxContainer/GridContainer/HostEdit")
 
@@ -87,41 +88,34 @@ text = "Global UI Scale"
 [node name="UiScaleSlider" type="HSlider" parent="Control/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = 0.5
+min_value = 1.0
 max_value = 4.0
-step = 0.25
 value = 1.0
-tick_count = 16
+tick_count = 4
 
 [node name="DownscaleLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "3D internal scale"
+text = "3D internal resolution"
 
-[node name="DownscaleSlider" type="HSlider" parent="Control/VBoxContainer/GridContainer"]
+[node name="ResOption" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "
 "
-min_value = 0.25
-max_value = 2.0
-step = 0.05
-value = 1.0
-
-[node name="3D Scaling Mode" type="Label" parent="Control/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "3D scaling mode"
-
-[node name="OptionButton" type="OptionButton" parent="Control/VBoxContainer/GridContainer"]
-layout_mode = 2
 selected = 0
-item_count = 3
-popup/item_0/text = "Bilinear (fastest)"
-popup/item_1/text = "FSR 1.0 (fast)"
+item_count = 6
+popup/item_0/text = "320x240"
+popup/item_1/text = "480x360"
 popup/item_1/id = 1
-popup/item_2/text = "FSR 2.0 (Slow)"
+popup/item_2/text = "640x480"
 popup/item_2/id = 2
+popup/item_3/text = "800x600"
+popup/item_3/id = 3
+popup/item_4/text = "1440x1080"
+popup/item_4/id = 4
+popup/item_5/text = "3072x2304"
+popup/item_5/id = 5
 
 [node name="DebugDrawLabel" type="Label" parent="Control/VBoxContainer/GridContainer"]
 layout_mode = 2

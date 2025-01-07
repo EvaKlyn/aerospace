@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://c7r023lcr407b"]
+
+[ext_resource type="Script" path="res://scenes/fx_scenes/martial/fx_dagger_toss.gd" id="1_w8uje"]
+[ext_resource type="PackedScene" uid="uid://cpws752hbit6x" path="res://scenes/fx_scenes/fx_blood_splat.tscn" id="2_56vkl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60w14"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_uuex3"]
+material = SubResource("StandardMaterial3D_60w14")
+size = Vector3(0.1, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aa2h8"]
+material = SubResource("StandardMaterial3D_60w14")
+size = Vector3(0.1, 0.4, 0.1)
+
+[node name="FxDaggerToss" type="Node3D"]
+script = ExtResource("1_w8uje")
+bloodsplat = ExtResource("2_56vkl")
+lifetime = 0.7
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.491395)
+mesh = SubResource("BoxMesh_uuex3")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.783405)
+mesh = SubResource("BoxMesh_aa2h8")

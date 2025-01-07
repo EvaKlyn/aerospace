@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dudp7k56tcpxr"]
+
+[ext_resource type="Script" path="res://src/skills/player_medium_dodge.gd" id="1_h11sl"]
+
+[node name="PlayerDodge" type="Node"]
+script = ExtResource("1_h11sl")
+skill_name = "Medium Dodge"
+base_cooldown = 0.4
+atb_cost = 5
+target_type = "self"
+category = "misc"
+logic_type = "callable"
+is_internal = true
+is_dodge = true

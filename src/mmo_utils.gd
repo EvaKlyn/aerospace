@@ -78,10 +78,44 @@ func do_fx(fx_path, origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO
 	main.world_3d.add_child(new_scene)
 	new_scene.setup(origin_pos, target_position, data)
 
-func terrain_camera():
-	for node in get_tree().get_nodes_in_group("terrains"):
-		print(node.name)
-		if node is Terrain3D:
-			assert(node is Terrain3D)
-			print(main.world_3d.get_viewport().get_camera_3d())
-			node.set_camera(main.world_3d.get_viewport().get_camera_3d())
+#func terrain_camera():
+	#for node in get_tree().get_nodes_in_group("terrains"):
+		#if node is Terrain3D:
+			#assert(node is Terrain3D)
+			#node.set_camera(main.world_3d.get_viewport().get_camera_3d())
+
+## Data = {
+##   id = (multiplayer id)
+##   name = (character name)
+##   level
+##   stats = {
+##     might = _
+##     finesse = _
+##     agility = _
+##     endurance = _
+##     arcana = _
+##     psycho = _
+##     charisma = _
+##     luck = _
+##     tempo = _
+##     wits = _
+##     }
+##   skills = [array of IDs]
+##   equipped = [array of IDs]
+##   inventory = [array of IDs]
+## }
+
+@rpc("any_peer","call_local")
+func create_player_character(char_data: Dictionary):
+	if NetworkEvents.is_server():
+		char_data["id"] = multiplayer.get_remote_sender_id()
+		main.player_spawner.spawn(char_data)
+		MmoUtils.rpc("eventlog", char_data["name"] + " logged on. " + str(peers.size()) + " players online.")
+
+
+func spawn_player_character(data: Dictionary) -> BasePlayer:
+	var character_scene = load("res://src/obj/base_player.tscn")
+	var new_pc: BasePlayer = character_scene.instantiate()
+	new_pc.network_peer = main.peers.get(data["id"])
+	new_pc.construct_player(data)
+	return new_pc

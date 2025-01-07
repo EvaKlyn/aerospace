@@ -18,8 +18,6 @@ enum SkillResult {
 @export_category("Basic Info")
 @export var skill_name: String = "Unknown Skill"
 @export var icon: Texture2D = PlaceholderTexture2D.new()
-@export var is_auto_attack: bool = false
-@export var is_internal: bool = false
 @export var base_cooldown: float = 2.0
 @export var cast_time: float = 0.0
 @export var auto_attack_reset: bool = false
@@ -30,6 +28,11 @@ enum SkillResult {
 @export_enum("enemy", "ally", "object", "self") var target_type: String = "enemy"
 @export_enum("skill", "spell", "special", "misc") var category: String = "skill"
 @export_enum("data-driven", "callable") var logic_type: String
+
+@export_category("Special Cases")
+@export var is_internal: bool = false
+@export var is_auto_attack: bool = false
+@export var is_dodge: bool = false
 
 @export_category("Text Popup")
 @export_enum("none", "caster", "target") var popup: String = "none"
@@ -68,6 +71,12 @@ enum SkillResult {
 @export var gives_status: bool = false
 @export var statuses: Dictionary = {}
 
+@export_category("Dodge parameters")
+@export var d_impulse_strength: float = 6.0
+@export var d_intangibility_time: float = 0.3
+@export var d_impulse_time: float = 0.4
+@export var d_hang_time: float = 0.4
+
 func _ready() -> void:
 	add_child(cooldown_timer)
 	cooldown_timer.one_shot = true
@@ -87,13 +96,6 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 	if caster.unit_info.atb < atb_cost:
 		return SkillResult.INVALID
 	
-	if not is_auto_attack:
-		caster.unit_info.atb -= atb_cost
-		caster.unit_info.atb += atb_gain * caster.atb_gain_mult
-	if is_auto_attack and !caster.status_effects.has("empowered"):
-		caster.unit_info.atb -= atb_cost
-		caster.unit_info.atb += atb_gain * caster.atb_gain_mult
-	
 	if base_cooldown > 0:
 		cooldown_timer.one_shot = true
 		cooldown_timer.start(base_cooldown * caster.unit_info.cooldown_mult)
@@ -108,12 +110,20 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 		if !success:
 			return SkillResult.INTERRUPT
 	
+	var mult = 1.0
+	var anim_speed = 1.0
+	
+	if is_auto_attack:
+		mult = caster.base_attack_speed/caster.unit_info.attack_speed
+		anim_speed = caster.unit_info.attack_speed/caster.base_attack_speed
+	
 	if cast_animation_name and caster.animator:
-		caster.animator.play(cast_animation_name)
-		caster.status_effects["animating"] = caster.animator.current_animation_length
+		caster.animator.stop()
+		caster.animator.play(cast_animation_name, -1, anim_speed)
+		caster.status_effects["animating"] = caster.animator.current_animation_length * mult
 	
-	await get_tree().create_timer(result_offset).timeout
-	
+	await get_tree().create_timer(result_offset * mult).timeout
+
 	var result = await _realcast(caster, target) 
 	
 	if auto_attack_reset:
@@ -121,6 +131,12 @@ func cast(caster: GameUnit, target: GameUnit = null) -> SkillResult:
 	
 	match result:
 		SkillResult.SUCCESS:
+			if not is_auto_attack:
+				caster.unit_info.atb -= atb_cost
+				caster.unit_info.atb += atb_gain * caster.unit_info.atb_gain_mult
+			if is_auto_attack and !caster.status_effects.has("empowered"):
+				caster.unit_info.atb -= atb_cost
+				caster.unit_info.atb += atb_gain * caster.unit_info.atb_gain_mult
 			if fx_scene:
 				var targetpos = null
 				if target: targetpos = target.unit_positon

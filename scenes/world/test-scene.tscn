@@ -1,0 +1,200 @@
+[gd_scene load_steps=21 format=3 uid="uid://bdyx571nqgdpr"]
+
+[ext_resource type="PackedScene" uid="uid://cj0meohqdqrur" path="res://assets/3d/props/rock1.blend" id="1_fxfl8"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/cache/scatter_cache.gd" id="2_e0cdu"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter.gd" id="3_ltt0h"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="4_2cab0"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="5_xexae"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/create_inside_poisson.gd" id="6_gxgqh"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="7_15u0h"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/relax.gd" id="8_8vvsc"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="9_odjgp"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter_item.gd" id="10_kbe63"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter_shape.gd" id="11_283yn"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="12_gw57v"]
+[ext_resource type="PackedScene" uid="uid://bpwmsqguyeho5" path="res://mapping/models/prop_scenes/field_tree_1.tscn" id="13_6pi52"]
+[ext_resource type="PackedScene" uid="uid://6knunt6hys80" path="res://assets/3d/level/fieldtest.blend" id="14_y6ea0"]
+
+[sub_resource type="Resource" id="Resource_17tt4"]
+script = ExtResource("6_gxgqh")
+radius = 8.0
+samples_before_rejection = 2
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Resource_ce32r"]
+script = ExtResource("7_15u0h")
+position = Vector3(0.15, 0.15, 0.15)
+rotation = Vector3(0, 360, 0)
+scale = Vector3(0.1, 0.1, 0.1)
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_ys745"]
+script = ExtResource("8_8vvsc")
+iterations = 3
+offset_step = 0.5
+consecutive_step_multiplier = 0.75
+use_computeshader = true
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = true
+reference_frame = 0
+
+[sub_resource type="Resource" id="Resource_vgw4n"]
+script = ExtResource("9_odjgp")
+ray_direction = Vector3(0, -1, 0)
+ray_length = 20.0
+ray_offset = 5.0
+remove_points_on_miss = true
+align_with_collision_normal = false
+max_slope = 25.0
+collision_mask = 1
+exclude_mask = 0
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 0
+
+[sub_resource type="Resource" id="Resource_gt1q5"]
+script = ExtResource("4_2cab0")
+stack = Array[ExtResource("5_xexae")]([SubResource("Resource_17tt4"), SubResource("Resource_ce32r"), SubResource("Resource_ys745"), SubResource("Resource_vgw4n")])
+
+[sub_resource type="Resource" id="Resource_g8bsm"]
+script = ExtResource("12_gw57v")
+radius = 97.2488
+
+[node name="FieldTest" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16.6471, 0)
+
+[node name="rock1" parent="." instance=ExtResource("1_fxfl8")]
+transform = Transform3D(-0.726633, 0, 1.86333, 0, 2, 0, -1.86333, 0, -0.726633, -11.7018, 0, 3.69061)
+
+[node name="rock2" parent="." instance=ExtResource("1_fxfl8")]
+transform = Transform3D(-1.84678, 0, 2.36419, 0, 3, 0, -2.36419, 0, -1.84678, 33.2761, 14, -4.36161)
+
+[node name="ScatterCache" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8145, 0)
+script = ExtResource("2_e0cdu")
+cache_file = "res://addons/proton_scatter/cache/testworld_100173093_scatter_cache.res"
+
+[node name="ProtonScatter" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.28842, 33.0107, 8.63419)
+script = ExtResource("3_ltt0h")
+show_output_in_tree = true
+render_mode = 1
+force_rebuild_on_load = false
+modifier_stack = SubResource("Resource_gt1q5")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="ScatterItem" type="Node3D" parent="ProtonScatter"]
+script = ExtResource("10_kbe63")
+source_ignore_scale = false
+path = "res://mapping/models/prop_scenes/field_tree_1.tscn"
+
+[node name="ScatterShape" type="Node3D" parent="ProtonScatter"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("11_283yn")
+shape = SubResource("Resource_g8bsm")
+
+[node name="ScatterOutput" type="Marker3D" parent="ProtonScatter"]
+
+[node name="ScatterItem" type="Node3D" parent="ProtonScatter/ScatterOutput"]
+
+[node name="Node3D" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.00459284, 0, 1.01688, 0, 1.01689, 0, -1.01688, 0, -0.00459284, -25.5444, -19.0107, -7.65371)
+
+[node name="Node3D2" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.60009, 0, 0.863874, 0, 1.05185, 0, -0.863874, 0, 0.60009, -23.5427, -19.0107, -22.2602)
+
+[node name="Node3D3" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.230801, 0, 1.06451, 0, 1.08924, 0, -1.06451, 0, -0.230801, 34.4099, -9.0107, -44.1564)
+
+[node name="Node3D4" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.974304, 0, 0.365015, 0, 1.04043, 0, -0.365015, 0, 0.974304, -20.8159, -19.0107, -41.3318)
+
+[node name="Node3D5" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.978128, 0, 0.227507, 0, 1.00424, 0, -0.227507, 0, 0.978128, 24.7284, -9.0107, -35.6139)
+
+[node name="Node3D6" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(1.01052, 0, 0.235036, 0, 1.03749, 0, -0.235036, 0, 1.01052, 39.6555, -19.0107, -27.2455)
+
+[node name="Node3D7" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.965676, 0, -0.406044, 0, 1.04757, 0, 0.406044, 0, -0.965676, 2.65089, -9.0107, -42.8606)
+
+[node name="Node3D8" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(1.0575, 0, -0.0742099, 0, 1.0601, 0, 0.0742099, 0, 1.0575, 23.9646, -19.0107, 28.9812)
+
+[node name="Node3D9" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.667712, 0, 0.780106, 0, 1.02684, 0, -0.780106, 0, 0.667712, 16.1677, -9.0107, -25.7961)
+
+[node name="Node3D10" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-1.05967, 0, 0.010116, 0, 1.05972, 0, -0.010116, 0, -1.05967, 35.4965, -19.0107, 26.959)
+
+[node name="Node3D11" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.323791, 0, -1.04471, 0, 1.09374, 0, 1.04471, 0, -0.323791, -32.3562, -9.0107, 21.4688)
+
+[node name="Node3D12" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.175142, 0, -1.07124, 0, 1.08546, 0, 1.07124, 0, -0.175142, -26.9188, -9.0107, 10.6752)
+
+[node name="Node3D13" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.124423, 0, 1.04037, 0, 1.04778, 0, -1.04037, 0, 0.124423, -22.1065, -9.0107, 24.3199)
+
+[node name="Node3D14" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-1.03608, 0, 0.299425, 0, 1.07848, 0, -0.299425, 0, -1.03608, 4.93077, -19.0107, 26.4725)
+
+[node name="Node3D15" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.277043, 0, 1.0077, 0, 1.04509, 0, -1.0077, 0, -0.277043, -14.0935, -19.0107, 5.43891)
+
+[node name="Node3D16" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.88841, 0, -0.537412, 0, 1.03831, 0, 0.537412, 0, -0.88841, 15.2059, -19.0107, -13.6895)
+
+[node name="Node3D17" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.0699234, 0, -1.01638, 0, 1.01879, 0, 1.01638, 0, 0.0699234, 24.1387, -19.0107, 12.5963)
+
+[node name="Node3D18" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.598095, 0, 0.810632, 0, 1.00739, 0, -0.810632, 0, 0.598095, 3.66152, -9.0107, -26.0297)
+
+[node name="Node3D19" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(1.07187, 0, -0.123368, 0, 1.07895, 0, 0.123368, 0, 1.07187, -8.33905, -9.0107, 26.5407)
+
+[node name="Node3D20" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.97065, 0, -0.41403, 0, 1.05526, 0, 0.41403, 0, -0.97065, 40.1414, -9.0107, -1.75963)
+
+[node name="Node3D21" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.33599, 0, 1.00214, 0, 1.05696, 0, -1.00214, 0, 0.33599, -32.3081, -19.0107, -15.1768)
+
+[node name="Node3D22" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.707845, 0, 0.785129, 0, 1.05711, 0, -0.785129, 0, 0.707845, 33.6833, -9.0107, 16.5689)
+
+[node name="Node3D23" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-1.0238, 0, 0.221803, 0, 1.04755, 0, -0.221803, 0, -1.0238, -35.6951, -9.0107, 6.06356)
+
+[node name="Node3D24" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(1.02809, 0, 0.202893, 0, 1.04792, 0, -0.202893, 0, 1.02809, 11.4845, -9.0107, -35.6259)
+
+[node name="Node3D25" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-1.00962, 0, -0.288205, 0, 1.04995, 0, 0.288205, 0, -1.00962, -17.7007, -9.0107, 14.9572)
+
+[node name="Node3D26" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.266399, 0, -1.0535, 0, 1.08666, 0, 1.0535, 0, -0.266399, -8.43817, -9.0107, -41.8258)
+
+[node name="Node3D27" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(-0.949001, 0, -0.554628, 0, 1.09919, 0, 0.554628, 0, -0.949001, -31.6822, -19.0107, -45.8416)
+
+[node name="Node3D28" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.872896, 0, 0.539094, 0, 1.02595, 0, -0.539094, 0, 0.872896, -14.8047, -19.0107, -32.6597)
+
+[node name="Node3D29" parent="ProtonScatter/ScatterOutput/ScatterItem" instance=ExtResource("13_6pi52")]
+transform = Transform3D(0.0782875, 0, -1.07358, 0, 1.07643, 0, 1.07358, 0, 0.0782875, 26.0839, -9.0107, -22.5323)
+
+[node name="fieldtest" parent="." instance=ExtResource("14_y6ea0")]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://fydb25dc700p"]
+
+[ext_resource type="Script" path="res://src/skills/tier1/sk_raider_dash.gd" id="1_du48o"]
+[ext_resource type="PackedScene" uid="uid://c7r023lcr407b" path="res://scenes/fx_scenes/martial/fx_dagger_toss.tscn" id="2_cm3ct"]
+
+[node name="SkRaiderDash" type="Node"]
+script = ExtResource("1_du48o")
+fx = ExtResource("2_cm3ct")
+skill_name = "Raider Dash"
+target_type = "self"
+logic_type = "callable"
+is_internal = true
+is_dodge = true
+damage_scales_with = "attack_damage"

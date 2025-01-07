@@ -255,8 +255,7 @@ func _load(file_path : String = default_file_path):
 		current_state_dictionary = JSON.parse_string(file.get_as_text())
 		if perform_typecast_on_dictionary_keys:
 			current_state_dictionary = _typecast_dictionary_keys(current_state_dictionary)
-	
-	emit_signal("loaded")
+	loaded.emit()
 
 
 # By default, JSON parsing doesn't typecast the keys of a Dictionary, which can be

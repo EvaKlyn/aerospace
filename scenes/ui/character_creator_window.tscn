@@ -1,0 +1,256 @@
+[gd_scene load_steps=6 format=3 uid="uid://bpmrglvrlp6ia"]
+
+[ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="1_7fyx8"]
+[ext_resource type="Script" path="res://scenes/ui/character_creator_window.gd" id="2_jt4am"]
+[ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="3_jv26e"]
+
+[sub_resource type="Environment" id="Environment_klk2k"]
+ambient_light_source = 2
+ambient_light_color = Color(0.522967, 0.522, 0.58, 1)
+
+[sub_resource type="World3D" id="World3D_4qn00"]
+environment = SubResource("Environment_klk2k")
+
+[node name="CharacterCreatorWindow" type="Window" node_paths=PackedStringArray("camera_pivot", "name_edit", "build_opt", "save_button", "mhp_label", "might_label", "finesse_label", "agility_label", "endurance_label", "arcana_label", "psycho_label", "luck_label", "tempo_label", "wits_label", "skills_container")]
+auto_translate_mode = 1
+transparent_bg = true
+title = "Character Creation"
+initial_position = 1
+size = Vector2i(580, 505)
+transparent = true
+theme = ExtResource("1_7fyx8")
+script = ExtResource("2_jt4am")
+camera_pivot = NodePath("HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D/Node3D")
+name_edit = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer/NameEdit")
+build_opt = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer/OptionButton")
+save_button = NodePath("HBoxContainer/VBoxContainer3/SaveButton")
+mhp_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/MhpLabel")
+might_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/MightLabel")
+finesse_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/FinesseLabel")
+agility_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/AgilityLabel")
+endurance_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/EnduranceLabel")
+arcana_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/ArcanaLabel")
+psycho_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/PsychoLabel")
+luck_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/LuckLabel")
+tempo_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/TempoLabel")
+wits_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/WitsLabel")
+skills_container = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_length = 16
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "Starting Build"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Raider"
+popup/item_1/text = "Arcane Adept"
+popup/item_1/id = 1
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Skills"
+
+[node name="VBoxContainer2" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2"]
+layout_mode = 2
+text = "Normal Dodge,"
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2"]
+layout_mode = 2
+text = "Melee Auto Attack,"
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Equipment"
+
+[node name="VBoxContainer3" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer3"]
+layout_mode = 2
+text = "WIP"
+
+[node name="SaveButton" type="Button" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 10
+disabled = true
+text = "Save Character"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/VBoxContainer2/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_4qn00")
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(288, 285)
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport"]
+
+[node name="Body" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D" node_paths=PackedStringArray("clothes_parts") instance=ExtResource("3_jv26e")]
+clothes_parts = [NodePath("Body/Body"), null]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D"]
+transform = Transform3D(-0.258819, 0.933013, 0.25, -2.26267e-08, -0.258819, 0.965926, 0.965926, 0.25, 0.0669873, 0, 0, 0)
+
+[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D/Node3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, -3)
+cull_mask = 983039
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Max HP"
+
+[node name="MhpLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Might
+"
+
+[node name="MightLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Finesse"
+
+[node name="FinesseLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Agility
+"
+
+[node name="AgilityLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label5" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Endurance"
+
+[node name="EnduranceLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label6" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Arcana"
+
+[node name="ArcanaLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label7" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Psycho"
+
+[node name="PsychoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label8" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Luck
+"
+
+[node name="LuckLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label9" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wits
+"
+
+[node name="WitsLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label10" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tempo"
+
+[node name="TempoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer3/VBoxContainer/NameEdit" to="." method="_on_name_edit_text_changed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer3/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer3/SaveButton" to="." method="_on_save_button_pressed"]

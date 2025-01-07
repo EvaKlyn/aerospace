@@ -3,8 +3,7 @@ class_name GameMainNode
 
 var is_host = false
 var spawn_host_pc = true
-
-@onready var name_input: LineEdit = $ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer/NicknameEdit
+var my_character_data = {}
 
 @export var character_scene: PackedScene
 @export var peer_scene: PackedScene
@@ -24,7 +23,7 @@ var spawn_host_pc = true
 var peers: Dictionary = {}
 
 func _ready() -> void:
-	player_spawner.spawn_function = _spawn_player
+	player_spawner.spawn_function = MmoUtils.spawn_player_character
 	NetworkEvents.on_client_start.connect(_handle_connected)
 	NetworkEvents.on_server_start.connect(_handle_host)
 	NetworkEvents.on_peer_join.connect(_handle_new_peer)
@@ -96,28 +95,7 @@ func _spawn(id: int):
 	peer.name += " #%d" % id
 	peer.peer_id = id
 	peers_parent.add_child(peer)
-	
-	if NetworkEvents.is_server():
-		await get_tree().create_timer(0.2).timeout
-		player_spawner.spawn({"id" = id})
-		MmoUtils.rpc("eventlog", peer.nickname + " logged on. " + str(peers.size()) + " players online.")
-
-## Data = {
-##   id = (multiplayer id)
-## }
-##   perhaps more
-func _spawn_player(data: Dictionary) -> BasePlayer:
-	var new_pc: BasePlayer = character_scene.instantiate()
-	new_pc.peer_id = data["id"]
-	new_pc.network_peer = peers.get(data["id"])
-	new_pc.name += " #%d" % data["id"]
-	new_pc.physics_body.network_peer = new_pc.network_peer
-	new_pc.set_multiplayer_authority(1)
-	new_pc.physics_body.velocity = Vector3.ZERO
-	
-	new_pc.physics_body.set_multiplayer_authority(data["id"])
-	print("Spawned Playercharacter %s for %s" % [new_pc.name, multiplayer.get_unique_id()])
-	return new_pc
+	print("created id " + str(id))
 
 func _process(delta: float) -> void:
 	fps_label.text = "FPS: " + str(Performance.get_monitor(Performance.TIME_FPS))

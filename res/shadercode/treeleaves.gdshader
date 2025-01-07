@@ -2,7 +2,7 @@
 //CC0 License
 shader_type spatial;
 
-render_mode depth_prepass_alpha,cull_disabled,diffuse_burley,specular_schlick_ggx;
+render_mode depth_prepass_alpha,cull_disabled,diffuse_toon,specular_schlick_ggx;
 
 group_uniforms General;
 uniform float alpha_scissor_threshold : hint_range(0,1) = 0.4;

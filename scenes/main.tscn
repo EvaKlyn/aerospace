@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://lubma0oweog8"]
+[gd_scene load_steps=21 format=3 uid="uid://lubma0oweog8"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_f2b64"]
 [ext_resource type="PackedScene" uid="uid://bdniqwi3nd2d6" path="res://src/obj/base_player.tscn" id="2_jwlpu"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/ui_coodinator.gd" id="5_xcw28"]
 [ext_resource type="Texture2D" uid="uid://0ld1sijgqxco" path="res://assets/texture2d/xp.png" id="6_qxnqs"]
 [ext_resource type="PackedScene" uid="uid://cb83wlwvwpwsp" path="res://scenes/ui/settings_window.tscn" id="8_yd0p5"]
+[ext_resource type="PackedScene" uid="uid://bpmrglvrlp6ia" path="res://scenes/ui/character_creator_window.tscn" id="9_71s8s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycnv4"]
 bg_color = Color(0.363273, 0.3596, 0.58, 1)
@@ -21,6 +22,9 @@ expand_margin_right = 8.0
 expand_margin_bottom = 8.0
 shadow_size = 12
 shadow_offset = Vector2(8, 8)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_erdsq"]
+viewport_path = NodePath("GameViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wyo00"]
 content_margin_left = 4.0
@@ -91,27 +95,40 @@ texture = SubResource("GradientTexture2D_werda")
 script = ExtResource("1_f2b64")
 character_scene = ExtResource("2_jwlpu")
 peer_scene = ExtResource("3_mnm6m")
-spawn_root = NodePath("GameView/AspectRatioContainer/SubViewportContainer/SubViewport/World3D")
+spawn_root = NodePath("GameViewport/World3D")
 peers_parent = NodePath("Peers")
 fps_label = NodePath("ChatWindow/Chat/Session/SessionInfo/HFlowContainer2/FPSLabel")
 ping_label = NodePath("ChatWindow/Chat/Session/SessionInfo/HFlowContainer2/PingLabel")
 chatlog = NodePath("ChatWindow/Chat/Chat/Chat/Log")
 syslog = NodePath("ChatWindow/Chat/Events/Events")
 chatbox = NodePath("ChatWindow/Chat/Chat/Chat/HBoxContainer/LineEdit")
-world_3d = NodePath("GameView/AspectRatioContainer/SubViewportContainer/SubViewport/World3D")
+world_3d = NodePath("GameViewport/World3D")
+
+[node name="GameViewport" type="SubViewport" parent="."]
+own_world_3d = true
+handle_input_locally = false
+use_occlusion_culling = true
+canvas_item_default_texture_filter = 0
+audio_listener_enable_3d = true
+gui_snap_controls_to_pixels = false
+sdf_oversize = 0
+sdf_scale = 0
+size = Vector2i(480, 360)
+
+[node name="World3D" type="Node3D" parent="GameViewport"]
 
 [node name="Bootstrapper" type="Node" parent="." node_paths=PackedStringArray("connect_ui", "noray_address_input", "oid_input", "host_oid_input", "force_relay_check", "game_view")]
 script = ExtResource("2_l05i4")
 connect_ui = NodePath("../ConnectMenuWindow")
-noray_address_input = NodePath("../ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer2/LineEdit2")
+noray_address_input = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer2/LineEdit2")
 oid_input = NodePath("../ChatWindow/Chat/Session/SessionInfo/HFlowContainer/LineEdit")
-host_oid_input = NodePath("../ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer/LineEdit")
-force_relay_check = NodePath("../ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer/CheckBox")
+host_oid_input = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer/LineEdit")
+force_relay_check = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer/CheckBox")
 game_view = NodePath("../GameView")
 
 [node name="Peers" type="Node" parent="."]
 
-[node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_window", "spell_bar", "spell_text", "status_window", "status_container", "viewport", "settings_window", "ancestry_dropdown", "color_picker", "head_slider", "hands_slider")]
+[node name="UiCoodinator" type="Node" parent="." node_paths=PackedStringArray("chat_log", "chat_line_edit", "chat_button", "hotbar", "hp_text", "hp_bar", "atb_text", "atb_bar", "skills_area", "spell_window", "spell_bar", "spell_text", "status_window", "status_container", "viewport", "settings_window", "character_creator", "new_chara_button", "character_container", "chara_status_label", "ancestry_dropdown", "color_picker", "head_slider", "hands_slider")]
 script = ExtResource("5_xcw28")
 chat_log = NodePath("../ChatWindow/Chat/Chat/Chat/Log")
 chat_line_edit = NodePath("../ChatWindow/Chat/Chat/Chat/HBoxContainer/LineEdit")
@@ -127,8 +144,12 @@ spell_bar = NodePath("../Hotbar/GridContainer/PanelContainer2/SpellBar/ProgressB
 spell_text = NodePath("../Hotbar/GridContainer/PanelContainer2/SpellBar/Label")
 status_window = NodePath("../Hotbar/GridContainer/StatusWindow")
 status_container = NodePath("../Hotbar/GridContainer/StatusWindow/HFlowContainer")
-viewport = NodePath("../GameView/AspectRatioContainer/SubViewportContainer/SubViewport")
+viewport = NodePath("../GameViewport")
 settings_window = NodePath("../SettingsWindow")
+character_creator = NodePath("../CharacterCreatorWindow")
+new_chara_button = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Characters/CreatorButton")
+character_container = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Characters/ScrollContainer/CharacterContainer")
+chara_status_label = NodePath("../ConnectMenuWindow/PanelContainer/TabContainer/Connection/CharaLabel")
 ancestry_dropdown = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/OptionButton")
 color_picker = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/ColorPickerButton")
 head_slider = NodePath("../ChatWindow/Chat/Session/SessionInfo/GridContainer/HSlider")
@@ -143,6 +164,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 theme = ExtResource("5_n1tw6")
 
 [node name="TextureRect" type="TextureRect" parent="GameView"]
@@ -168,26 +190,12 @@ ratio = 1.3333
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ycnv4")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="GameView/AspectRatioContainer"]
+[node name="TextureRect2" type="TextureRect" parent="GameView/AspectRatioContainer"]
 texture_filter = 1
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-focus_mode = 0
-stretch = true
-metadata/_edit_use_anchors_ = true
-
-[node name="SubViewport" type="SubViewport" parent="GameView/AspectRatioContainer/SubViewportContainer"]
-handle_input_locally = false
-use_occlusion_culling = true
-canvas_item_default_texture_filter = 0
-audio_listener_enable_3d = true
-sdf_oversize = 0
-sdf_scale = 0
-size = Vector2i(863, 648)
-render_target_update_mode = 4
-
-[node name="World3D" type="Node3D" parent="GameView/AspectRatioContainer/SubViewportContainer/SubViewport"]
+texture = SubResource("ViewportTexture_erdsq")
+expand_mode = 2
+stretch_mode = 6
 
 [node name="ServerUI" type="Control" parent="."]
 visible = false
@@ -267,6 +275,7 @@ layout_mode = 2
 text = "PlayerPing"
 
 [node name="Hotbar" type="VBoxContainer" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -365,8 +374,9 @@ layout_mode = 2
 
 [node name="ConnectMenuWindow" type="Window" parent="."]
 transparent_bg = true
+title = "TESTING MAIN MENU YIPEE"
 initial_position = 1
-size = Vector2i(380, 190)
+size = Vector2i(420, 240)
 transparent = true
 theme = ExtResource("5_n1tw6")
 
@@ -378,88 +388,117 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ConnectMenuWindow/PanelContainer"]
+[node name="TabContainer" type="TabContainer" parent="ConnectMenuWindow/PanelContainer"]
+layout_mode = 2
+current_tab = 1
+
+[node name="Connection" type="VBoxContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+metadata/_tab_index = 0
 
-[node name="GridContainer2" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/VBoxContainer"]
+[node name="CharaLabel" type="Label" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
+layout_mode = 2
+text = "Select a character!"
+
+[node name="GridContainer2" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
 layout_mode = 2
 columns = 2
 
-[node name="Label2" type="Label" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer2"]
+[node name="Label2" type="Label" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Relay Server IP"
 
-[node name="LineEdit2" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer2"]
+[node name="LineEdit2" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "localhost"
 placeholder_text = "0.0.0.0"
 alignment = 1
 
-[node name="Button" type="Button" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer2"]
+[node name="Button" type="Button" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer2"]
 layout_mode = 2
 text = "connect to relay"
 
-[node name="HSeparator" type="HSeparator" parent="ConnectMenuWindow/PanelContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
 layout_mode = 2
 columns = 2
 
-[node name="Label" type="Label" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "session ID:"
 
-[node name="LineEdit" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="LineEdit" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "XXXX"
 alignment = 1
 
-[node name="Label2" type="Label" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "nickname:"
 
-[node name="NicknameEdit" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="NicknameEdit" type="LineEdit" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "nickname here"
 alignment = 1
 max_length = 16
 
-[node name="ConnectButton" type="Button" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="ConnectButton" type="Button" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 text = "connect to host"
 
-[node name="CheckBox" type="CheckBox" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer"]
+[node name="CheckBox" type="CheckBox" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer"]
 layout_mode = 2
 text = "force relay"
 
-[node name="HSeparator2" type="HSeparator" parent="ConnectMenuWindow/PanelContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
 layout_mode = 2
 
-[node name="GridContainer3" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/VBoxContainer"]
+[node name="GridContainer3" type="GridContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection"]
 layout_mode = 2
 columns = 2
 
-[node name="Button2" type="Button" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer3"]
+[node name="Button2" type="Button" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "host & play"
 
-[node name="Button3" type="Button" parent="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer3"]
+[node name="Button3" type="Button" parent="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "server only"
+
+[node name="Characters" type="VBoxContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer/Characters"]
+layout_mode = 2
+size_flags_vertical = 3
+vertical_scroll_mode = 0
+
+[node name="CharacterContainer" type="VBoxContainer" parent="ConnectMenuWindow/PanelContainer/TabContainer/Characters/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CreatorButton" type="Button" parent="ConnectMenuWindow/PanelContainer/TabContainer/Characters"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Create New Character"
 
 [node name="ChatWindow" type="Window" parent="."]
 transparent_bg = true
@@ -610,17 +649,22 @@ text = "Commit Changes"
 [node name="SettingsWindow" parent="." instance=ExtResource("8_yd0p5")]
 visible = false
 
+[node name="CharacterCreatorWindow" parent="." instance=ExtResource("9_71s8s")]
+visible = false
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
-spawn_path = NodePath("../GameView/AspectRatioContainer/SubViewportContainer/SubViewport/World3D")
+spawn_path = NodePath("../GameViewport/World3D")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../GameView/AspectRatioContainer/SubViewportContainer/SubViewport/World3D")
+spawn_path = NodePath("../GameViewport/World3D")
 
-[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer2/Button" to="Bootstrapper" method="connect_to_noray"]
-[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer/ConnectButton" to="Bootstrapper" method="join"]
-[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer3/Button2" to="Bootstrapper" method="host"]
-[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/VBoxContainer/GridContainer3/Button3" to="Bootstrapper" method="host_only"]
+[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer2/Button" to="Bootstrapper" method="connect_to_noray"]
+[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer/ConnectButton" to="Bootstrapper" method="join"]
+[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer3/Button2" to="Bootstrapper" method="host"]
+[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/TabContainer/Connection/GridContainer3/Button3" to="Bootstrapper" method="host_only"]
+[connection signal="pressed" from="ConnectMenuWindow/PanelContainer/TabContainer/Characters/CreatorButton" to="UiCoodinator" method="_on_creator_button_pressed"]
 [connection signal="pressed" from="ChatWindow/Chat/Chat/Chat/HBoxContainer/ChatButton" to="UiCoodinator" method="_on_chat_button_pressed"]
 [connection signal="pressed" from="ChatWindow/Chat/Session/SessionInfo/CustomizeButton" to="UiCoodinator" method="_on_customize_button_pressed"]
+[connection signal="visibility_changed" from="CharacterCreatorWindow" to="UiCoodinator" method="_on_character_creator_window_visibility_changed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

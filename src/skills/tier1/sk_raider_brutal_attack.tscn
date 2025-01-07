@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://cv3r614fxgavs"]
+
+[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_4ncs4"]
+[ext_resource type="Texture2D" uid="uid://by28rmh11sk2q" path="res://assets/texture2d/icons/skills/empower auto.png" id="2_j1ljm"]
+
+[node name="Empower" type="Node"]
+script = ExtResource("1_4ncs4")
+skill_name = "Brutal Attack"
+icon = ExtResource("2_j1ljm")
+base_cooldown = 0.0
+cast_time = 0.6
+auto_attack_reset = true
+atb_cost = 50
+target_type = "self"
+logic_type = "data-driven"
+popup = "caster"
+popup_text = "Empowered!"
+popup_fill = Color(1, 0.13, 0.13, 1)
+popup_border = Color(0, 0, 0, 1)
+popup_scale = 2.0
+gives_status = true
+statuses = {
+"empowered": 10.0
+}

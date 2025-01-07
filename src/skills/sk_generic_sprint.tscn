@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://btcr61usatg54"]
+
+[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_80hpw"]
+
+[node name="Sprint" type="Node"]
+script = ExtResource("1_80hpw")
+skill_name = "Sprint"
+base_cooldown = 12.0
+target_type = "self"
+category = "misc"
+logic_type = "data-driven"
+gives_status = true
+statuses = {
+"sprint": 8.0
+}

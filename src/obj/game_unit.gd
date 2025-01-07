@@ -8,6 +8,8 @@ enum Teams {
 	UNTARGETABLE
 }
 
+const base_attack_speed = 0.6
+
 signal attacked(attacker: GameUnit)
 signal damaged(attacker: GameUnit, damage_report: Dictionary)
 signal stats_update
@@ -19,59 +21,48 @@ var skill_map: Array[GameSkill] = []
 
 @export_category("Basics")
 @export var unit_name: String = ""
+@export var current_level: int = 1
 @export var team: Teams = Teams.NEUTRAL
-@export var max_hp: int = 10
+@export var base_max_hp: int = 10
 @export var current_hp: int = 10
 @export var max_target_range: float = 20.0
+@export var inventory_slots: int = 10
+@export var inventory: Array[String] = []
+@export var known_skills: Array[String] = []
 
 @export_category("RPG Statistics")
-@export var rpg_might: int = 10
-@export var rpg_agility: int = 10
-@export var rpg_vitality: int = 10
-@export var rpg_arcana: int = 10
-@export var rpg_astrology: int = 10
-@export var rpg_charisma: int = 10
-@export var rpg_luck: int = 10
-@export var rpg_guts: int = 10
-@export var rpg_psycho: int = 10
-@export var rpg_: int = 10
+@export var rpg_might: int = 0 # attack dmg & a bit of poise
+@export var rpg_finesse: int = 0 # attack speed & a bit of attack dmg
+@export var rpg_agility: int = 0 # movement related shit
+@export var rpg_endurance: int = 0 # max HP & poise
+@export var rpg_arcana: int = 0 # magic damage 
+@export var rpg_psycho: int = 0 # magic pen etc
+@export var rpg_charisma: int = 0 # idk yet but i like the idea of it
+@export var rpg_luck: int = 0 # crit rate (later other stuff like drops)
+@export var rpg_tempo: int = 0 # atb gain and CDR/Spell speed
+@export var rpg_wits: int = 0 # attack ranges
 
-@export_category("Combat Statistics")
-@export var stat_attack_damage: int = 0
-@export var stat_armor: int = 0
-@export var stat_poise: int = 0
-@export_range(0.0, 1.0) var stat_evasion: float = 0.0
-@export var stat_magic_power: int = 0
-@export var stat_magic_resist: int = 0
-@export var stat_armor_pen: int = 0
-@export var stat_magic_pen: int = 0
-@export var stat_attack_drain: int = 0
-@export var stat_magic_drain: int = 0
-@export var stat_attack_speed: float = 1.0
-@export var stat_cooldown_mult: float = 1.0
-@export var stat_move_speed: float = 10.0
-@export var stat_jump_str: float = 14.0
-@export var stat_melee_range: float = 4.0
-@export var stat_missile_range: float = 12.0
-@export var stat_crit_rate: float = 0.05
-
-@export_category("ATB")
-@export var atb_passive_gain: float = 3.0
-@export var atb_gain_mult: float = 1.0
-
-@export_category("funny stuff")
-@export var gravity_mult: float = 1.0
-@export var cast_time_mult: float = 1.0
+@export_category("Natual Modifiers")
+@export var nat_armor: int = 0
+@export var nat_speed: float = 10.0
+@export var nat_jump: float = 12.0
+@export var nat_magic_resist: int = 0
+@export var nat_attack_speed_reduce: float = 0
+@export var nat_melee_range: float = 4
+@export var nat_missile_range: float = 40
 
 @export_category("State")
 @export var actionable: bool = true
 @export var unit_positon: Vector3 = Vector3.ZERO
 @export var equipment_list: Array[String] = []
-@export var skills: Array[GameSkill] = []
+@export var skills: Array = []
+
 @export var auto_attack_skill: GameSkill
 @export var has_target: bool = false
 @export var target_position: Vector3 = Vector3.ZERO
 @export var status_effects: Dictionary = {}
+
+var skills_nodes = {}
 
 @onready var unit_info: UnitInfo = $UnitInfo
 @onready var sync: MultiplayerSynchronizer = $MultiplayerSynchronizer
@@ -108,13 +99,14 @@ var last_cast_time = 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	recalc_stats()
+	update_skils_equipment()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
 	
-	unit_info.atb = unit_info.atb + (atb_passive_gain * delta)
+	unit_info.atb = unit_info.atb + (unit_info.atb_passive_gain * delta)
 	unit_info.atb = clamp(unit_info.atb, 0, 100)
 	
 	if current_target: 
@@ -144,8 +136,8 @@ func _physics_process(delta: float) -> void:
 	#if !actionable:
 		#last_autoattack_lockout = NetworkTime.time
 		
-	
-	if NetworkTime.time - unit_info.attack_speed > last_autoattack_lockout:
+	var lockout_window = 1.0/unit_info.attack_speed
+	if NetworkTime.time - lockout_window > last_autoattack_lockout:
 		await auto_attack()
 	
 	var stale_states = []
@@ -203,27 +195,29 @@ func auto_attack():
 		remove_status("empowered")
 
 func recalc_stats():
-	unit_info.max_hp = max_hp
+	unit_info.max_hp = base_max_hp + (rpg_endurance * 5) + (current_level * 3)
 	unit_info.current_hp = current_hp
-	unit_info.attack_damage = stat_attack_damage
-	unit_info.armor = stat_armor
-	unit_info.magic_power = stat_magic_power
-	unit_info.magic_resist = stat_magic_resist
-	unit_info.armor_pen = stat_armor_pen
-	unit_info.magic_pen = stat_magic_pen
-	unit_info.attack_drain = stat_attack_drain
-	unit_info.magic_drain = stat_magic_drain
-	unit_info.attack_speed = stat_attack_speed
-	unit_info.cooldown_mult = stat_cooldown_mult
-	unit_info.move_speed = stat_move_speed
-	unit_info.missile_range = stat_missile_range
-	unit_info.evasion = stat_evasion
-	unit_info.poise = stat_poise
-	unit_info.jump_str = stat_jump_str
-	unit_info.gravity_mult = gravity_mult
-	unit_info.melee_range = stat_melee_range
-	unit_info.cast_time_mult = cast_time_mult
-	unit_info.crit_rate = stat_crit_rate
+	unit_info.attack_damage = (rpg_might * 1.5) + (rpg_finesse * 0.5)
+	unit_info.armor = nat_armor + (rpg_endurance * 0.05)
+	unit_info.magic_power = rpg_arcana + rpg_psycho
+	unit_info.magic_resist = nat_magic_resist + (rpg_endurance * 0.05)
+	unit_info.armor_pen = 0
+	unit_info.magic_pen = (rpg_psycho * 0.5)
+	unit_info.attack_drain = 0
+	unit_info.magic_drain = 0
+	unit_info.attack_speed = base_attack_speed + (rpg_finesse * 0.1)
+	unit_info.cooldown_mult = 1.0 * clamp(((100-rpg_tempo)/100), 0.1, 2.0)
+	unit_info.move_speed = nat_speed + (rpg_agility * 0.2)
+	unit_info.missile_range = nat_missile_range + rpg_wits
+	unit_info.evasion = clamp(rpg_agility * 0.01, 0, 0.8)
+	unit_info.poise = (rpg_might * 0.5) + (rpg_endurance * 0.75)
+	unit_info.jump_str = nat_jump + (rpg_agility * 0.25)
+	unit_info.gravity_mult = 1.0
+	unit_info.melee_range = nat_melee_range + (rpg_wits * 0.15)
+	unit_info.cast_time_mult = 1.0 * clamp(1 - (rpg_tempo * 0.01), 0.1, 2.0)
+	unit_info.crit_rate = clamp(rpg_luck * 0.01, 0, 0.9)
+	unit_info.atb_passive_gain = 4.0 + (rpg_tempo * 0.15)
+	unit_info.atb_gain_mult = 1.0 * clamp(((100+rpg_tempo)/100), 0.5, 2.0)
 	
 	if status_effects.has("low_g"):
 		unit_info.gravity_mult *= 0.5
@@ -268,16 +262,29 @@ func recalc_stats():
 	if status_effects.has("dodge"):
 		unit_info.evasion = 1.0
 	
-	skills.clear()
-	unit_info.skills_dict.clear()
-	for child in get_children():
-		if child is GameSkill:
-			if child.is_internal: continue
-			if child.is_auto_attack: continue
-			skills.append(child)
-			unit_info.skills_dict[child.skill_name] = [skills.size() - 1, child.icon.resource_path]
-	
 	stats_update.emit()
+
+func update_skils_equipment():
+	for child in get_children():
+		if child is UnitInfo: continue
+		if child is MultiplayerSynchronizer: continue
+		child.queue_free()
+	
+	unit_info.skills_dict.clear()
+	skills_nodes.clear()
+	
+	for skill in skills:
+		var new_child = Stuff.get_skill_node(skill)
+		if new_child is GameSkill:
+			add_child(new_child)
+			skills_nodes[new_child.skill_name] = new_child
+			if new_child.is_dodge and is_instance_of(get_parent(), BasePlayer):
+				get_parent().dodge_skill = new_child
+			if new_child.is_internal: continue
+			if new_child.is_auto_attack: 
+				auto_attack_skill = new_child
+				continue
+			unit_info.skills_dict[new_child.skill_name] = [new_child.name, new_child.icon.resource_path]
 
 ## OK SO this function returns a dict that has 3 keys.
 ## inflicted: int = amount of damage that was done in reality
@@ -331,6 +338,18 @@ func take_damage(from: GameUnit, damage: DamageInstance) -> Dictionary:
 	current_hp -= final_dmg
 	recalc_stats()
 	return dmg_report
+
+func take_healing(amount: int):
+	var new_hp = clamp(current_hp + amount, 0, unit_info.max_hp)
+	var textcolor = [Color.GREEN, Color.WHITE]
+	var diff = new_hp - current_hp
+	if diff > 0:
+		current_hp = new_hp
+		MmoUtils.rpc("text_popup", unit_positon, "++" + str(diff), 1.0, 1.0, textcolor[0], textcolor[1])
+	else:
+		textcolor = [Color.DARK_OLIVE_GREEN, Color.GRAY]
+		MmoUtils.rpc("text_popup", unit_positon, str(0), 1.0, 1.0, textcolor[0], textcolor[1])
+	
 
 func add_status(state: String, duration: float):
 	status_effects[state] = duration

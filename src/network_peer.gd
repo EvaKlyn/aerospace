@@ -11,15 +11,12 @@ var jump: bool = false
 var target: bool = false
 var dodge: bool = false
 
-var twist_pivot = Node3D.new()
-var pitch_pivot = Node3D.new()
-
-var twist: float = 0
-var pitch: float = 0
-
+var player_object: BasePlayer
 var dummy = 1
 
 var mouse_cam_sensitivity = 0.003
+
+var character_data = {}
 
 @export var nickname: String = "NOTHIN'"
 
@@ -31,8 +28,10 @@ func _ready():
 	if !is_multiplayer_authority():
 		return
 	
-	nickname = get_node("/root/Main").name_input.text
+	nickname = "bubs"
 	nickname = nickname.left(16)
+	character_data = get_node("/root/Main").my_character_data
+	MmoUtils.rpc("create_player_character", character_data)
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
@@ -77,6 +76,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			MetaManager.MouseReleaseMode.HOLD_RELEASE:
 				capture_mouse()
 	
+	if event is InputEventMouseMotion and player_object:
+		player_object.camera_input(event)
 
 func capture_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

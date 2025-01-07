@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://twp240b2v6uw"]
+
+[ext_resource type="Script" path="res://scenes/ui/character_thumbnail.gd" id="1_5fi2k"]
+
+[node name="CharacterThumbnail" type="PanelContainer" node_paths=PackedStringArray("name_label", "level_label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5fi2k")
+name_label = NodePath("HBoxContainer/NameLabel")
+level_label = NodePath("HBoxContainer/LevelLabel")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Select"
+
+[node name="NameLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Character Name"
+
+[node name="LevelLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Level 1"
+
+[node name="Button2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "delete"
+
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Button2" to="." method="_on_button_2_pressed"]

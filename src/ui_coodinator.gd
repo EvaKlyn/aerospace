@@ -22,6 +22,11 @@ extends Node
 
 @export var settings_window: Window
 
+@export var character_creator: Window
+@export var new_chara_button: Button
+@export var character_container: VBoxContainer
+@export var chara_status_label: Label
+
 @export_category("customization_menu")
 @export var ancestry_dropdown: OptionButton
 @export var color_picker: ColorPickerButton
@@ -43,10 +48,27 @@ func _ready() -> void:
 	hotbar.visible = false
 	MetaManager.ui_coordinator = self
 	MetaManager.settings_updated.connect(_on_settings_updated)
+	reload_characters()
 
+func reload_characters():
+	var characters = []
+	characters.append_array(SaveSystem.get_var("characters", []))
+	for child in character_container.get_children():
+		child.queue_free()
+	for dict in characters:
+		var new_thumbnail: UiCharacterThumbnail = load("res://scenes/ui/character_thumbnail.tscn").instantiate()
+		new_thumbnail.name_label.text = dict["name"]
+		new_thumbnail.level_label.text = str(dict["level"])
+		new_thumbnail.data = dict
+		new_thumbnail.size_flags_horizontal = Control.SIZE_EXPAND
+		character_container.add_child(new_thumbnail)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	if get_parent().my_character_data == {}:
+		chara_status_label.text = "Select a character!"
+	else:
+		chara_status_label.text = "Current character: " + get_parent().my_character_data["name"]
 	if not unitinfo or not base_player:
 		return
 	if not unit:
@@ -103,7 +125,6 @@ func _process(_delta: float) -> void:
 				if unit.status_effects[key] <= last_status_effects[key]:
 					continue
 				else:
-					print(unit.status_effects[key] - last_status_effects[key])
 					_remove_status_icon(key)
 			_add_status_icon(key, unit.status_effects[key])
 		for child in status_container.get_children():
@@ -138,8 +159,7 @@ func _on_chat_button_pressed() -> void:
 		chat_line_edit.clear()
 
 func _on_skill_button_pressed(skillbutton: Button):
-	print(unitinfo.skills_dict[skillbutton.text.substr(4)])
-	base_player.rpc("do_skill", unitinfo.skills_dict[skillbutton.text.substr(4)][0])
+	base_player.rpc("do_skill", skillbutton.text.substr(4))
 
 
 #var customization: Dictionary = {
@@ -159,10 +179,14 @@ func _on_customize_button_pressed() -> void:
 		"head_scale" = head_slider.value,
 		"hand_scale" = hands_slider.value
 	}
-	print(customization)
 	base_player.rpc("remote_customize", customization)
 
 func _on_settings_updated():
-	viewport.scaling_3d_scale = MetaManager.game_scale
-	viewport.scaling_3d_mode = MetaManager.game_scale_mode
+	viewport.size = MetaManager.game_res
 	viewport.debug_draw = MetaManager.debug_draw_mode
+
+func _on_creator_button_pressed() -> void:
+	character_creator.visible = true
+
+func _on_character_creator_window_visibility_changed() -> void:
+	reload_characters()

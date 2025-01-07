@@ -1,20 +1,15 @@
-[gd_scene load_steps=25 format=3 uid="uid://bdniqwi3nd2d6"]
+[gd_scene load_steps=20 format=3 uid="uid://bdniqwi3nd2d6"]
 
 [ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="2_3mq61"]
 [ext_resource type="Texture2D" uid="uid://ds1g4py3poq0s" path="res://assets/texture2d/ui_targetring.png" id="2_phblr"]
-[ext_resource type="Script" path="res://src/skills/player_medium_dodge.gd" id="3_j1g7p"]
 [ext_resource type="Script" path="res://src/obj/player_body.gd" id="3_nmnka"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_464ud"]
-[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="4_sxmj2"]
-[ext_resource type="PackedScene" uid="uid://dogwtl8hqdpcd" path="res://scenes/fx_scenes/class_test/fx_laser_blast.tscn" id="5_k72ke"]
-[ext_resource type="PackedScene" uid="uid://cpws752hbit6x" path="res://scenes/fx_scenes/fx_blood_splat.tscn" id="5_l0g5k"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_o54a7"]
 [ext_resource type="Texture2D" uid="uid://c6fp2r011bpc6" path="res://assets/texture2d/ui_rangering.png" id="5_smjeu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_28du0"]
-[ext_resource type="Texture2D" uid="uid://by28rmh11sk2q" path="res://assets/texture2d/icons/skills/empower auto.png" id="6_212h4"]
-[ext_resource type="Script" path="res://src/skills/great_leap.gd" id="6_mc0xs"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
+[ext_resource type="FontFile" uid="uid://nn0djp667dy1" path="res://assets/fonts/Inter.ttc" id="10_mnoqu"]
 [ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="13_8ntcc"]
 [ext_resource type="Shader" path="res://res/shadercode/wireframe.gdshader" id="15_kt54l"]
 
@@ -49,12 +44,14 @@ properties/7/replication_mode = 2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ar3d"]
 
-[sub_resource type="SystemFont" id="SystemFont_m3lb3"]
-font_names = PackedStringArray("Arial")
-font_italic = true
-font_weight = 725
-subpixel_positioning = 0
-oversampling = 2.0
+[sub_resource type="FontVariation" id="FontVariation_i4rj2"]
+base_font = ExtResource("10_mnoqu")
+variation_face_index = 15
+variation_transform = Transform2D(1.2, 0, 0, 1, 0, 0)
+opentype_features = {
+1936928818: 1
+}
+spacing_glyph = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jipd4"]
 render_priority = 0
@@ -91,104 +88,27 @@ properties/4/replication_mode = 2
 properties/5/path = NodePath("Vis/MeshInstance3D:visible")
 properties/5/spawn = true
 properties/5/replication_mode = 2
+properties/6/path = NodePath("GameUnit:unit_name")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath(".:dodge_array")
+properties/7/spawn = true
+properties/7/replication_mode = 2
 
-[node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("physics_body", "game_unit", "vis_body")]
+[node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("game_unit", "physics_body", "vis_body")]
 script = ExtResource("1_t8tp8")
-jump_str = 14
-physics_body = NodePath("PhysicsBody")
 game_unit = NodePath("GameUnit")
+physics_body = NodePath("PhysicsBody")
 vis_body = NodePath("Vis/Body")
 
-[node name="GameUnit" parent="." node_paths=PackedStringArray("auto_attack_skill") instance=ExtResource("2_3mq61")]
+[node name="GameUnit" parent="." instance=ExtResource("2_3mq61")]
 team = 1
 max_target_range = 60.0
-stat_attack_damage = 10
-stat_attack_speed = 1.5
-stat_move_speed = 7.0
-stat_jump_str = 11.0
-stat_missile_range = 60.0
-atb_passive_gain = 2.0
-auto_attack_skill = NodePath("TestAttack")
-
-[node name="PlayerDodge" type="Node" parent="GameUnit"]
-script = ExtResource("3_j1g7p")
-skill_name = "Medium Dodge"
-is_internal = true
-base_cooldown = 0.4
-atb_cost = 5
-target_type = "self"
-category = "misc"
-logic_type = "callable"
-
-[node name="TestAttack" type="Node" parent="GameUnit"]
-script = ExtResource("4_sxmj2")
-skill_name = "Basic Attack"
-is_auto_attack = true
-base_cooldown = 0.0
-atb_gain = 5
-atb_cost = 0
-logic_type = "data-driven"
-fx_scene = ExtResource("5_l0g5k")
-cast_animation_name = &"player_anim_lib/onehand_swing1"
-result_offset = 0.4
-inflicts_damage = true
-damage_scales_with = "attack_damage"
-
-[node name="Empower" type="Node" parent="GameUnit"]
-script = ExtResource("4_sxmj2")
-skill_name = "Brutal Attack"
-icon = ExtResource("6_212h4")
-base_cooldown = 0.0
-cast_time = 0.2
-auto_attack_reset = true
-atb_cost = 30
-target_type = "self"
-logic_type = "data-driven"
-popup = "caster"
-popup_text = "Empowered!"
-popup_fill = Color(1, 0.13, 0.13, 1)
-popup_border = Color(0, 0, 0, 1)
-popup_scale = 2.0
-gives_status = true
-statuses = {
-"empowered": 10.0
-}
-
-[node name="VoidBeam" type="Node" parent="GameUnit"]
-script = ExtResource("4_sxmj2")
-skill_name = "Void Beam"
-base_cooldown = 0.0
-cast_time = 1.0
-atb_cost = 30
-failure_chance = 0.1
-range_type = "ranged"
-logic_type = "data-driven"
-fx_scene = ExtResource("5_k72ke")
-cast_animation_name = &"player_anim_lib/cast"
-inflicts_damage = true
-base_damage = 3
-damage_type = "magic"
-damage_scales_with = "attack_damage"
-base_magic_pen = 10
-
-[node name="Sprint" type="Node" parent="GameUnit"]
-script = ExtResource("4_sxmj2")
-skill_name = "Sprint"
-base_cooldown = 12.0
-target_type = "self"
-category = "misc"
-logic_type = "data-driven"
-gives_status = true
-statuses = {
-"sprint": 8.0
-}
-
-[node name="GreatLeap" type="Node" parent="GameUnit"]
-script = ExtResource("6_mc0xs")
-skill_name = "Test Jump"
-base_cooldown = 0.0
-target_type = "self"
-logic_type = "callable"
+rpg_might = 4
+rpg_finesse = 2
+rpg_endurance = 5
+rpg_tempo = 3
+rpg_wits = 1
 
 [node name="TargetArea" type="Area3D" parent="."]
 collision_mask = 2
@@ -344,18 +264,20 @@ no_depth_test = true
 texture = ExtResource("5_smjeu")
 
 [node name="Label3D" type="Label3D" parent="Vis"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25571, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.37295, 0)
 visibility_range_end = 30.0
 visibility_range_end_margin = 2.0
 pixel_size = 0.007
 billboard = 1
-text = "nickname"
-font = SubResource("SystemFont_m3lb3")
-outline_size = 8
+text = "nickname
+"
+font = SubResource("FontVariation_i4rj2")
+outline_size = 16
 
 [node name="AngleDummy" type="Node3D" parent="Vis"]
 
-[node name="Body" parent="Vis" instance=ExtResource("13_8ntcc")]
+[node name="Body" parent="Vis" node_paths=PackedStringArray("clothes_parts") instance=ExtResource("13_8ntcc")]
+clothes_parts = [NodePath("Body/Body"), null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Vis"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27624, 0)

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://chvhcrarqfjbo"]
+
+[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_7ec4c"]
+[ext_resource type="PackedScene" uid="uid://cpws752hbit6x" path="res://scenes/fx_scenes/fx_blood_splat.tscn" id="2_jox5h"]
+
+[node name="GenericMeleeAA" type="Node"]
+script = ExtResource("1_7ec4c")
+skill_name = "Basic Attack"
+base_cooldown = 0.0
+atb_gain = 5
+atb_cost = 0
+logic_type = "data-driven"
+is_auto_attack = true
+fx_scene = ExtResource("2_jox5h")
+cast_animation_name = &"player_anim_lib/onehand_swing1"
+result_offset = 0.4
+inflicts_damage = true
+damage_scales_with = "attack_damage"

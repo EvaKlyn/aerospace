@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cc6ttb68gy3ym"]
+
+[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_d5msy"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4ql0x"]
+size = Vector2(32, 32)
+
+[node name="SkDebugEpicFail" type="Node"]
+script = ExtResource("1_d5msy")
+skill_name = "Epic Fail"
+icon = SubResource("PlaceholderTexture2D_4ql0x")
+target_type = "self"
+category = "misc"
+logic_type = "data-driven"
+popup = "caster"
+popup_text = "Epic Fail!!!!"
+popup_fill = Color(0.95, 0, 1, 1)
+popup_border = Color(0, 0, 0, 1)
+popup_scale = 4.0
+popup_lifetime = 0.2
+inflicts_damage = true
+base_damage = 1

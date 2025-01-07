@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw3bojc1h8ut1"]
+
+[ext_resource type="Script" path="res://src/skills/great_leap.gd" id="1_22gys"]
+
+[node name="GreatLeap" type="Node"]
+script = ExtResource("1_22gys")
+skill_name = "Test Jump"
+base_cooldown = 0.0
+target_type = "self"
+logic_type = "callable"

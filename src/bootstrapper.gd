@@ -59,6 +59,9 @@ func host_only():
 	host()
 
 func host():
+	if get_parent().my_character_data == {}:
+		return
+	
 	if Noray.local_port <= 0:
 		return ERR_UNCONFIGURED
 	
@@ -96,8 +99,11 @@ func host():
 	
 
 func join():
+	if get_parent().my_character_data == {}:
+		return
+	
 	role = Role.CLIENT
-
+	
 	if force_relay_check.button_pressed:
 		Noray.connect_relay(host_oid_input.text)
 	else:
