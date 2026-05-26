@@ -6,6 +6,7 @@ extends Window
 @export var build_opt: OptionButton
 @export var save_button: Button
 
+@export_category("Stat labels")
 @export var mhp_label: Label
 @export var might_label: Label
 @export var finesse_label: Label
@@ -17,6 +18,13 @@ extends Window
 @export var tempo_label: Label
 @export var wits_label: Label
 @export var skills_container: HFlowContainer
+
+@export_category("Character Creator")
+@export var ancestry_dropdown: OptionButton
+@export var accent_color_picker: ColorPickerButton
+@export var head_scale_slider: HSlider
+@export var hand_scale_slider: HSlider
+@export var chara_preview_parent: Node3D
 
 ## Data = {
 ##   name = (character name)
@@ -63,6 +71,8 @@ var current_data = {
 	
 }
 
+var _preview_body: Node3D = null
+
 var build_raider_skills = ["sk_generic_melee_aa", "sk_generic_sprint", 
 	"sk_raider_brutal_attack", "sk_raider_dash"]
 var build_raider_stats = {
@@ -85,10 +95,32 @@ var build_adept_stats = {
 func _ready() -> void:
 	current_data = base_data.duplicate(true)
 	apply_build(0)
+	
+	# Connect customization controls to update preview
+	ancestry_dropdown.item_selected.connect(func(_index): update_preview())
+	accent_color_picker.color_changed.connect(func(_color): update_preview())
+	head_scale_slider.value_changed.connect(func(_value): update_preview())
+	hand_scale_slider.value_changed.connect(func(_value): update_preview())
+	
+	visibility_changed.connect(func():
+		if visible:
+			# Reset fields to default when opened
+			build_opt.selected = 0
+			ancestry_dropdown.selected = 0
+			accent_color_picker.color = Color.WHITE
+			head_scale_slider.value = 1.0
+			hand_scale_slider.value = 1.0
+			name_edit.text = ""
+			apply_build(0)
+			update_preview()
+	)
+	
 	_update_all()
+	update_preview()
 
 func _physics_process(delta: float) -> void:
-	camera_pivot.rotate_y(1*delta)
+	if is_instance_valid(camera_pivot):
+		camera_pivot.rotate_y(1*delta)
 	
 	if name_edit.text == "":
 		save_button.disabled = true
@@ -138,6 +170,13 @@ func _on_option_button_item_selected(index: int) -> void:
 	apply_build(index)
 
 func _on_save_button_pressed() -> void:
+	current_data["customization"] = {
+		"ancestry": ancestry_dropdown.text.to_lower(),
+		"clothes_color": accent_color_picker.color,
+		"head_scale": head_scale_slider.value,
+		"hand_scale": hand_scale_slider.value
+	}
+	
 	var chars: Array = SaveSystem.get_var("characters", [])
 	chars.append(current_data)
 	SaveSystem.set_var("characters", chars)
@@ -150,3 +189,43 @@ func _on_close_requested() -> void:
 	visible = false
 	current_data = base_data.duplicate(true)
 	name_edit.text = ""
+
+func update_preview():
+	if not chara_preview_parent:
+		return
+		
+	# Clear previous preview body only
+	if is_instance_valid(_preview_body):
+		_preview_body.queue_free()
+		_preview_body = null
+		
+	var ancestry = ancestry_dropdown.text.to_lower()
+	var new_body
+	match ancestry:
+		"human":
+			var scene: PackedScene = load("res://scenes/chara/bodytypes/body_type_human.tscn")
+			new_body = scene.instantiate()
+		"bird":
+			var scene: PackedScene = load("res://scenes/chara/bodytypes/body_type_bird.tscn")
+			new_body = scene.instantiate()
+		_:
+			var scene: PackedScene = load("res://scenes/chara/bodytypes/body_type_human.tscn")
+			new_body = scene.instantiate()
+			
+	_preview_body = new_body
+	chara_preview_parent.add_child(_preview_body)
+	
+	# Apply customization parameters to preview mesh
+	var clothes_color = accent_color_picker.color
+	var head_scale = clamp(head_scale_slider.value, 0.7, 1.4)
+	var hand_scale = clamp(hand_scale_slider.value, 0.7, 1.4)
+	
+	for mesh in new_body.clothes_parts:
+		if mesh is MeshInstance3D:
+			mesh.get_active_material(0).albedo_color = clothes_color
+		if mesh is Sprite3D:
+			mesh.modulate = clothes_color
+			
+	new_body.head.scale = Vector3(head_scale, head_scale, head_scale)
+	new_body.left_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)
+	new_body.right_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)

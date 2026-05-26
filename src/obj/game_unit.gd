@@ -129,15 +129,15 @@ func _physics_process(delta: float) -> void:
 		unit_info.cast_time_left = 0
 		status_effects.erase("casting")
 	
-	if NetworkTime.time - 1.5 > last_prune:
+	if (Time.get_ticks_msec() / 1000.0) - 1.5 > last_prune:
 		prune_targeting_me()
-		last_prune = NetworkTime.time
+		last_prune = Time.get_ticks_msec() / 1000.0
 	
 	#if !actionable:
 		#last_autoattack_lockout = NetworkTime.time
 		
 	var lockout_window = 1.0/unit_info.attack_speed
-	if NetworkTime.time - lockout_window > last_autoattack_lockout:
+	if (Time.get_ticks_msec() / 1000.0) - lockout_window > last_autoattack_lockout:
 		await auto_attack()
 	
 	var stale_states = []
@@ -189,7 +189,7 @@ func auto_attack():
 		if current_target.unit_positon.distance_to(unit_positon) > unit_info.missile_range:
 			return
 	
-	last_autoattack_lockout = NetworkTime.time
+	last_autoattack_lockout = Time.get_ticks_msec() / 1000.0
 	await auto_attack_skill.cast(self, current_target)
 	if status_effects.has("empowered"):
 		remove_status("empowered")

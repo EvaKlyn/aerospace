@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://jrec6f84e6rw"]
+[gd_scene format=3 uid="uid://jrec6f84e6rw"]
 
-[ext_resource type="Script" path="res://src/obj/enemy_units/attack_dummy.gd" id="1_b6x5a"]
+[ext_resource type="Script" uid="uid://b07qx0hdhotsh" path="res://src/obj/enemy_units/attack_dummy.gd" id="1_b6x5a"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="1_p5xtl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ynb8f"]
@@ -24,26 +24,26 @@ properties/0/path = NodePath("CharacterBody3D:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="AttackDummy" type="Node3D" node_paths=PackedStringArray("vis", "physics_body")]
+[node name="AttackDummy" type="Node3D" unique_id=1374713407 node_paths=PackedStringArray("vis", "physics_body")]
 script = ExtResource("1_b6x5a")
 vis = NodePath("MeshInstance3D")
 physics_body = NodePath("CharacterBody3D")
 
-[node name="GameUnit" parent="." instance=ExtResource("1_p5xtl")]
+[node name="GameUnit" parent="." unique_id=435610123 instance=ExtResource("1_p5xtl")]
 unit_name = "Attack Dummy"
 current_hp = 9999
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1681150445]
 gi_mode = 2
 mesh = SubResource("CapsuleMesh_kj272")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1329269745]
 collision_layer = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=265679716]
 shape = SubResource("CapsuleShape3D_2ywng")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=1264195199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74261, 0)
 pixel_size = 0.007
 billboard = 1
@@ -52,7 +52,7 @@ texture_filter = 2
 text = "nickname"
 font = SubResource("SystemFont_b5b56")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1098239328]
 replication_interval = 1.0
 delta_interval = 1.0
 replication_config = SubResource("SceneReplicationConfig_1p77o")

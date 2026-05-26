@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cc6ttb68gy3ym"]
+[gd_scene format=3 uid="uid://cc6ttb68gy3ym"]
 
-[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_d5msy"]
+[ext_resource type="Script" uid="uid://gtpfqe7xwhcy" path="res://src/resource_classes/skill.gd" id="1_d5msy"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4ql0x"]
 size = Vector2(32, 32)
 
-[node name="SkDebugEpicFail" type="Node"]
+[node name="SkDebugEpicFail" type="Node" unique_id=1080665017]
 script = ExtResource("1_d5msy")
 skill_name = "Epic Fail"
 icon = SubResource("PlaceholderTexture2D_4ql0x")

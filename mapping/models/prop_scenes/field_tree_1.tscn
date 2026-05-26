@@ -1,6 +1,6 @@
-[gd_scene load_steps=18 format=4 uid="uid://bpwmsqguyeho5"]
+[gd_scene format=4 uid="uid://bpwmsqguyeho5"]
 
-[ext_resource type="Shader" path="res://res/shadercode/treeleaves.gdshader" id="1_kmn5f"]
+[ext_resource type="Shader" uid="uid://dqpk8isg0bbht" path="res://res/shadercode/treeleaves.gdshader" id="1_kmn5f"]
 [ext_resource type="Texture2D" uid="uid://d3wh4vk058q2" path="res://assets/texture3d/gradients.png" id="1_v88v1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sk7py"]
@@ -78,13 +78,13 @@ shader_parameter/alpha_scissor_threshold = 0.4
 shader_parameter/specular = 0.0
 shader_parameter/roughness = 0.0
 shader_parameter/face_tint = 0.2
+shader_parameter/Leaf_Texture = ExtResource("1_v88v1")
 shader_parameter/Leaf_UV_Scale = Vector2(1, 1)
 shader_parameter/Leaf_Tint_Base = Color(0, 0, 0, 1)
 shader_parameter/Leaf_Tint_Highlight = Color(0.448, 0.7, 0.322, 1)
 shader_parameter/Leaf_Tint_Str = 1.0
 shader_parameter/Texture_As_Brightness = true
 shader_parameter/Brightness = 8.0
-shader_parameter/Leaf_Texture = ExtResource("1_v88v1")
 shader_parameter/Leaf_Emmisive_Color = Color(0, 0, 0, 1)
 shader_parameter/Leaf_Emissive_Str = 0.0
 shader_parameter/Trunk_UV_Scale = Vector2(1, 1)
@@ -139,44 +139,42 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kafq7")
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=2087170300]
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Node3D" type="Node3D" parent="." unique_id=1251179280]
 transform = Transform3D(11, 0, 0, 0, 11, 0, 0, 0, 11, 0, -0.64144, 0)
 
-[node name="Cube2" type="MeshInstance3D" parent="Node3D"]
+[node name="Cube2" type="MeshInstance3D" parent="Node3D" unique_id=1089266825]
 mesh = SubResource("ArrayMesh_wc6yg")
-skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Node3D/Cube2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D/Cube2" unique_id=940753328]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=630064670]
 shape = SubResource("ConvexPolygonShape3D_ekemy")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=149694074]
 shape = SubResource("ConvexPolygonShape3D_nkahy")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=583105532]
 shape = SubResource("ConvexPolygonShape3D_5iamc")
 
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=796074146]
 shape = SubResource("ConvexPolygonShape3D_8ldsy")
 
-[node name="CollisionShape3D5" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=1091384157]
 shape = SubResource("ConvexPolygonShape3D_judrn")
 
-[node name="CollisionShape3D6" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=849807055]
 shape = SubResource("ConvexPolygonShape3D_5h2sm")
 
-[node name="CollisionShape3D7" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=1973411321]
 shape = SubResource("ConvexPolygonShape3D_rfqq2")
 
-[node name="CollisionShape3D8" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=634590066]
 shape = SubResource("ConvexPolygonShape3D_aes61")
 
-[node name="CollisionShape3D9" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D"]
+[node name="CollisionShape3D9" type="CollisionShape3D" parent="Node3D/Cube2/StaticBody3D" unique_id=1136451127]
 shape = SubResource("ConvexPolygonShape3D_a5hoc")
 
-[node name="Sphere2" type="MeshInstance3D" parent="Node3D"]
+[node name="Sphere2" type="MeshInstance3D" parent="Node3D" unique_id=836030370]
 mesh = SubResource("ArrayMesh_1mfir")
-skeleton = NodePath("")

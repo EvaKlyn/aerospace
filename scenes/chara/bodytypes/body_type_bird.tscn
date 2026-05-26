@@ -1,6 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://crnp1ylxwmb6x"]
+[gd_scene format=3 uid="uid://crnp1ylxwmb6x"]
 
-[ext_resource type="Script" path="res://src/obj/body_type.gd" id="1_wsmet"]
+[ext_resource type="Script" uid="uid://j55l4kj67kjv" path="res://src/obj/body_type.gd" id="1_wsmet"]
 [ext_resource type="Texture2D" uid="uid://52bsx8jmtctd" path="res://assets/texture3d/chara/fabric2.png" id="2_52wow"]
 [ext_resource type="Texture2D" uid="uid://c86lom3fuascn" path="res://assets/texture3d/chara/feather.png" id="3_1u1fd"]
 [ext_resource type="Texture2D" uid="uid://bhprwdalvd2vu" path="res://assets/texture3d/chara/hand.png" id="3_fvi6v"]
@@ -78,14 +78,14 @@ length = 0.001
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l2mfc"]
 _data = {
-"RESET": SubResource("Animation_pfs23")
+&"RESET": SubResource("Animation_pfs23")
 }
 
 [sub_resource type="SphereMesh" id="SphereMesh_yntlk"]
 radial_segments = 6
 rings = 3
 
-[node name="BodyTypeBird" type="Node3D" node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
+[node name="BodyTypeBird" type="Node3D" unique_id=1271645474 node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
 script = ExtResource("1_wsmet")
 clothes_parts = [NodePath("Hands/RightHand"), NodePath("Hands/LeftHand"), NodePath("Neck/Head/MeshInstance3D3"), NodePath("Neck/Head/HeadMesh2"), NodePath("Neck/Head/MeshInstance3D4"), NodePath("Neck/Head/MeshInstance3D5"), NodePath("Neck/Head/MeshInstance3D3")]
 right_hand = NodePath("Hands/RightHand")
@@ -94,75 +94,73 @@ hand_container = NodePath("Hands")
 head = NodePath("Neck/Head")
 animator = NodePath("AnimationPlayer")
 
-[node name="Body" type="Node3D" parent="."]
+[node name="Body" type="Node3D" parent="." unique_id=1318191056]
 
-[node name="Body" type="MeshInstance3D" parent="Body"]
+[node name="Body" type="MeshInstance3D" parent="Body" unique_id=519525429]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945549, 0)
 mesh = SubResource("CylinderMesh_k837a")
 skeleton = NodePath("../../..")
 
-[node name="Body2" type="MeshInstance3D" parent="Body"]
+[node name="Body2" type="MeshInstance3D" parent="Body" unique_id=1235918441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.274032, 0)
 mesh = SubResource("CylinderMesh_wqdon")
 skeleton = NodePath("../../..")
 
-[node name="Hands" type="Node3D" parent="."]
+[node name="Hands" type="Node3D" parent="." unique_id=179309035]
 
-[node name="RightHand" type="Sprite3D" parent="Hands"]
+[node name="RightHand" type="Sprite3D" parent="Hands" unique_id=41134346]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.54, 0)
 pixel_size = 0.013
 billboard = 1
 shaded = true
 texture = ExtResource("3_fvi6v")
 
-[node name="LeftHand" type="Sprite3D" parent="Hands"]
+[node name="LeftHand" type="Sprite3D" parent="Hands" unique_id=1276555097]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.54, 0)
 pixel_size = 0.013
 billboard = 1
 shaded = true
 texture = ExtResource("3_fvi6v")
 
-[node name="Neck" type="Node3D" parent="."]
+[node name="Neck" type="Node3D" parent="." unique_id=322068280]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.346, 0)
 
-[node name="Head" type="Node3D" parent="Neck"]
+[node name="Head" type="Node3D" parent="Neck" unique_id=537393206]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000111818, 0)
 
-[node name="BeakUpper" type="MeshInstance3D" parent="Neck/Head"]
+[node name="BeakUpper" type="MeshInstance3D" parent="Neck/Head" unique_id=1759826750]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.59535e-08, 0.295692, -0.488928)
 mesh = SubResource("PrismMesh_bpt26")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Neck/Head"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Neck/Head" unique_id=2005171695]
 transform = Transform3D(-4.37114e-08, 0, 1, 0.5, -0.866025, 2.18557e-08, 0.866025, 0.5, 3.78552e-08, -7.59535e-08, 0.540766, 0.35698)
 mesh = SubResource("PrismMesh_45cov")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Neck/Head"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Neck/Head" unique_id=911432170]
 transform = Transform3D(-0.239813, -0.138456, 0.960895, 0.5, -0.866025, 2.18557e-08, 0.83216, 0.480448, 0.276912, -0.0741701, 0.44875, 0.327257)
 mesh = SubResource("PrismMesh_45cov")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Neck/Head"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Neck/Head" unique_id=1284875333]
 transform = Transform3D(0.314035, 0.181308, 0.931938, 0.5, -0.866025, 2.18557e-08, 0.807082, 0.465969, -0.362617, 0.0931442, 0.456692, 0.323129)
 mesh = SubResource("PrismMesh_45cov")
 
-[node name="BeakLower" type="MeshInstance3D" parent="Neck/Head"]
+[node name="BeakLower" type="MeshInstance3D" parent="Neck/Head" unique_id=1336637675]
 transform = Transform3D(-4.37114e-08, 0, 1, 0.0460254, -0.99894, 2.01184e-09, 0.99894, 0.0460254, 4.36651e-08, -7.59535e-08, 0.138748, -0.384142)
 mesh = SubResource("PrismMesh_pre52")
 
-[node name="HeadMesh2" type="MeshInstance3D" parent="Neck/Head"]
+[node name="HeadMesh2" type="MeshInstance3D" parent="Neck/Head" unique_id=1505677262]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
 mesh = SubResource("SphereMesh_eheit")
 skeleton = NodePath("../../..")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_l2mfc"),
-"player_anim_lib": ExtResource("5_g6ugn")
-}
-autoplay = "player_anim_lib/idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1981791513]
+libraries/ = SubResource("AnimationLibrary_l2mfc")
+libraries/player_anim_lib = ExtResource("5_g6ugn")
+autoplay = &"player_anim_lib/idle"
 playback_auto_capture_transition_type = 6
 playback_default_blend_time = 0.1
 
-[node name="GrassDisplacer" type="MeshInstance3D" parent="."]
+[node name="GrassDisplacer" type="MeshInstance3D" parent="." unique_id=406557991]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.377682, 0)
 layers = 65536
 mesh = SubResource("SphereMesh_yntlk")

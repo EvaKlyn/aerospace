@@ -31,7 +31,6 @@ class_name BasePlayer
 @onready var melee_ring: Sprite3D = $Vis/MeleeRangeDecal
 @onready var dodge_fx: Node3D = $Vis/MeshInstance3D
 @export var network_anim: StringName = ""
-@export var network_anim_pos: float = 1.0
 
 var dummy = 1
 var customize_cooldown = 0.0
@@ -74,7 +73,6 @@ func _ready():
 		MmoUtils.main.ui_coordinator.unitinfo = game_unit.unit_info
 		MmoUtils.main.ui_coordinator.base_player = self
 		listener.make_current()
-		MmoUtils.terrain_camera()
 	
 	if not is_multiplayer_authority():
 		return
@@ -82,6 +80,11 @@ func _ready():
 	await get_tree().create_timer(0.2).timeout
 	customization_changed.connect(update_customization)
 	game_unit.sync.set_visibility_for(peer_id, true)
+	
+	var syncer = physics_body.get_node_or_null("MultiplayerSynchronizer")
+	if syncer:
+		syncer.set_visibility_for(peer_id, false)
+		
 	game_unit.cast_over.connect(_cast_over)
 	game_unit.recalc_stats()
 	game_unit.update_skils_equipment()
@@ -115,9 +118,10 @@ func construct_player(data: Dictionary):
 	physics_body.network_peer = network_peer
 	set_multiplayer_authority(1)
 	physics_body.velocity = Vector3.ZERO
-	physics_body.set_multiplayer_authority(data["id"])
+	physics_body.set_multiplayer_authority(1)
 	
-	if not NetworkEvents.is_server():
+	var mp = Engine.get_main_loop().get_multiplayer()
+	if not mp.is_server():
 		return
 	
 	game_unit.unit_name = data["name"]
@@ -156,7 +160,7 @@ func _physics_process(delta: float) -> void:
 	
 	if camera.current:
 		var fac = delta * 11
-		camera_origin.position = physics_body.position
+		camera_origin.global_position = vis.global_position
 		camera.global_transform = camera_target.global_transform
 	
 	if not is_multiplayer_authority():
@@ -188,7 +192,6 @@ func _physics_process(delta: float) -> void:
 	else: dodge_fx.visible = false
 	
 	network_anim = vis_body.animator.current_animation
-	network_anim_pos = vis_body.animator.current_animation_position
 
 func _cast_over(success: bool):
 	pass
@@ -237,8 +240,9 @@ func remote_customize(dict: Dictionary):
 
 func update_customization() -> void:
 	customize_cooldown = 10.0
-	target_ring.modulate = customization.get("clothes_color", Color.WHITE)
-	melee_ring.modulate = customization.get("clothes_color", Color.WHITE)
+	var clothes_color = get_customization_color("clothes_color", Color.WHITE)
+	target_ring.modulate = clothes_color
+	melee_ring.modulate = clothes_color
 	
 	var new_body
 	match customization.get("ancestry", "human"):
@@ -260,14 +264,31 @@ func update_customization() -> void:
 	
 	for mesh in vis_body.clothes_parts:
 		if mesh is MeshInstance3D:
-			mesh.get_active_material(0).albedo_color = customization.get("clothes_color", Color.WHITE)
+			mesh.get_active_material(0).albedo_color = clothes_color
 		if mesh is Sprite3D:
-			mesh.modulate = customization.get("clothes_color", Color.WHITE)
+			mesh.modulate = clothes_color
 	var head_scale = clamp(customization.get("head_scale", 1.0), 0.7, 1.4)
 	var hand_scale = clamp(customization.get("hand_scale", 1.0), 0.7, 1.4)
 	vis_body.head.scale = Vector3(head_scale,head_scale,head_scale)
 	vis_body.left_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)
 	vis_body.right_hand.scale = Vector3(hand_scale, hand_scale, hand_scale)
+
+func get_customization_color(key: String, default: Color) -> Color:
+	var val = customization.get(key, default)
+	if val is Color:
+		return val
+	if val is String:
+		if val.begins_with("(") and val.ends_with(")"):
+			val = val.substr(1, val.length() - 2)
+			var parts = val.split(",")
+			if parts.size() >= 3:
+				var r = parts[0].to_float()
+				var g = parts[1].to_float()
+				var b = parts[2].to_float()
+				var a = parts[3].to_float() if parts.size() > 3 else 1.0
+				return Color(r, g, b, a)
+		return Color(val)
+	return default
 
 # runs on every client
 func visual_update(delta) -> void:
@@ -294,8 +315,6 @@ func visual_update(delta) -> void:
 	if not is_multiplayer_authority():
 		if vis_body.animator.current_animation != network_anim:
 			vis_body.animator.play(network_anim)
-		if vis_body.animator.current_animation_position > network_anim_pos:
-			vis_body.animator.seek(network_anim_pos)
 
 ## DAMAGE_REPORT SPEC
 ## inflicted: int = amount of damage that was done in reality

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dudp7k56tcpxr"]
+[gd_scene format=3 uid="uid://dudp7k56tcpxr"]
 
-[ext_resource type="Script" path="res://src/skills/player_medium_dodge.gd" id="1_h11sl"]
+[ext_resource type="Script" uid="uid://brtfkmtd3bf4l" path="res://src/skills/player_medium_dodge.gd" id="1_h11sl"]
 
-[node name="PlayerDodge" type="Node"]
+[node name="PlayerDodge" type="Node" unique_id=398631855]
 script = ExtResource("1_h11sl")
 skill_name = "Medium Dodge"
 base_cooldown = 0.4

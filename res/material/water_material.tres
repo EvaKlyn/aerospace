@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cf5yq4x0wcvie"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cf5yq4x0wcvie"]
 
-[ext_resource type="Shader" path="res://res/shadercode/ocean_water.gdshader" id="1_hb1o8"]
+[ext_resource type="Shader" uid="uid://bxek8s0bepg43" path="res://res/shadercode/ocean_water.gdshader" id="1_hb1o8"]
 [ext_resource type="Texture2D" uid="uid://d1lepc7puunia" path="res://assets/texture3d/overworld/waterbw.png" id="2_6xnrj"]
 
 [sub_resource type="Gradient" id="Gradient_0pkbe"]
@@ -8,8 +8,8 @@
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_s1ou7"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_girk7"]
-color_ramp = SubResource("Gradient_0pkbe")
 noise = SubResource("FastNoiseLite_s1ou7")
+color_ramp = SubResource("Gradient_0pkbe")
 
 [resource]
 resource_local_to_scene = true
@@ -33,17 +33,17 @@ shader_parameter/roughness = 0.4
 shader_parameter/height_scale = 1.0
 shader_parameter/amplitude1 = 2.0
 shader_parameter/amplitude2 = 0.5
+shader_parameter/vertex_noise_big = ExtResource("2_6xnrj")
 shader_parameter/v_noise_tile = 200
+shader_parameter/normal_noise = ExtResource("2_6xnrj")
+shader_parameter/normal_noise2 = ExtResource("2_6xnrj")
 shader_parameter/normal_noise_size = 5.12
 shader_parameter/normal_noise_speed = 0.05
 shader_parameter/v_normal_scale = 1.0
 shader_parameter/normal_map_w = 256
 shader_parameter/wobble_power = 0.01
-shader_parameter/sky_color = Color(0.586263, 0.849038, 0.924417, 1)
-shader_parameter/vertex_noise_big = ExtResource("2_6xnrj")
-shader_parameter/normal_noise = ExtResource("2_6xnrj")
-shader_parameter/normal_noise2 = ExtResource("2_6xnrj")
 shader_parameter/under_wobble_noise = SubResource("NoiseTexture2D_girk7")
+shader_parameter/sky_color = Color(0.586263, 0.849038, 0.924417, 1)
 shader_parameter/foam_color = Color(0, 0, 0, 1)
 shader_parameter/foam_mask_size = 0.0
 shader_parameter/foam_mask_offset = Vector2(5.565, 0)

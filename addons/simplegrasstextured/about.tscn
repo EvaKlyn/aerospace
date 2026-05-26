@@ -1,14 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://cb8klhv6nwvtl"]
+[gd_scene format=3 uid="uid://cb8klhv6nwvtl"]
 
-[ext_resource type="Script" path="res://addons/simplegrasstextured/about.gd" id="1_r23hh"]
+[ext_resource type="Script" uid="uid://bat5750vwdow0" path="res://addons/simplegrasstextured/about.gd" id="1_r23hh"]
 [ext_resource type="Material" uid="uid://cl74usvfymgvs" path="res://addons/simplegrasstextured/materials/icon.material" id="2_4glo1"]
 [ext_resource type="Texture2D" uid="uid://cubr1a55brlfp" path="res://addons/simplegrasstextured/sgt_icon_48.svg" id="3_7w1su"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hnw4u"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwftf"]
 
-[node name="SimpleGrassTexturedHelpAbout" type="AcceptDialog"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hnw4u"]
+
+[node name="SimpleGrassTexturedHelpAbout" type="AcceptDialog" unique_id=1670947291]
 title = "About"
 position = Vector2i(0, 36)
 size = Vector2i(520, 240)
@@ -27,7 +27,7 @@ by IcterusGames
 [indent][url]https://github.com/IcterusGames/SimpleGrassTextured[/url][/indent]
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=433899392]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 512.0
@@ -37,26 +37,26 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2109849277]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=965748313]
 material = ExtResource("2_4glo1")
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 texture = ExtResource("3_7w1su")
 stretch_mode = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer" unique_id=958691020]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_hnw4u")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lwftf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hnw4u")
 bbcode_enabled = true
 text = "Simple Grass Textured Plugin
-v. 2.0.5
+v. 2.0.6
 by IcterusGames
 [font_size=7] [/font_size]
 [b]Support me on:[/b]

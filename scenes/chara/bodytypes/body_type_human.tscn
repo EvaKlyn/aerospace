@@ -1,6 +1,6 @@
-[gd_scene load_steps=27 format=4 uid="uid://cstkb6ilx4y0w"]
+[gd_scene format=4 uid="uid://cstkb6ilx4y0w"]
 
-[ext_resource type="Script" path="res://src/obj/body_type.gd" id="1_0wwr0"]
+[ext_resource type="Script" uid="uid://j55l4kj67kjv" path="res://src/obj/body_type.gd" id="1_0wwr0"]
 [ext_resource type="Texture2D" uid="uid://c3v1u7c7f8vp0" path="res://assets/texture3d/chara/fabric1.png" id="2_m56t3"]
 [ext_resource type="Texture2D" uid="uid://52bsx8jmtctd" path="res://assets/texture3d/chara/fabric2.png" id="3_bss7y"]
 [ext_resource type="Texture2D" uid="uid://coo4g3mirkaww" path="res://assets/texture3d/chara/hair1.png" id="4_jvag0"]
@@ -247,94 +247,88 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l2mfc"]
 _data = {
-"RESET": SubResource("Animation_pfs23")
+&"RESET": SubResource("Animation_pfs23")
 }
 
 [sub_resource type="SphereMesh" id="SphereMesh_wuaxn"]
 radial_segments = 6
 rings = 3
 
-[node name="Body" type="Node3D" node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
+[node name="Body" type="Node3D" unique_id=125792331 node_paths=PackedStringArray("clothes_parts", "right_hand", "left_hand", "hand_container", "head", "animator")]
 script = ExtResource("1_0wwr0")
-clothes_parts = [NodePath("Body/Body"), NodePath("")]
+clothes_parts = [NodePath("Body/Body"), null]
 right_hand = NodePath("Hands/RightHand")
 left_hand = NodePath("Hands/LeftHand")
 hand_container = NodePath("Hands")
 head = NodePath("Neck")
 animator = NodePath("AnimationPlayer")
 
-[node name="Neck" type="Node3D" parent="."]
+[node name="Neck" type="Node3D" parent="." unique_id=1558588195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.346, 0)
 
-[node name="Head" type="Node3D" parent="Neck"]
+[node name="Head" type="Node3D" parent="Neck" unique_id=1615656218]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.363908, 0)
 
-[node name="Cube_001" type="MeshInstance3D" parent="Neck/Head"]
+[node name="Cube_001" type="MeshInstance3D" parent="Neck/Head" unique_id=382187594]
 transform = Transform3D(-0.87, 0, -1.31366e-07, 0, 0.87, 0, 1.31366e-07, 0, -0.87, 0, 0, 0)
 visible = false
 mesh = SubResource("ArrayMesh_ceh8t")
-skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Neck/Head/Cube_001"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Neck/Head/Cube_001" unique_id=585122719]
 mesh = SubResource("ArrayMesh_u0icc")
 
-[node name="Cube" type="MeshInstance3D" parent="Neck/Head"]
+[node name="Cube" type="MeshInstance3D" parent="Neck/Head" unique_id=440770819]
 transform = Transform3D(-0.93, 0, -1.40426e-07, 0, 0.93, 0, 1.40426e-07, 0, -0.93, 0, 0.0688033, 0)
 mesh = SubResource("SphereMesh_q4e28")
-skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Neck/Head/Cube"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Neck/Head/Cube" unique_id=883367012]
 mesh = SubResource("ArrayMesh_nfpoh")
 
-[node name="Hands" type="Node3D" parent="."]
+[node name="Hands" type="Node3D" parent="." unique_id=679915317]
 
-[node name="RightHand" type="MeshInstance3D" parent="Hands"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.615822, 0.531283, -5.57722e-08)
+[node name="RightHand" type="MeshInstance3D" parent="Hands" unique_id=951392739]
+transform = Transform3D(-1, 0, 2.5351817e-06, 0, 1, 0, -2.5351817e-06, 0, -1, 0.615822, 0.531283, -5.57722e-08)
 mesh = SubResource("SphereMesh_adg31")
-skeleton = NodePath("")
 
-[node name="WeaponTestSword" parent="Hands/RightHand" instance=ExtResource("5_v1ck2")]
+[node name="WeaponTestSword" parent="Hands/RightHand" unique_id=1954395192 instance=ExtResource("5_v1ck2")]
 transform = Transform3D(-1.07156, 0.0892092, 7.91624e-09, 0.0043112, 0.0517851, 1.07401, 0.089105, 1.07031, -0.0519642, -0.0044381, -0.0120176, -6.70134e-10)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Hands/RightHand"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Hands/RightHand" unique_id=177978788]
 mesh = SubResource("ArrayMesh_2mr2w")
 
-[node name="LeftHand" type="MeshInstance3D" parent="Hands"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -0.602178, 0.542763, -0.0120466)
+[node name="LeftHand" type="MeshInstance3D" parent="Hands" unique_id=965354986]
+transform = Transform3D(-1, 0, -2.5351817e-06, 0, 1, 0, 2.5351817e-06, 0, -1, -0.602178, 0.542763, -0.0120466)
 mesh = SubResource("SphereMesh_adg31")
-skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Hands/LeftHand"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Hands/LeftHand" unique_id=1860385441]
 mesh = SubResource("ArrayMesh_2mr2w")
 
-[node name="Body" type="Node3D" parent="."]
+[node name="Body" type="Node3D" parent="." unique_id=134805259]
 
-[node name="Body" type="MeshInstance3D" parent="Body"]
+[node name="Body" type="MeshInstance3D" parent="Body" unique_id=3197818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.945549, 0)
 mesh = SubResource("CylinderMesh_3sp4r")
 skeleton = NodePath("../../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Body"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Body" unique_id=309449979]
 mesh = SubResource("ArrayMesh_67wbo")
 
-[node name="Body2" type="MeshInstance3D" parent="Body"]
+[node name="Body2" type="MeshInstance3D" parent="Body" unique_id=170747675]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.274032, 0)
 mesh = SubResource("CylinderMesh_b2dns")
 skeleton = NodePath("../../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Body2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Body2" unique_id=1053897697]
 mesh = SubResource("ArrayMesh_5db68")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_l2mfc"),
-"player_anim_lib": ExtResource("6_yu1jq")
-}
-autoplay = "player_anim_lib/idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1861907941]
+libraries/ = SubResource("AnimationLibrary_l2mfc")
+libraries/player_anim_lib = ExtResource("6_yu1jq")
+autoplay = &"player_anim_lib/idle"
 playback_auto_capture_transition_type = 6
 playback_default_blend_time = 0.06
 
-[node name="GrassDisplacer" type="MeshInstance3D" parent="."]
+[node name="GrassDisplacer" type="MeshInstance3D" parent="." unique_id=1126557867]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.377682, 0)
 layers = 65536
 mesh = SubResource("SphereMesh_wuaxn")

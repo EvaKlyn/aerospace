@@ -74,12 +74,13 @@ func _process(_delta: float) -> void:
 	if not unit:
 		unit = unitinfo.get_parent()
 	if just_connected:
-		var customization = {
-		"ancestry" = ancestry_dropdown.text.to_lower(),
-		"clothes_color" = color_picker.color,
-		"head_scale" = head_slider.value,
-		"hand_scale" = hands_slider.value
-		}
+		var character_data = get_parent().my_character_data
+		var customization = character_data.get("customization", {
+			"ancestry": ancestry_dropdown.text.to_lower(),
+			"clothes_color": color_picker.color,
+			"head_scale": head_slider.value,
+			"hand_scale": hands_slider.value
+		})
 		base_player.rpc("remote_customize", customization)
 		just_connected = false
 	
@@ -154,7 +155,7 @@ func _remove_status_icon(state: String):
 	if node: node.queue_free()
 
 func _on_chat_button_pressed() -> void:
-	if NetworkTime._is_active():
+	if multiplayer.multiplayer_peer != null:
 		MmoUtils.rpc("sendchat", chat_line_edit.text)
 		chat_line_edit.clear()
 
@@ -170,7 +171,7 @@ func _on_skill_button_pressed(skillbutton: Button):
 #}
 
 func _on_customize_button_pressed() -> void:
-	if !NetworkTime._is_active():
+	if multiplayer.multiplayer_peer == null:
 		return
 	
 	var customization = {

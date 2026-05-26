@@ -24,33 +24,22 @@ var peers: Dictionary = {}
 
 func _ready() -> void:
 	player_spawner.spawn_function = MmoUtils.spawn_player_character
-	NetworkEvents.on_client_start.connect(_handle_connected)
-	NetworkEvents.on_server_start.connect(_handle_host)
-	NetworkEvents.on_peer_join.connect(_handle_new_peer)
-	NetworkEvents.on_peer_leave.connect(_handle_leave)
-	NetworkEvents.on_client_stop.connect(_handle_stop)
-	NetworkEvents.on_server_stop.connect(_handle_stop)
+	multiplayer.peer_connected.connect(_handle_new_peer)
+	multiplayer.peer_disconnected.connect(_handle_leave)
+	multiplayer.connected_to_server.connect(func(): _handle_connected(multiplayer.get_unique_id()))
+	multiplayer.server_disconnected.connect(_handle_stop)
+	multiplayer.connection_failed.connect(_handle_stop)
 
-func _client_handle_connect(address: String, port: int) -> Error:
-	# Do a handshake
-	var udp = PacketPeerUDP.new()
-	udp.bind(Noray.local_port)
-	udp.set_dest_address(address, port)
-	var err = await PacketHandshake.over_packet_peer(udp)
-	udp.close()
-	if err != OK:
-		return err
-	
-	# Connect to host
-	var peer = ENetMultiplayerPeer.new()
-	err = peer.create_client(address, port, 0, 0, 0, Noray.local_port)
-	if err != OK:
-		return err
-	return OK
+func _client_handle_connect(connection_string: String):
+	var client = IrohClient.connect(connection_string)
+	multiplayer.multiplayer_peer = client
 
 func _handle_connected(id: int):
 	# Spawn an avatar for us
 	_spawn(id)
+	# Spawn avatars for all already connected peers
+	for peer_id in multiplayer.get_peers():
+		_spawn(peer_id)
 
 func _handle_host():
 	# Spawn own avatar on host machine
@@ -79,7 +68,7 @@ func _handle_leave(id: int):
 	peer.queue_free()
 	peers.erase(id)
 	
-	if NetworkEvents.is_server():
+	if multiplayer.is_server():
 		MmoUtils.rpc("eventlog", peer.nickname + " disconnected. " + str(peers.size()) + " players online.")
 
 
@@ -99,16 +88,16 @@ func _spawn(id: int):
 
 func _process(delta: float) -> void:
 	fps_label.text = "FPS: " + str(Performance.get_monitor(Performance.TIME_FPS))
-	if NetworkTime._is_active():
-		ping_label.text = "Ping: " + str(NetworkTime.remote_rtt)
+	if multiplayer.multiplayer_peer != null:
+		ping_label.text = "Ping: N/A"
 
 
 func _physics_process(delta: float) -> void:
-	if not NetworkEvents.is_server():
+	if not multiplayer.is_server():
 		return
 	if !spawn_host_pc and get_viewport().get_camera_3d():
 		get_viewport().get_camera_3d().current = false
 	MmoUtils.peers = peers
 
 func _on_multiplayer_spawner_spawned(node: Node) -> void:
-	MmoUtils.terrain_camera()
+	pass

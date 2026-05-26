@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dogwtl8hqdpcd"]
+[gd_scene format=3 uid="uid://dogwtl8hqdpcd"]
 
-[ext_resource type="Script" path="res://scenes/fx_scenes/class_test/fx_laser_blast.gd" id="1_mooe7"]
+[ext_resource type="Script" uid="uid://carw6w4q0i3ks" path="res://scenes/fx_scenes/class_test/fx_laser_blast.gd" id="1_mooe7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5jvva"]
 transparency = 1
@@ -78,27 +78,25 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fdyw3"]
 _data = {
-"RESET": SubResource("Animation_85uql"),
-"norm": SubResource("Animation_l5d06")
+&"RESET": SubResource("Animation_85uql"),
+&"norm": SubResource("Animation_l5d06")
 }
 
-[node name="FxLaserBlast" type="Node3D"]
+[node name="FxLaserBlast" type="Node3D" unique_id=144370147]
 script = ExtResource("1_mooe7")
 needs_target_position = true
 
-[node name="Beam" type="Node3D" parent="."]
+[node name="Beam" type="Node3D" parent="." unique_id=1396010667]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Beam"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Beam" unique_id=1258502139]
 transform = Transform3D(1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, 0, 0, 0.497611)
 mesh = SubResource("CylinderMesh_uaubk")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1894382896]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 1.91668)
 mesh = SubResource("SphereMesh_kvsks")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_fdyw3")
-}
-autoplay = "norm"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=739998743]
+libraries/ = SubResource("AnimationLibrary_fdyw3")
+autoplay = &"norm"

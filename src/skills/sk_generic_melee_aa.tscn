@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://chvhcrarqfjbo"]
+[gd_scene format=3 uid="uid://chvhcrarqfjbo"]
 
-[ext_resource type="Script" path="res://src/resource_classes/skill.gd" id="1_7ec4c"]
+[ext_resource type="Script" uid="uid://gtpfqe7xwhcy" path="res://src/resource_classes/skill.gd" id="1_7ec4c"]
 [ext_resource type="PackedScene" uid="uid://cpws752hbit6x" path="res://scenes/fx_scenes/fx_blood_splat.tscn" id="2_jox5h"]
 
-[node name="GenericMeleeAA" type="Node"]
+[node name="GenericMeleeAA" type="Node" unique_id=1131750564]
 script = ExtResource("1_7ec4c")
 skill_name = "Basic Attack"
 base_cooldown = 0.0

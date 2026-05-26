@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cpws752hbit6x"]
+[gd_scene format=3 uid="uid://cpws752hbit6x"]
 
-[ext_resource type="Script" path="res://scenes/fx_scenes/fx_blood_splat.gd" id="1_qy6yw"]
+[ext_resource type="Script" uid="uid://kfnby103sq3p" path="res://scenes/fx_scenes/fx_blood_splat.gd" id="1_qy6yw"]
 
 [sub_resource type="Animation" id="Animation_klnog"]
 length = 0.001
@@ -203,8 +203,8 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dm6ds"]
 _data = {
-"RESET": SubResource("Animation_klnog"),
-"splat": SubResource("Animation_lp4xa")
+&"RESET": SubResource("Animation_klnog"),
+&"splat": SubResource("Animation_lp4xa")
 }
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_32g1y"]
@@ -219,33 +219,31 @@ material = SubResource("StandardMaterial3D_32g1y")
 radial_segments = 16
 rings = 8
 
-[node name="FxBloodSplat" type="Node3D"]
+[node name="FxBloodSplat" type="Node3D" unique_id=342671854]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0, 0)
 script = ExtResource("1_qy6yw")
 lifetime = 0.25
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_dm6ds")
-}
-autoplay = "splat"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=705209875]
+libraries/ = SubResource("AnimationLibrary_dm6ds")
+autoplay = &"splat"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1893554614]
 transform = Transform3D(0.435, 0, 0, 0, 0.435, 0, 0, 0, 0.435, 0, 0, 0)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_23s4p")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=2080188265]
 transform = Transform3D(0.435, 0, 0, 0, 0.435, 0, 0, 0, 0.435, 0, 0, 0)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_23s4p")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1402171849]
 transform = Transform3D(1.335, 0, 0, 0, 1.335, 0, 0, 0, 1.335, 0, 0, 0)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_23s4p")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=1287234563]
 transform = Transform3D(0.435, 0, 0, 0, 0.435, 0, 0, 0, 0.435, 0, 0, 0)
 cast_shadow = 0
 mesh = SubResource("SphereMesh_23s4p")

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=32 format=3 uid="uid://dc0t2son1242f"]
+[gd_resource type="Theme" format=3 uid="uid://dc0t2son1242f"]
 
 [ext_resource type="FontFile" uid="uid://nn0djp667dy1" path="res://assets/fonts/Inter.ttc" id="1_xlo1a"]
 
@@ -269,6 +269,7 @@ shadow_offset = Vector2(4, 4)
 
 [sub_resource type="SystemFont" id="SystemFont_cha0y"]
 font_names = PackedStringArray("Arial")
+subpixel_positioning = 0
 
 [sub_resource type="FontVariation" id="FontVariation_ijced"]
 fallbacks = Array[Font]([SubResource("SystemFont_cha0y")])

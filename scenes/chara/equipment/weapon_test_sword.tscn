@@ -1,6 +1,6 @@
-[gd_scene load_steps=12 format=4 uid="uid://cjymfh3s7sowj"]
+[gd_scene format=4 uid="uid://cjymfh3s7sowj"]
 
-[ext_resource type="Shader" path="res://res/shadercode/metallic.gdshader" id="1_jfy66"]
+[ext_resource type="Shader" uid="uid://uhmgbwc0oi7f" path="res://res/shadercode/metallic.gdshader" id="1_jfy66"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_1h2sw"]
 _data = PackedByteArray("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")
@@ -31,8 +31,8 @@ roughness = 0.45
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tge2u"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pknvl"]
-color_ramp = SubResource("Gradient_wfn3k")
 noise = SubResource("FastNoiseLite_tge2u")
+color_ramp = SubResource("Gradient_wfn3k")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hvwhh"]
 render_priority = 0
@@ -42,8 +42,8 @@ shader_parameter/metalness = 1.0
 shader_parameter/emission = Color(0.820366, 0.820366, 0.820366, 1)
 shader_parameter/lighting_power = 1.0
 shader_parameter/lighting_map = SubResource("NoiseTexture2D_pknvl")
-shader_parameter/reflected_map_power = 0.42
 shader_parameter/reflected_map = SubResource("NoiseTexture2D_pknvl")
+shader_parameter/reflected_map_power = 0.42
 shader_parameter/use_refraction = false
 shader_parameter/refraction_amount = 3.715
 shader_parameter/refraction_brightness = 0.1
@@ -128,9 +128,8 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ehl3k")
 
-[node name="WeaponTestSword" type="Node3D"]
+[node name="WeaponTestSword" type="Node3D" unique_id=750811143]
 
-[node name="Cube2" type="MeshInstance3D" parent="."]
+[node name="Cube2" type="MeshInstance3D" parent="." unique_id=667550467]
 transform = Transform3D(2.01, 0, 0, 0, 2.01, 0, 0, 0, 2.01, 0, 0.115317, 0)
 mesh = SubResource("ArrayMesh_lkpqi")
-skeleton = NodePath("")

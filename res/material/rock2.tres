@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cw0ue0vc5tbn4"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cw0ue0vc5tbn4"]
 
 [ext_resource type="Texture2D" uid="uid://b2qcd5lgme5a6" path="res://assets/texture3d/overworld/stone1.png" id="1_fq566"]
 

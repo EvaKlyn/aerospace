@@ -1,17 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://cvlabg8e2qbk3"]
+[gd_scene format=3 uid="uid://cvlabg8e2qbk3"]
 
-[ext_resource type="Script" path="res://addons/godot_state_charts/utilities/event_refactor/event_refactor.gd" id="1_hh1x6"]
+[ext_resource type="Script" uid="uid://b85tobmeafb7g" path="res://addons/godot_state_charts/utilities/event_refactor/event_refactor.gd" id="1_hh1x6"]
 
-[node name="event_refactor" type="ConfirmationDialog"]
-initial_position = 1
+[node name="event_refactor" type="ConfirmationDialog" unique_id=176804503]
+oversampling_override = 1.0
 title = "Rename Event"
+initial_position = 1
 size = Vector2i(586, 562)
 visible = true
 ok_button_text = "Rename"
 dialog_autowrap = true
 script = ExtResource("1_hh1x6")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1221729353]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 578.0
@@ -21,28 +22,28 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1524564706]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1977394492]
 layout_mode = 2
 text = "Event"
 
-[node name="EventList" type="ItemList" parent="MarginContainer/VBoxContainer"]
+[node name="EventList" type="ItemList" parent="MarginContainer/VBoxContainer" unique_id=1933997225]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(560, 330)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1896247780]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=405359552]
 layout_mode = 2
 text = "New name"
 
-[node name="EventNameEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="EventNameEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=245420940]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

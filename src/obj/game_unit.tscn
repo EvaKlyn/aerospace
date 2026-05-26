@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bke1gby46hsvp"]
+[gd_scene format=3 uid="uid://bke1gby46hsvp"]
 
-[ext_resource type="Script" path="res://src/obj/game_unit.gd" id="1_k6u2v"]
-[ext_resource type="Script" path="res://src/obj/unit_info.gd" id="2_bjbw2"]
+[ext_resource type="Script" uid="uid://dawv7alvgc5e6" path="res://src/obj/game_unit.gd" id="1_k6u2v"]
+[ext_resource type="Script" uid="uid://7b74gxm0gl5r" path="res://src/obj/unit_info.gd" id="2_bjbw2"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_i4lhl"]
 properties/0/path = NodePath(".:unit_name")
@@ -86,14 +86,14 @@ properties/26/path = NodePath("UnitInfo:full_cast_time")
 properties/26/spawn = true
 properties/26/replication_mode = 2
 
-[node name="GameUnit" type="Node"]
+[node name="GameUnit" type="Node" unique_id=1593484596]
 script = ExtResource("1_k6u2v")
 team = 2
 
-[node name="UnitInfo" type="Node" parent="."]
+[node name="UnitInfo" type="Node" parent="." unique_id=14147562]
 script = ExtResource("2_bjbw2")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=749587399]
 replication_interval = 0.1
 delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_i4lhl")

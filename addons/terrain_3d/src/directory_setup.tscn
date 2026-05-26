@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://by3kr2nqbqr67"]
 
-[node name="DirectorySetup" type="ConfirmationDialog"]
+[node name="DirectorySetup" type="ConfirmationDialog" unique_id=1651001655]
+oversampling_override = 1.0
 title = "Terrain3D Data Directory Setup"
 position = Vector2i(0, 36)
 size = Vector2i(750, 574)
 visible = true
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=956841233]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 742.0
@@ -16,51 +17,51 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=150281835]
 layout_mode = 2
 
-[node name="Instructions" type="Label" parent="Margin/VBox"]
+[node name="Instructions" type="Label" parent="Margin/VBox" unique_id=1545355367]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "Terrain3D now stores data in a directory instead of a single file. Each region is stored in a separate file named `terrain3d[-_]##[-_]##.res`. For instance, the region at location (-1, 1) would be named `terrain3d-01_01.res`. Enable Terrain3D / Debug / Show Region Labels for a visual display."
 autowrap_mode = 3
 
-[node name="DirectoryLabel" type="Label" parent="Margin/VBox"]
+[node name="DirectoryLabel" type="Label" parent="Margin/VBox" unique_id=369050935]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "
 Specify the directory to store your data. Any existing region files will be loaded."
 autowrap_mode = 3
 
-[node name="DirHBox" type="HBoxContainer" parent="Margin/VBox"]
+[node name="DirHBox" type="HBoxContainer" parent="Margin/VBox" unique_id=1295269613]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="Margin/VBox/DirHBox"]
+[node name="LineEdit" type="LineEdit" parent="Margin/VBox/DirHBox" unique_id=1236544102]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Data directory"
 
-[node name="SelectDir" type="Button" parent="Margin/VBox/DirHBox"]
+[node name="SelectDir" type="Button" parent="Margin/VBox/DirHBox" unique_id=448062553]
 layout_mode = 2
 
-[node name="UpgradeLabel" type="Label" parent="Margin/VBox"]
+[node name="UpgradeLabel" type="Label" parent="Margin/VBox" unique_id=1763152286]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "
 If you wish to upgrade a storage file from v0.8.4 - v0.9.2, specify it below. Data will be stored in the directory above upon save. The original file will not be touched."
 autowrap_mode = 3
 
-[node name="UpgradeHBox" type="HBoxContainer" parent="Margin/VBox"]
+[node name="UpgradeHBox" type="HBoxContainer" parent="Margin/VBox" unique_id=451837392]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="Margin/VBox/UpgradeHBox"]
+[node name="LineEdit" type="LineEdit" parent="Margin/VBox/UpgradeHBox" unique_id=715743924]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Storage .res to upgrade"
 
-[node name="SelectResFile" type="Button" parent="Margin/VBox/UpgradeHBox"]
+[node name="SelectResFile" type="Button" parent="Margin/VBox/UpgradeHBox" unique_id=89192019]
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="Margin/VBox"]
+[node name="Spacer" type="Control" parent="Margin/VBox" unique_id=111652115]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2

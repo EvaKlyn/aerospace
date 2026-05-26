@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpmrglvrlp6ia"]
+[gd_scene format=3 uid="uid://bpmrglvrlp6ia"]
 
 [ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="1_7fyx8"]
-[ext_resource type="Script" path="res://scenes/ui/character_creator_window.gd" id="2_jt4am"]
-[ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="3_jv26e"]
+[ext_resource type="Script" uid="uid://4p1x7gb72mhr" path="res://scenes/ui/character_creator_window.gd" id="2_jt4am"]
 
 [sub_resource type="Environment" id="Environment_klk2k"]
 ambient_light_source = 2
@@ -11,9 +10,10 @@ ambient_light_color = Color(0.522967, 0.522, 0.58, 1)
 [sub_resource type="World3D" id="World3D_4qn00"]
 environment = SubResource("Environment_klk2k")
 
-[node name="CharacterCreatorWindow" type="Window" node_paths=PackedStringArray("camera_pivot", "name_edit", "build_opt", "save_button", "mhp_label", "might_label", "finesse_label", "agility_label", "endurance_label", "arcana_label", "psycho_label", "luck_label", "tempo_label", "wits_label", "skills_container")]
+[node name="CharacterCreatorWindow" type="Window" unique_id=189625684 node_paths=PackedStringArray("camera_pivot", "name_edit", "build_opt", "save_button", "mhp_label", "might_label", "finesse_label", "agility_label", "endurance_label", "arcana_label", "psycho_label", "luck_label", "tempo_label", "wits_label", "skills_container", "ancestry_dropdown", "accent_color_picker", "head_scale_slider", "hand_scale_slider", "chara_preview_parent")]
 auto_translate_mode = 1
 transparent_bg = true
+oversampling_override = 1.0
 title = "Character Creation"
 initial_position = 1
 size = Vector2i(580, 505)
@@ -24,231 +24,291 @@ camera_pivot = NodePath("HBoxContainer/VBoxContainer2/SubViewportContainer/SubVi
 name_edit = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer/NameEdit")
 build_opt = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer/OptionButton")
 save_button = NodePath("HBoxContainer/VBoxContainer3/SaveButton")
-mhp_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/MhpLabel")
-might_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/MightLabel")
-finesse_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/FinesseLabel")
-agility_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/AgilityLabel")
-endurance_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/EnduranceLabel")
-arcana_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/ArcanaLabel")
-psycho_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/PsychoLabel")
-luck_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/LuckLabel")
-tempo_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/TempoLabel")
-wits_label = NodePath("HBoxContainer/VBoxContainer2/GridContainer/WitsLabel")
+mhp_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/MhpLabel")
+might_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/MightLabel")
+finesse_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/FinesseLabel")
+agility_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/AgilityLabel")
+endurance_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/EnduranceLabel")
+arcana_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/ArcanaLabel")
+psycho_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/PsychoLabel")
+luck_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/LuckLabel")
+tempo_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/TempoLabel")
+wits_label = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Statistics/WitsLabel")
 skills_container = NodePath("HBoxContainer/VBoxContainer3/VBoxContainer2")
+ancestry_dropdown = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Appearance/AncestryDropdown")
+accent_color_picker = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Appearance/AccentColorPicker")
+head_scale_slider = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Appearance/HeadScaleSlider")
+hand_scale_slider = NodePath("HBoxContainer/VBoxContainer2/TabContainer/Appearance/HandScaleSlider")
+chara_preview_parent = NodePath("HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=585405879]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer" unique_id=861100716]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer3"]
+[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer3" unique_id=23200493]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=822978660]
 layout_mode = 2
 text = "Name"
 
-[node name="NameEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+[node name="NameEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=1778026694]
 layout_mode = 2
 size_flags_horizontal = 3
 max_length = 16
 
-[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=532301879]
 layout_mode = 2
 text = "Starting Build"
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer3/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=1761281683]
 layout_mode = 2
 selected = 0
 item_count = 2
 popup/item_0/text = "Raider"
+popup/item_0/id = 0
 popup/item_1/text = "Arcane Adept"
 popup/item_1/id = 1
 
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer3"]
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer3" unique_id=2036185846]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3" unique_id=67962278]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Skills"
 
-[node name="VBoxContainer2" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3"]
+[node name="VBoxContainer2" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3" unique_id=513640307]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2" unique_id=437181240]
 layout_mode = 2
 text = "Normal Dodge,"
 
-[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2"]
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer2" unique_id=1553196791]
 layout_mode = 2
 text = "Melee Auto Attack,"
 
-[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3"]
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3" unique_id=710484874]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Equipment"
 
-[node name="VBoxContainer3" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3"]
+[node name="VBoxContainer3" type="HFlowContainer" parent="HBoxContainer/VBoxContainer3" unique_id=903640055]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer3"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/VBoxContainer3" unique_id=1105253427]
 layout_mode = 2
 text = "WIP"
 
-[node name="SaveButton" type="Button" parent="HBoxContainer/VBoxContainer3"]
+[node name="SaveButton" type="Button" parent="HBoxContainer/VBoxContainer3" unique_id=912527511]
 layout_mode = 2
 size_flags_vertical = 10
 disabled = true
 text = "Save Character"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=70623081]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1235649401]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="HBoxContainer/VBoxContainer2/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/VBoxContainer2/SubViewportContainer" unique_id=23776090]
 own_world_3d = true
 world_3d = SubResource("World3D_4qn00")
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(288, 285)
+size = Vector2i(288, 250)
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport"]
+[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport" unique_id=2141301522]
 
-[node name="Body" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D" node_paths=PackedStringArray("clothes_parts") instance=ExtResource("3_jv26e")]
-clothes_parts = [NodePath("Body/Body"), null]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D" unique_id=268345877]
 transform = Transform3D(-0.258819, 0.933013, 0.25, -2.26267e-08, -0.258819, 0.965926, 0.965926, 0.25, 0.0669873, 0, 0, 0)
 
-[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D"]
+[node name="Node3D" type="Node3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D" unique_id=753342829]
+transform = Transform3D(1, 0, 0, 0, 0.9323238, -0.36162457, 0, 0.36162457, 0.9323238, 0, -0.16, 0)
 
-[node name="Camera3D" type="Camera3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D/Node3D"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, -3)
+[node name="Camera3D" type="Camera3D" parent="HBoxContainer/VBoxContainer2/SubViewportContainer/SubViewport/Node3D/Node3D" unique_id=92911802]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, -4.4)
 cull_mask = 983039
+fov = 50.4
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="TabContainer" type="TabContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1597160923]
 layout_mode = 2
-columns = 2
+size_flags_vertical = 3
+current_tab = 1
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Statistics" type="GridContainer" parent="HBoxContainer/VBoxContainer2/TabContainer" unique_id=836484974]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+columns = 2
+metadata/_tab_index = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=337979841]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Max HP"
 
-[node name="MhpLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="MhpLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=313775925]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "10"
 
-[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=2042003224]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Might
-"
+text = "Might"
 
-[node name="MightLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="MightLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1557771395]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=228868180]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Finesse"
 
-[node name="FinesseLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="FinesseLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=972772967]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1801016132]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Agility
-"
+text = "Agility"
 
-[node name="AgilityLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="AgilityLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1343423901]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label5" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label5" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1185597328]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Endurance"
 
-[node name="EnduranceLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="EnduranceLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=223534461]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label6" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label6" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1218264496]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Arcana"
 
-[node name="ArcanaLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="ArcanaLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1657799352]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label7" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label7" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1855834290]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Psycho"
 
-[node name="PsychoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="PsychoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1477288225]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label8" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label8" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=2060608134]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Luck
-"
+text = "Luck"
 
-[node name="LuckLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "0"
-
-[node name="Label9" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Wits
-"
-
-[node name="WitsLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="LuckLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1065981613]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[node name="Label10" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="Label9" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1851761853]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wits"
+
+[node name="WitsLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=1976309961]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Label10" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=809656779]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Tempo"
 
-[node name="TempoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/GridContainer"]
+[node name="TempoLabel" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Statistics" unique_id=547810266]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
+
+[node name="Appearance" type="GridContainer" parent="HBoxContainer/VBoxContainer2/TabContainer" unique_id=357796772]
+layout_mode = 2
+columns = 2
+metadata/_tab_index = 1
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=36656357]
+layout_mode = 2
+text = "Ancestry"
+
+[node name="AncestryDropdown" type="OptionButton" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=561862725]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Human"
+popup/item_0/id = 0
+popup/item_1/text = "Bird"
+popup/item_1/id = 1
+
+[node name="Label5" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=977005169]
+layout_mode = 2
+text = "Accent Color"
+
+[node name="AccentColorPicker" type="ColorPickerButton" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=707772719]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.498039, 1, 0.831373, 1)
+edit_alpha = false
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=1171441833]
+layout_mode = 2
+text = "Head Scale"
+
+[node name="HeadScaleSlider" type="HSlider" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=1413612320]
+layout_mode = 2
+min_value = 0.7
+max_value = 1.4
+step = 0.02
+value = 1.0
+
+[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=504972496]
+layout_mode = 2
+text = "Hands Scale"
+
+[node name="HandScaleSlider" type="HSlider" parent="HBoxContainer/VBoxContainer2/TabContainer/Appearance" unique_id=133823501]
+layout_mode = 2
+min_value = 0.7
+max_value = 1.4
+step = 0.02
+value = 1.0
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="text_changed" from="HBoxContainer/VBoxContainer3/VBoxContainer/NameEdit" to="." method="_on_name_edit_text_changed"]

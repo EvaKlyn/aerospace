@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0djdi65baeuc"]
+[gd_scene format=3 uid="uid://c0djdi65baeuc"]
 
-[ext_resource type="Script" path="res://src/obj/ui/status_icon.gd" id="1_tertf"]
+[ext_resource type="Script" uid="uid://tigmr17yy4nt" path="res://src/obj/ui/status_icon.gd" id="1_tertf"]
 [ext_resource type="Theme" uid="uid://dc0t2son1242f" path="res://res/default_ui.tres" id="1_wvqft"]
 [ext_resource type="Texture2D" uid="uid://cs4hihm10seqf" path="res://assets/texture2d/icons/status/stun.png" id="2_nanv3"]
 
@@ -17,25 +17,25 @@ corner_radius_bottom_left = 8
 shadow_size = 1
 shadow_offset = Vector2(0, 2)
 
-[node name="StatusIcon" type="PanelContainer"]
+[node name="StatusIcon" type="PanelContainer" unique_id=298863255]
 size_flags_horizontal = 0
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_i1cul")
 script = ExtResource("1_tertf")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=216122680]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=54158942]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("1_wvqft")
 texture = ExtResource("2_nanv3")
 stretch_mode = 4
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=489233438]
 layout_mode = 2
 text = "10"
 horizontal_alignment = 1

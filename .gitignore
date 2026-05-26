@@ -1,8 +1,3 @@
 # Godot 4+ specific ignores
-/.godot/
+.godot/
 /android/
-/mapping/maps/autosave
-# ignore baked lightmaps for size
-*.exr
-*.lmbake
-*.exr.import

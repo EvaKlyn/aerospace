@@ -14,10 +14,10 @@ var peers: Dictionary = {}
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	if not NetworkEvents.is_server():
+	if not multiplayer.is_server():
 		return
 	
-	if NetworkTime._is_active():
+	if multiplayer.multiplayer_peer != null:
 		var done_guys = []
 		for k in ids_on_cooldown:
 			if ids_on_cooldown[k] > 0.0:
@@ -107,7 +107,7 @@ func do_fx(fx_path, origin_pos: Vector3, target_position: Vector3 = Vector3.ZERO
 
 @rpc("any_peer","call_local")
 func create_player_character(char_data: Dictionary):
-	if NetworkEvents.is_server():
+	if multiplayer.is_server():
 		char_data["id"] = multiplayer.get_remote_sender_id()
 		main.player_spawner.spawn(char_data)
 		MmoUtils.rpc("eventlog", char_data["name"] + " logged on. " + str(peers.size()) + " players online.")

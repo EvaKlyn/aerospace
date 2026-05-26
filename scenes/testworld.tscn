@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://1waxlh1bxip1"]
+[gd_scene format=3 uid="uid://1waxlh1bxip1"]
 
 [ext_resource type="Texture2D" uid="uid://cbx8n0l0ajy21" path="res://assets/texture3d/sky1_pano.png" id="1_g3nf8"]
+[ext_resource type="PackedScene" uid="uid://6knunt6hys80" path="res://assets/3d/level/fieldtest.blend" id="4_4ccfe"]
 [ext_resource type="Texture2D" uid="uid://63xns3m78lhw" path="res://assets/texture2d/lensdirt.png" id="4_cutd0"]
+[ext_resource type="PackedScene" uid="uid://beu44127nuut7" path="res://assets/3d/trees/fieldtree.blend" id="5_y52uh"]
 [ext_resource type="PackedScene" uid="uid://jrec6f84e6rw" path="res://src/obj/enemy_units/attack_dummy.tscn" id="12_q8owb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ew54i"]
@@ -34,8 +36,6 @@ ssil_sharpness = 1.0
 sdfgi_use_occlusion = true
 sdfgi_bounce_feedback = 0.3
 sdfgi_min_cell_size = 0.8
-sdfgi_cascade0_distance = 51.2
-sdfgi_max_distance = 819.2
 sdfgi_y_scale = 2
 glow_levels/3 = 0.06
 glow_levels/4 = 2.51
@@ -46,7 +46,6 @@ glow_normalized = true
 glow_intensity = 1.02
 glow_strength = 1.12
 glow_bloom = 0.32
-glow_blend_mode = 1
 glow_hdr_scale = 0.44
 glow_map_strength = 0.51
 glow_map = ExtResource("4_cutd0")
@@ -61,9 +60,9 @@ adjustment_brightness = 1.04
 adjustment_contrast = 0.92
 adjustment_saturation = 0.56
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1120709426]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2060166588]
 transform = Transform3D(-0.861836, 0.451556, -0.230944, -0.00215503, 0.45208, 0.891975, 0.507182, 0.769234, -0.388646, -1.4507, 6.00016, -0.341866)
 light_color = Color(1, 0.824, 0.52, 1)
 light_energy = 1.595
@@ -72,8 +71,16 @@ shadow_enabled = true
 shadow_blur = 1.483
 directional_shadow_max_distance = 300.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1234532733]
 environment = SubResource("Environment_hos4c")
 
-[node name="AttackDummy" parent="." instance=ExtResource("12_q8owb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92017, -8.67395, 12.8677)
+[node name="AttackDummy" parent="." unique_id=1601225036 instance=ExtResource("12_q8owb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92017, 0.99999976, 12.8677)
+
+[node name="fieldtest" parent="." unique_id=1147906797 instance=ExtResource("4_4ccfe")]
+
+[node name="fieldtree" parent="." unique_id=1723529925 instance=ExtResource("5_y52uh")]
+transform = Transform3D(1.2248236, 0, 5.8736534, 0, 6, 0, -5.8736534, 0, 1.2248236, -5.363307, -0.21804845, 17.794456)
+
+[node name="fieldtree2" parent="." unique_id=850241965 instance=ExtResource("5_y52uh")]
+transform = Transform3D(-5.5730124, 0, -2.2229548, 0, 6.000001, 0, 2.2229548, 0, -5.5730124, -8.570555, -0.21804845, 12.672529)

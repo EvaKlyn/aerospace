@@ -1,17 +1,17 @@
-[gd_scene load_steps=20 format=3 uid="uid://bdniqwi3nd2d6"]
+[gd_scene format=3 uid="uid://bdniqwi3nd2d6"]
 
-[ext_resource type="Script" path="res://base_player.gd" id="1_t8tp8"]
+[ext_resource type="Script" uid="uid://bculadt5rfotb" path="res://base_player.gd" id="1_t8tp8"]
 [ext_resource type="PackedScene" uid="uid://bke1gby46hsvp" path="res://src/obj/game_unit.tscn" id="2_3mq61"]
 [ext_resource type="Texture2D" uid="uid://ds1g4py3poq0s" path="res://assets/texture2d/ui_targetring.png" id="2_phblr"]
-[ext_resource type="Script" path="res://src/obj/player_body.gd" id="3_nmnka"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_464ud"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_o54a7"]
+[ext_resource type="Script" uid="uid://cm21cb6l6a7sf" path="res://src/obj/player_body.gd" id="3_nmnka"]
+[ext_resource type="Script" uid="uid://crurwve5lp3ac" path="res://addons/godot_state_charts/state_chart.gd" id="4_464ud"]
+[ext_resource type="Script" uid="uid://b1disveh7hfoh" path="res://addons/godot_state_charts/compound_state.gd" id="5_o54a7"]
 [ext_resource type="Texture2D" uid="uid://c6fp2r011bpc6" path="res://assets/texture2d/ui_rangering.png" id="5_smjeu"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_28du0"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
+[ext_resource type="Script" uid="uid://cbfbvs514xd7t" path="res://addons/godot_state_charts/atomic_state.gd" id="6_28du0"]
+[ext_resource type="Script" uid="uid://sftrlk7pvdjy" path="res://addons/godot_state_charts/transition.gd" id="7_pu7ar"]
 [ext_resource type="FontFile" uid="uid://nn0djp667dy1" path="res://assets/fonts/Inter.ttc" id="10_mnoqu"]
 [ext_resource type="PackedScene" uid="uid://cstkb6ilx4y0w" path="res://scenes/chara/bodytypes/body_type_human.tscn" id="13_8ntcc"]
-[ext_resource type="Shader" path="res://res/shadercode/wireframe.gdshader" id="15_kt54l"]
+[ext_resource type="Shader" uid="uid://dtkl62pqnw21d" path="res://res/shadercode/wireframe.gdshader" id="15_kt54l"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7047k"]
 radius = 3.0
@@ -95,13 +95,13 @@ properties/7/path = NodePath(".:dodge_array")
 properties/7/spawn = true
 properties/7/replication_mode = 2
 
-[node name="BasePlayer" type="Node3D" node_paths=PackedStringArray("game_unit", "physics_body", "vis_body")]
+[node name="BasePlayer" type="Node3D" unique_id=1909353722 node_paths=PackedStringArray("game_unit", "physics_body", "vis_body")]
 script = ExtResource("1_t8tp8")
 game_unit = NodePath("GameUnit")
 physics_body = NodePath("PhysicsBody")
 vis_body = NodePath("Vis/Body")
 
-[node name="GameUnit" parent="." instance=ExtResource("2_3mq61")]
+[node name="GameUnit" parent="." unique_id=786389269 instance=ExtResource("2_3mq61")]
 team = 1
 max_target_range = 60.0
 rpg_might = 4
@@ -110,131 +110,131 @@ rpg_endurance = 5
 rpg_tempo = 3
 rpg_wits = 1
 
-[node name="TargetArea" type="Area3D" parent="."]
+[node name="TargetArea" type="Area3D" parent="." unique_id=1348496692]
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TargetArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TargetArea" unique_id=1397610898]
 shape = SubResource("SphereShape3D_7047k")
 
-[node name="PhysicsBody" type="CharacterBody3D" parent="."]
+[node name="PhysicsBody" type="CharacterBody3D" parent="." unique_id=507118929]
 collision_layer = 3
 floor_constant_speed = true
 script = ExtResource("3_nmnka")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PhysicsBody"]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PhysicsBody" unique_id=1606553115]
 replication_interval = 0.05
 delta_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_7jxna")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicsBody"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicsBody" unique_id=223348992]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_0ar3d")
 
-[node name="SightCast" type="RayCast3D" parent="PhysicsBody"]
+[node name="SightCast" type="RayCast3D" parent="PhysicsBody" unique_id=2013093577]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="AudioListener3D" type="AudioListener3D" parent="PhysicsBody"]
+[node name="AudioListener3D" type="AudioListener3D" parent="PhysicsBody" unique_id=652995667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="StateChart" type="Node" parent="PhysicsBody"]
+[node name="StateChart" type="Node" parent="PhysicsBody" unique_id=18858875]
 script = ExtResource("4_464ud")
 
-[node name="States" type="Node" parent="PhysicsBody/StateChart"]
+[node name="States" type="Node" parent="PhysicsBody/StateChart" unique_id=890940810]
 script = ExtResource("5_o54a7")
 initial_state = NodePath("Frozen")
 
-[node name="Actionable" type="Node" parent="PhysicsBody/StateChart/States"]
+[node name="Actionable" type="Node" parent="PhysicsBody/StateChart/States" unique_id=2117359497]
 script = ExtResource("6_28du0")
 
-[node name="StartCast" type="Node" parent="PhysicsBody/StateChart/States/Actionable"]
+[node name="StartCast" type="Node" parent="PhysicsBody/StateChart/States/Actionable" unique_id=177845068]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Casting")
 event = &"cast"
 delay_in_seconds = "0.0"
 
-[node name="Dodge" type="Node" parent="PhysicsBody/StateChart/States/Actionable"]
+[node name="Dodge" type="Node" parent="PhysicsBody/StateChart/States/Actionable" unique_id=1669691134]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Dodge")
 event = &"dodge"
 delay_in_seconds = "0.0"
 
-[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States/Actionable"]
+[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States/Actionable" unique_id=1077411295]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Knockback")
 event = &"hit"
 delay_in_seconds = "0.0"
 
-[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Actionable"]
+[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Actionable" unique_id=1976507174]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Frozen")
 event = &"freeze"
 delay_in_seconds = "0.0"
 
-[node name="Casting" type="Node" parent="PhysicsBody/StateChart/States"]
+[node name="Casting" type="Node" parent="PhysicsBody/StateChart/States" unique_id=1662172786]
 script = ExtResource("6_28du0")
 
-[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States/Casting"]
+[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States/Casting" unique_id=1160041187]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Knockback")
 event = &"hit"
 delay_in_seconds = "0.0"
 
-[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Casting"]
+[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Casting" unique_id=1073103198]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Actionable")
 event = &"castover"
 delay_in_seconds = "0.0"
 
-[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Casting"]
+[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Casting" unique_id=254845434]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Frozen")
 event = &"freeze"
 delay_in_seconds = "0.0"
 
-[node name="Dodge" type="Node" parent="PhysicsBody/StateChart/States"]
+[node name="Dodge" type="Node" parent="PhysicsBody/StateChart/States" unique_id=877427273]
 script = ExtResource("6_28du0")
 
-[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Dodge"]
+[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Dodge" unique_id=746067348]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Actionable")
 event = &"dodgeover"
 delay_in_seconds = "0.0"
 
-[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Dodge"]
+[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Dodge" unique_id=160442186]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Frozen")
 event = &"freeze"
 delay_in_seconds = "0.0"
 
-[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States"]
+[node name="Knockback" type="Node" parent="PhysicsBody/StateChart/States" unique_id=369145646]
 script = ExtResource("6_28du0")
 
-[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Knockback"]
+[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Knockback" unique_id=2050903792]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Actionable")
 event = &"knockbackover"
 delay_in_seconds = "0.0"
 
-[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Knockback"]
+[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States/Knockback" unique_id=2016796966]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Frozen")
 event = &"freeze"
 delay_in_seconds = "0.0"
 
-[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States"]
+[node name="Frozen" type="Node" parent="PhysicsBody/StateChart/States" unique_id=77240486]
 script = ExtResource("6_28du0")
 
-[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Frozen"]
+[node name="Done" type="Node" parent="PhysicsBody/StateChart/States/Frozen" unique_id=1245922606]
 script = ExtResource("7_pu7ar")
 to = NodePath("../../Actionable")
 event = &"unfreeze"
 delay_in_seconds = "0.0"
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=104522340]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
 cull_mask = 983039
 
-[node name="TargetRing" type="Sprite3D" parent="."]
+[node name="TargetRing" type="Sprite3D" parent="." unique_id=197148681]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 visible = false
 pixel_size = 0.03
@@ -242,28 +242,28 @@ billboard = 1
 texture_filter = 2
 texture = ExtResource("2_phblr")
 
-[node name="CameraOrigin" type="Node3D" parent="."]
+[node name="CameraOrigin" type="Node3D" parent="." unique_id=597054820]
 
-[node name="h" type="Node3D" parent="CameraOrigin"]
+[node name="h" type="Node3D" parent="CameraOrigin" unique_id=1325865798]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8749, 0)
 
-[node name="v" type="Node3D" parent="CameraOrigin/h"]
+[node name="v" type="Node3D" parent="CameraOrigin/h" unique_id=654473286]
 
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin/h/v"]
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin/h/v" unique_id=152022079]
 spring_length = 7.0
 margin = 0.47
 
-[node name="CameraTarget" type="Node3D" parent="CameraOrigin/h/v/SpringArm3D"]
+[node name="CameraTarget" type="Node3D" parent="CameraOrigin/h/v/SpringArm3D" unique_id=583428014]
 
-[node name="Vis" type="Node3D" parent="."]
+[node name="Vis" type="Node3D" parent="." unique_id=2093802058]
 
-[node name="MeleeRangeDecal" type="Sprite3D" parent="Vis"]
+[node name="MeleeRangeDecal" type="Sprite3D" parent="Vis" unique_id=164179911]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0629038, -2.74961e-09)
 pixel_size = 0.004
 no_depth_test = true
 texture = ExtResource("5_smjeu")
 
-[node name="Label3D" type="Label3D" parent="Vis"]
+[node name="Label3D" type="Label3D" parent="Vis" unique_id=1877953066]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.37295, 0)
 visibility_range_end = 30.0
 visibility_range_end_margin = 2.0
@@ -274,28 +274,20 @@ text = "nickname
 font = SubResource("FontVariation_i4rj2")
 outline_size = 16
 
-[node name="AngleDummy" type="Node3D" parent="Vis"]
+[node name="AngleDummy" type="Node3D" parent="Vis" unique_id=528048950]
 
-[node name="Body" parent="Vis" node_paths=PackedStringArray("clothes_parts") instance=ExtResource("13_8ntcc")]
+[node name="Body" parent="Vis" unique_id=56857805 node_paths=PackedStringArray("clothes_parts") instance=ExtResource("13_8ntcc")]
 clothes_parts = [NodePath("Body/Body"), null]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Vis"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Vis" unique_id=1464400509]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27624, 0)
 visible = false
 mesh = SubResource("SphereMesh_1my7c")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=881227643]
 replication_interval = 0.05
 delta_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_0u3pd")
 
 [connection signal="damaged" from="GameUnit" to="." method="_on_game_unit_damaged"]
 [connection signal="stats_update" from="GameUnit" to="." method="_on_game_unit_stats_update"]
-[connection signal="state_entered" from="PhysicsBody/StateChart/States/Actionable" to="PhysicsBody" method="_on_actionable_state_entered"]
-[connection signal="state_exited" from="PhysicsBody/StateChart/States/Actionable" to="PhysicsBody" method="_on_actionable_state_exited"]
-[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Actionable" to="PhysicsBody" method="_on_actionable_state_physics_processing"]
-[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Casting" to="PhysicsBody" method="_on_casting_state_physics_processing"]
-[connection signal="state_entered" from="PhysicsBody/StateChart/States/Dodge" to="PhysicsBody" method="_on_dodge_state_entered"]
-[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Dodge" to="PhysicsBody" method="_on_dodge_state_physics_processing"]
-[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Knockback" to="PhysicsBody" method="_on_knockback_state_physics_processing"]
-[connection signal="state_physics_processing" from="PhysicsBody/StateChart/States/Frozen" to="PhysicsBody" method="_on_frozen_state_physics_processing"]
